@@ -6,6 +6,7 @@
 .idea/**/misc.xml
 .idea/compiler.xml
 .idea/jarRepositories.xml
+.idea/uiDesigner.xml
 .idea/libraries-with-intellij-classes.xml
 .idea/modules.xml
 .idea/*.iml

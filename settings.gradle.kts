@@ -1,7 +1,4 @@
 
-// enable feature preview GRADLE_METADATA, required by KorGE
-enableFeaturePreview("GRADLE_METADATA")
-
 pluginManagement {
     val kotlinVersion: String by settings
     val korgePluginVersion: String by settings

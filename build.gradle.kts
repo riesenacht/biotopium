@@ -8,6 +8,7 @@ plugins {
 val biotopiumGroupId: String by project
 val biotopiumArtifactId: String by project
 val biotopiumVersion: String by project
+val biotopiumCoreArtifactId: String by project
 
 group = biotopiumGroupId
 version = biotopiumVersion
@@ -18,7 +19,15 @@ repositories {
     jcenter()
 }
 
+korge {
+    id = "${biotopiumGroupId}.${biotopiumArtifactId}"
+
+    targetJvm()
+    targetJs()
+}
+
 kotlin {
+
     js(IR) {
         binaries.executable()
         browser {
@@ -37,7 +46,11 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation(project(":${biotopiumCoreArtifactId}"))
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -48,10 +61,4 @@ kotlin {
         val jvmMain by getting
         val jvmTest by getting
     }
-}
-
-korge {
-    id = "${biotopiumGroupId}.${biotopiumArtifactId}"
-    targetJvm()
-    targetJs()
 }
