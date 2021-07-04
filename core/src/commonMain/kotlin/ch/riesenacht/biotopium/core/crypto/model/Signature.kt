@@ -19,9 +19,13 @@
 package ch.riesenacht.biotopium.core.crypto.model
 
 /**
- * Represents the output of a hash function,
- * formatted as hexadecimal string.
+ * Represents a signature of a message.
+ * A signature can be created for a message using a [PrivateKey].
+ * The validity of a signature can be verified using the corresponding [PublicKey].
+ * The signature is a so-called detached signature,
+ * which means the signature itself does not contain its signed message.
+ * The signature is formatted as base64 string.
  *
  * @author Manuel Riesen
  */
-typealias Hash = String
+typealias Signature = String

@@ -13,6 +13,7 @@ version = biotopiumVersion
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 kotlin {
@@ -47,6 +48,9 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(project(":${biotopiumP2pArtifactId}"))
+
+                // LazySodium Java, libsodium for JVM
+                implementation("com.goterl.lazycode:lazysodium-java:4.3.4")
             }
         }
         val jvmTest by getting
@@ -56,6 +60,10 @@ kotlin {
 
                 // SHA-3 implementation for JavaScript (SHA-3 FIPS 202 standard)
                 implementation(npm("sha3", "2.1.4"))
+
+                // Port of TweetNaCl / NaCl
+                implementation(npm("tweetnacl", "1.0.3"))
+                implementation(npm("tweetnacl-util", "0.15.1"))
             }
         }
         val jsTest by getting

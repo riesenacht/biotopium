@@ -19,9 +19,13 @@
 package ch.riesenacht.biotopium.core.crypto.model
 
 /**
- * Represents the output of a hash function,
- * formatted as hexadecimal string.
+ * Represents a EdDSA key pair.
+ * @property privateKey private key
+ * @property publicKey public key
  *
  * @author Manuel Riesen
  */
-typealias Hash = String
+data class KeyPair(
+    val privateKey: PrivateKey,
+    val publicKey: PublicKey
+)

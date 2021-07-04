@@ -19,9 +19,9 @@
 package ch.riesenacht.biotopium.core.crypto.model
 
 /**
- * Represents the output of a hash function,
- * formatted as hexadecimal string.
+ * Represents a private key, sometimes also called secret key.
+ * The private key is formatted as base64 string.
  *
  * @author Manuel Riesen
  */
-typealias Hash = String
+typealias PrivateKey = String

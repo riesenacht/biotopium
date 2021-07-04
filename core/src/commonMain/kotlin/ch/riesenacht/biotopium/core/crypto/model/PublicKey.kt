@@ -19,9 +19,9 @@
 package ch.riesenacht.biotopium.core.crypto.model
 
 /**
- * Represents the output of a hash function,
- * formatted as hexadecimal string.
+ * Represents a public key, which can be shared.
+ * The public key is formatted as base64 string.
  *
  * @author Manuel Riesen
  */
-typealias Hash = String
+typealias PublicKey = String
