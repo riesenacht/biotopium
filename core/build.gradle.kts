@@ -3,7 +3,7 @@ plugins {
 }
 
 val jvmTargetVersion: String by project
-val biotopiumP2pArtifactId: String by project
+val biotopiumNetworkArtifactId: String by project
 val biotopiumSubmoduleGroupId: String by project
 val biotopiumVersion: String by project
 val kotlinVersion: String by project
@@ -37,7 +37,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":${biotopiumP2pArtifactId}"))
+                implementation(project(":${biotopiumNetworkArtifactId}"))
             }
         }
         val commonTest by getting {
@@ -47,7 +47,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation(project(":${biotopiumP2pArtifactId}"))
+                implementation(project(":${biotopiumNetworkArtifactId}"))
 
                 // LazySodium Java, libsodium for JVM
                 implementation("com.goterl.lazycode:lazysodium-java:4.3.4")
@@ -56,7 +56,7 @@ kotlin {
         val jvmTest by getting
         val jsMain by getting {
             dependencies {
-                implementation(project(":${biotopiumP2pArtifactId}"))
+                implementation(project(":${biotopiumNetworkArtifactId}"))
 
                 // SHA-3 implementation for JavaScript (SHA-3 FIPS 202 standard)
                 implementation(npm("sha3", "2.1.4"))

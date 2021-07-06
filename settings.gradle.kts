@@ -25,10 +25,10 @@ pluginManagement {
 
 val biotopiumArtifactId: String by settings
 val biotopiumCoreArtifactId: String by settings
-val biotopiumP2pArtifactId: String by settings
+val biotopiumNetworkArtifactId: String by settings
 val biotopiumBlocklordArtifactId: String by settings
 
 rootProject.name = biotopiumArtifactId
 include(biotopiumCoreArtifactId)
-include(biotopiumP2pArtifactId)
+include(biotopiumNetworkArtifactId)
 include(biotopiumBlocklordArtifactId)
