@@ -15,6 +15,11 @@ We use a highly incremental approach for the development cycle.
 
 Since this is a prototype and in favor of rapid development many breaking changes will occur in the early phase of development.
 
+# Build Requirements
+Besides JDK 11 and the Kotlin compiler the following tools are required to build this project:
+- GCC
+- Go 16
+
 # Contributors
 This project was originally initiated by
 - Manuel Riesen
