@@ -1,5 +1,7 @@
+
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 val jvmTargetVersion: String by project
@@ -26,13 +28,16 @@ kotlin {
         compilations.all {
             kotlinOptions.jvmTarget = jvmTargetVersion
         }
-        withJava()
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
