@@ -56,7 +56,12 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jsMain by getting
+        val jsMain by getting {
+            dependencies {
+                implementation(devNpm("process", "0.11.10"))
+            }
+
+        }
         val jsTest by getting
         val jvmMain by getting
         val jvmTest by getting
