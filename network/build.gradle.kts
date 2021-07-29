@@ -6,6 +6,8 @@ plugins {
 
 val jvmTargetVersion: String by project
 val biotopiumSubmoduleGroupId: String by project
+val biotopiumNetworkArtifactId: String by project
+val gop2pArtifactId: String by project
 val biotopiumVersion: String by project
 
 group = biotopiumSubmoduleGroupId
@@ -45,7 +47,11 @@ kotlin {
         }
         val jsMain by getting
         val jsTest by getting
-        val jvmMain by getting
+        val jvmMain by getting {
+            dependencies {
+                implementation(project(":$biotopiumNetworkArtifactId:$gop2pArtifactId"))
+            }
+        }
         val jvmTest by getting
     }
 }

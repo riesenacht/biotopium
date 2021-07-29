@@ -27,13 +27,13 @@ val libraryEnding = when {
 }
 
 val goModTidy = task<Exec>("goModTidy") {
-    workingDir("src/main/go/")
+    workingDir("src/main/go/gop2p")
     commandLine("go", "mod",  "tidy")
 }
 
 val goBuild = task<Exec>("goBuild") {
     dependsOn(goModTidy)
-    workingDir("src/main/go/")
+    workingDir("src/main/go/gop2p")
     val libraryName = "gop2p.$libraryEnding"
     val libraryPath = "${project.buildDir.absolutePath}${File.separator}$libraryName"
     commandLine("go", "build", "-o", libraryPath, "-buildmode", "c-shared")
