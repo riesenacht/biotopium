@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.network
 
-import ch.riesenacht.biotopium.network.model.SerializedMessage
+import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import ch.riesenacht.biotopium.utils.await
 import ch.riesenacht.biotopium.utils.jsArray
 import ch.riesenacht.biotopium.utils.jsObject

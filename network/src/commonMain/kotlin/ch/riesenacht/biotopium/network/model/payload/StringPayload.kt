@@ -16,19 +16,14 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model
+package ch.riesenacht.biotopium.network.model.payload
+
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a boxed message.
- * A boxed message's [payload] is serialized.
- * @property type message type
- * @property payload serialized payload
+ * Represents a payload consisting of a [string].
  *
  * @author Manuel Riesen
  */
 @Serializable
-data class BoxedMessage(
-    val type: MessageType,
-    val payload: String
-)
+data class StringPayload(val string: String) : MessagePayload

@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.network
 
-import ch.riesenacht.biotopium.network.model.MessagePayload
+import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 
 /**
  * Represents a message handler.

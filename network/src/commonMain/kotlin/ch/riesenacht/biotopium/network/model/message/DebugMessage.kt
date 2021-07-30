@@ -18,7 +18,8 @@
 
 package ch.riesenacht.biotopium.network.model.message
 
-import ch.riesenacht.biotopium.network.model.MessagePayload
+import ch.riesenacht.biotopium.network.model.payload.StringPayload
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -29,4 +30,5 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
-data class DebugMessage(val message: String) : MessagePayload
+@SerialName("DebugMessage")
+data class DebugMessage(override val payload: StringPayload) : Message<StringPayload>()

@@ -16,11 +16,15 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model
+package ch.riesenacht.biotopium.network
 
-/**
- * Represents a serialized message.
- *
- * @author Manuel Riesen
- */
-typealias SerializedMessage = String
+import kotlin.test.Test
+
+class P2pNodeTest {
+
+    @Test
+    fun test() {
+        val node = P2pNode()
+        node.start()
+    }
+}

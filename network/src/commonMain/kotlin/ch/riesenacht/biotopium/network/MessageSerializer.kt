@@ -18,62 +18,33 @@
 
 package ch.riesenacht.biotopium.network
 
-import ch.riesenacht.biotopium.network.model.*
-import ch.riesenacht.biotopium.network.model.message.DebugMessage
+import ch.riesenacht.biotopium.network.model.message.Message
+import ch.riesenacht.biotopium.network.model.message.SerializedMessage
+import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlin.reflect.KClass
 
 /**
  * Serializer for messages.
- * Boxes and unboxes messages.
- * Serializes boxed messages.
  *
  * @author Manuel Riesen
  */
 object MessageSerializer {
 
-    /**
-     * Boxes an unboxed [message].
-     * @return boxed message
-     */
-    inline fun <reified T : MessagePayload> box(message: UnboxedMessage<T>): BoxedMessage {
-        val payload = Json.encodeToString(message.payload)
-        return BoxedMessage(message.type, payload)
+    val format = Json {
+        classDiscriminator = "class"
     }
 
     /**
-     * Unboxes a [boxedMessage].
-     * @throws UnsupportedMessageTypeException unsupported message type
-     * @return unboxed message
-     */
-    @Throws(UnsupportedMessageTypeException::class)
-    fun unbox(boxedMessage: BoxedMessage): UnboxedMessage<MessagePayload> {
-        val implClass = when(boxedMessage.type) {
-            MessageType.DEBUG -> DebugMessage::class
-            else -> throw UnsupportedMessageTypeException(boxedMessage.type)
-        }
-        val payload = decode(implClass, boxedMessage.payload)
-        return UnboxedMessage(boxedMessage.type, payload)
-    }
-
-    /**
-     * Decodes an encoded message.
-     * @param implClass implementation class
-     * @param encoded encoded message
-     */
-    private inline fun <reified T : MessagePayload> decode(implClass: KClass<T>, encoded: String): T = Json.decodeFromString(encoded)
-
-    /**
-     * Serializes a boxed [message].
+     * Serializes a [message].
      * @return serialized message.
      */
-    fun serialize(message: BoxedMessage): SerializedMessage = Json.encodeToString(message)
+    inline fun <reified T : MessagePayload> serialize(message: Message<T>): SerializedMessage = format.encodeToString(message)
 
     /**
      * Deserializes a [serialized] message.
-     * @return boxed message
+     * @return message
      */
-    fun deserialize(serialized: SerializedMessage): BoxedMessage = Json.decodeFromString(serialized)
+    fun deserialize(serialized: SerializedMessage): Message<MessagePayload> = format.decodeFromString(serialized)
 }

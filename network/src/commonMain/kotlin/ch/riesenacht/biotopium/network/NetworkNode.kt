@@ -18,7 +18,10 @@
 
 package ch.riesenacht.biotopium.network
 
-import ch.riesenacht.biotopium.network.model.*
+import ch.riesenacht.biotopium.network.model.message.Message
+import ch.riesenacht.biotopium.network.model.message.SerializedMessage
+import ch.riesenacht.biotopium.network.model.payload.MessagePayload
+import kotlin.reflect.KClass
 
 /**
  * Represents a network node.
@@ -27,11 +30,7 @@ import ch.riesenacht.biotopium.network.model.*
  */
 abstract class NetworkNode {
 
-    private val handlerMap: Map<MessageType, MutableList<MessageHandler>> = mapOf(
-        *(MessageType.values()
-            .map { Pair(it, mutableListOf<MessageHandler>()) }
-            .toTypedArray())
-    )
+    private val handlerMap: MutableMap<KClass<*>, MutableList<MessageHandler>> = mutableMapOf()
 
     /**
      * Starts the network node.
@@ -46,19 +45,12 @@ abstract class NetworkNode {
     /**
      * Sends a serialized [message].
      */
-    protected abstract fun sendSerialized(message: SerializedMessage)
+    abstract fun sendSerialized(message: SerializedMessage)
 
     /**
      * Sends an unboxed [message].
      */
-    inline fun <reified T : MessagePayload> send(message: UnboxedMessage<T>) {
-        sendBoxed(MessageSerializer.box(message))
-    }
-
-    /**
-     * Sends a boxed [message].
-     */
-    fun sendBoxed(message: BoxedMessage) {
+    inline fun <reified T : MessagePayload> send(message: Message<T>) {
         val serialized = MessageSerializer.serialize(message)
         sendSerialized(serialized)
     }
@@ -66,7 +58,10 @@ abstract class NetworkNode {
     /**
      * Registers a [handler] for a message [type].
      */
-    fun registerMessageHandler(type: MessageType, handler: MessageHandler) {
+    fun <T : Message<*>> registerMessageHandler(type: KClass<T>, handler: MessageHandler) {
+        if(!handlerMap.containsKey(type)) {
+            handlerMap[type] = mutableListOf()
+        }
         handlerMap[type]!!.add(handler)
     }
 
@@ -75,8 +70,11 @@ abstract class NetworkNode {
      * The corresponding message handlers are called.
      */
     fun receive(serialized: SerializedMessage) {
-        val boxedMessage = MessageSerializer.deserialize(serialized)
-        val unboxedMessage = MessageSerializer.unbox(boxedMessage)
-        handlerMap[unboxedMessage.type]!!.forEach { it.invoke(unboxedMessage.payload) }
+        val message: Message<MessagePayload> = MessageSerializer.deserialize(serialized)
+        handlerMap.entries.filter { it.key.isInstance(message) }
+            .flatMap { it.value }
+            .forEach {
+                it.invoke(message.payload)
+        }
     }
 }

@@ -16,18 +16,23 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model
+package ch.riesenacht.biotopium.network.model.message
+
+import ch.riesenacht.biotopium.network.model.payload.MessagePayload
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 
 /**
- * Represents an unboxed message.
- * @property type message type
- * @property payload payload
+ * Represents a message sent over the network.
  *
  * @author Manuel Riesen
  */
 @Serializable
-data class UnboxedMessage<T : MessagePayload>(
-    val type: MessageType,
-    val payload: T
-)
+sealed class Message<T : MessagePayload> {
+
+    /**
+     * The message's payload
+     */
+    @Polymorphic
+    abstract val payload: T
+}

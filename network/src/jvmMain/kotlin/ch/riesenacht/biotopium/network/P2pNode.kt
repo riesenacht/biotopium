@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.go2p.GoP2p
-import ch.riesenacht.biotopium.network.model.SerializedMessage
+import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 
 /**
  * Represents a peer-to-peer node.

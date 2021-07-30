@@ -16,7 +16,11 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model
+package ch.riesenacht.biotopium.network.model.message
 
-class StringPayload : MessagePayload {
-}
+/**
+ * Represents a serialized message.
+ *
+ * @author Manuel Riesen
+ */
+typealias SerializedMessage = String

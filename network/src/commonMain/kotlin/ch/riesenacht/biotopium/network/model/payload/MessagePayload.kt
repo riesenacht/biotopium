@@ -16,14 +16,11 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network
-
-import ch.riesenacht.biotopium.network.model.MessageType
+package ch.riesenacht.biotopium.network.model.payload
 
 /**
- * Exception for unsupported message types.
- * @param type message type
+ * Represents the payload of a message.
  *
  * @author Manuel Riesen
  */
-class UnsupportedMessageTypeException(type: MessageType) : Exception(type.name)
+interface MessagePayload
