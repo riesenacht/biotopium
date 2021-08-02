@@ -16,13 +16,21 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network
-
-import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
+package ch.riesenacht.biotopium.network.model.config
 
 /**
- * Represents a peer-to-peer node.
+ * Represents the configuration of a [P2pNode].
+ * Not all configuration values can and will be used by the [P2pNode].
+ * The usability of the values is dependent to the underlying platform capabilities.
+ *
+ * @property listenPort port to listen on (if possible on platform)
+ * @property bootstrapPeers bootstrap peers to use (if possible on platform)
+ * @property privateKeyBase64 private key bytes, encoded in base64 to use (if possible on platform)
  *
  * @author Manuel Riesen
  */
-expect class P2pNode(p2pConfig: P2pConfiguration) : NetworkNode
+data class P2pConfiguration(
+    val listenPort: Int,
+    val bootstrapPeers: List<String> = emptyList(),
+    val privateKeyBase64: String? = null
+)

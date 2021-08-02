@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.go2p.GoP2p
+import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import kotlinx.coroutines.*
 import kotlin.concurrent.thread
@@ -31,9 +32,14 @@ import kotlin.coroutines.suspendCoroutine
  *
  * @author Manuel Riesen
  */
-actual class P2pNode : NetworkNode() {
+actual class P2pNode actual constructor(
+    p2pConfig: P2pConfiguration
+): NetworkNode() {
 
-    private val gop2p = GoP2p()
+    private val gop2p = GoP2p.builder()
+        .port(p2pConfig.listenPort)
+        .privateKeyBase64(p2pConfig.privateKeyBase64)
+        .build()
 
     private var listenJob: Job? = null
 

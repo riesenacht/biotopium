@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.network
 
+import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import ch.riesenacht.biotopium.utils.await
 import ch.riesenacht.biotopium.utils.jsArray
@@ -30,7 +31,9 @@ import ch.riesenacht.biotopium.utils.jsObjectFromPairs
  *
  * @author Manuel Riesen
  */
-actual class P2pNode : NetworkNode() {
+actual class P2pNode actual constructor(
+    private val p2pConfig: P2pConfiguration
+) : NetworkNode() {
 
     private var libp2p: Libp2pInstance? = null
 
@@ -60,9 +63,7 @@ actual class P2pNode : NetworkNode() {
                 }
                 peerDiscovery = jsObjectFromPairs(
                     Bootstrap.tag to jsObject {
-                        list = jsArray(
-                            "/ip4/127.0.0.1/tcp/5558/ws/p2p/12D3KooWFBmiRR8avwf28vQXFZgF5PUxag9Nd3vQM7CMBdegGdh6",
-                        )
+                        list = jsArray(*p2pConfig.bootstrapPeers.toTypedArray())
                         interval = 5000
                         enabled = true
                     }

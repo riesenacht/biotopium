@@ -38,17 +38,76 @@ public class GoP2p {
 
     private static final GoP2pLibrary GO_P2P_LIBRARY;
 
+    private final int port;
+    private final String privateKeyBase64;
+
     static {
         String buildDirPath = new File(GoP2p.class.getProtectionDomain().getCodeSource().getLocation().getPath()).toPath().getParent().getParent().toAbsolutePath().toString();
         String path = new File(buildDirPath + File.separator + LIBRARY_NAME).getAbsolutePath();
         GO_P2P_LIBRARY = LibraryLoader.create(GoP2pLibrary.class).load(path);
     }
 
+    private GoP2p(int port, String privateKeyBase64) {
+        this.port = port;
+        this.privateKeyBase64 = privateKeyBase64;
+    }
+
+    /**
+     * The builder for the {@link GoP2p} class.
+     */
+    public static class Builder {
+
+        private int port = 0;
+        private String privateKeyBase64;
+
+        private Builder() { }
+
+        /**
+         * Sets the port of the new {@link GoP2p} instance.
+         * @param port port to listen
+         * @return builder
+         */
+        public Builder port(int port) {
+            this.port = port;
+            return this;
+        }
+
+        /**
+         * Sets the private key of the new {@link GoP2p} instance.
+         * @param privateKeyBase64 private key in base64 format
+         * @return builder
+         */
+        public Builder privateKeyBase64(String privateKeyBase64) {
+            this.privateKeyBase64 = privateKeyBase64;
+            return this;
+        }
+
+        /**
+         * Finishes the building process.
+         * @return new {@link GoP2p} instance
+         */
+        public GoP2p build() {
+            return new GoP2p(port, privateKeyBase64);
+        }
+    }
+
+    /**
+     * Provides the builder.
+     * @return builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     /**
      * Starts the peer-to-peer server.
      */
     public void start() {
-        GO_P2P_LIBRARY.StartServer();
+        Pointer privateKeyPtr = null;
+        if(privateKeyBase64 != null) {
+            privateKeyPtr = createPointerFromString(privateKeyBase64);
+        }
+        GO_P2P_LIBRARY.StartServer(port, privateKeyPtr);
     }
 
     /**
@@ -73,18 +132,28 @@ public class GoP2p {
      * @param serialized serialized message
      */
     public void send(String serialized) {
-        // correct C string size
-        int size = serialized.length()+1;
-        Pointer ptr =  Runtime.getSystemRuntime().getMemoryManager().allocateTemporary(size, true);
-        ptr.putString(0, serialized, size, StandardCharsets.UTF_8);
+        Pointer ptr = createPointerFromString(serialized);
         GO_P2P_LIBRARY.Send(ptr);
+    }
+
+    /**
+     * Creates a pointer and puts the given string in it.
+     * @param str string to put in pointer
+     * @return pointer to string
+     */
+    private Pointer createPointerFromString(String str) {
+        // correct C string size
+        int size = str.length()+1;
+        Pointer ptr =  Runtime.getSystemRuntime().getMemoryManager().allocateTemporary(size, true);
+        ptr.putString(0, str, size, StandardCharsets.UTF_8);
+        return ptr;
     }
 
     /**
      * Represents the gop2p library.
      */
     public interface GoP2pLibrary {
-        void StartServer();
+        void StartServer(int port, Pointer pkBase64Ptr);
         void StopServer();
         void Send(Pointer serialized);
         Pointer ListenBlocking();

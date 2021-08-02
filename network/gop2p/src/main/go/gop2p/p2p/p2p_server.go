@@ -26,7 +26,8 @@ import (
 	"github.com/libp2p/go-libp2p-core/host"
 	noise "github.com/libp2p/go-libp2p-noise"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	ws "github.com/libp2p/go-ws-transport"
+	dht "github.com/libp2p/go-libp2p-kad-dht"
+	"github.com/libp2p/go-libp2p-core/routing"
 	"log"
 	"riesenacht.ch/biotopium/network/gop2p/check"
 )
@@ -75,11 +76,19 @@ func StartP2PServer(config *config) {
 	h, err := libp2p.New(ctx,
 		libp2p.Identity(privateKey),
 		libp2p.ListenAddrStrings(
-			fmt.Sprintf("/ip4/127.0.0.1/tcp/%d/ws/", config.Port),
+			fmt.Sprintf("/ip4/0.0.0.0/tcp/%d/ws/", config.Port),
 		),
-		libp2p.DisableRelay(),
-		libp2p.Transport(ws.New),
+		libp2p.NATPortMap(), // Try to open ports over uPnP
+		libp2p.EnableAutoRelay(), // Advertise node on relays
+		libp2p.DefaultTransports, // default transports, includes WebSockets and TCP
 		libp2p.Security(noise.ID, noise.New),
+		libp2p.Routing(func(h host.Host) (routing.PeerRouting, error) {
+            dhtInstance, err := dht.New(
+                ctx,
+                h,
+            )
+            return dhtInstance, err
+        }),
 	)
 	check.Err(err)
 	instance.Host = h

@@ -26,7 +26,7 @@ type config struct {
 }
 
 // NewConfig is the factory function of the config struct.
-// A topic, port and private key bytes have to be given.
+// A topic, a port and private key bytes have to be given.
 // A pointer to a new P2PConfig is returned.
 func NewConfig(topic string, port int, pkByte []byte) *config {
 	return &config{
