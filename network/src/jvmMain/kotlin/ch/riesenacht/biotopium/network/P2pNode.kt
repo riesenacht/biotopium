@@ -20,6 +20,10 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.go2p.GoP2p
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
+import kotlinx.coroutines.*
+import kotlin.concurrent.thread
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Represents a peer-to-peer node.
@@ -31,23 +35,29 @@ actual class P2pNode : NetworkNode() {
 
     private val gop2p = GoP2p()
 
+    private var listenJob: Job? = null
+
     override suspend fun start() {
         gop2p.start()
-        //TODO call is blocking
-        listen()
+        startListening()
     }
 
     override suspend fun stop() {
         gop2p.stop()
+        listenJob?.cancelAndJoin()
     }
 
     override fun sendSerialized(message: SerializedMessage) {
         gop2p.send(message)
     }
 
-    private fun listen() {
+    private suspend fun startListening(): Unit = withContext(Dispatchers.Default) {
+        listenJob = launch(Job()) { listenBlocking() }
+    }
+
+    private fun listenBlocking() {
         val serialized = gop2p.listenBlocking()
         receive(serialized)
-        listen()
+        listenBlocking()
     }
 }

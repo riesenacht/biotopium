@@ -38,6 +38,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
             }
         }
         val commonTest by getting {
