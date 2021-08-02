@@ -38,7 +38,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
             }
         }
         val commonTest by getting {
@@ -63,6 +62,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(project(":$biotopiumNetworkArtifactId:$gop2pArtifactId"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
             }
         }
         val jvmTest by getting
