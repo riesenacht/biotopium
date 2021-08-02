@@ -75,8 +75,7 @@ public class GoP2p {
     public void send(String serialized) {
         // correct C string size
         int size = serialized.length()+1;
-        //TODO investigate possible memory leak
-        Pointer ptr = Memory.allocate(Runtime.getSystemRuntime(), size);
+        Pointer ptr =  Runtime.getSystemRuntime().getMemoryManager().allocateTemporary(size, true);
         ptr.putString(0, serialized, size, StandardCharsets.UTF_8);
         GO_P2P_LIBRARY.Send(ptr);
     }
