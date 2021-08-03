@@ -20,8 +20,7 @@ package ch.riesenacht.biotopium.core.blockchain
 
 /**
  * Represents data stored in a [Block].
- * Block data can be hashed.
  *
  * @author Manuel Riesen
  */
-interface BlockData : Hashable
+interface BlockData

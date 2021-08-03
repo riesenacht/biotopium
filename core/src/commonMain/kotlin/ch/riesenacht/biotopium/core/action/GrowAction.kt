@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.model.map.Plot
 import kotlinx.serialization.Serializable
 
@@ -27,14 +26,12 @@ import kotlinx.serialization.Serializable
  * A growth action describes the growth of a plant on a plot.
  *
  * @property produce the affected plot
- * @property sign the signature of the action's initiator
  *
  * @author Manuel Riesen
  */
 @Serializable
 data class GrowAction(
-    override val produce: Plot,
-    override val sign: Signature,
+    override val produce: Plot
 ) : Action, Producible<Plot> {
     override val type = ActionType.GROW
 }

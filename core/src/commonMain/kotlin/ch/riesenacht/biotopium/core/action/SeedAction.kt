@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.model.item.Seed
 import ch.riesenacht.biotopium.core.model.map.Tile
 import kotlinx.serialization.Serializable
@@ -29,15 +28,13 @@ import kotlinx.serialization.Serializable
  *
  * @property produce the affected tile
  * @property consume the consumed seed
- * @property sign the signature of the action's initiator
  *
  * @author Manuel Riesen
  */
 @Serializable
 data class SeedAction(
     override val produce: Tile,
-    override val consume: Seed,
-    override val sign: Signature
+    override val consume: Seed
 ) : Action, Producible<Tile>, Consumable<Seed> {
     override val type = ActionType.SEED
 }

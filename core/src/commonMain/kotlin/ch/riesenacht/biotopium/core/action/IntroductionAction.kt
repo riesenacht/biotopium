@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.model.misc.IntroductionGift
 import kotlinx.serialization.Serializable
 
@@ -28,14 +27,12 @@ import kotlinx.serialization.Serializable
  * The player receives an introduction gift.
  *
  * @property produce the introduction gift
- * @property sign the signature of the action's initiator
  *
  * @author Manuel Riesen
  */
 @Serializable
 data class IntroductionAction(
-    override val produce: IntroductionGift,
-    override val sign: Signature
+    override val produce: IntroductionGift
 ) : Action, Producible<IntroductionGift> {
     override val type = ActionType.INTRODUCTION
 }

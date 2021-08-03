@@ -19,7 +19,6 @@
 package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.blockchain.BlockData
-import ch.riesenacht.biotopium.core.crypto.model.Signature
 
 /**
  * Represents an action performed by a player or the game itself.
@@ -34,13 +33,4 @@ sealed interface Action : BlockData {
      * The type of action
      */
     val type: ActionType
-
-    /**
-     * The signature of the action's creator
-     */
-    val sign: Signature
-
-    override fun toHashableString(): String {
-        TODO("Not yet implemented")
-    }
 }

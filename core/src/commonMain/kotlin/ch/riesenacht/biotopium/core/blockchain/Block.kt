@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.blockchain
 
 import ch.riesenacht.biotopium.core.crypto.model.Hash
+import ch.riesenacht.biotopium.core.crypto.model.Signature
 import kotlinx.serialization.Serializable
 
 /**
@@ -26,8 +27,10 @@ import kotlinx.serialization.Serializable
  * The [height] of a block shows the position on the blockchain.
  * A block contains the [timestamp] of its creation time.
  * Over the [previous hash][prevHash] the block is connected to the previous block in the chain.
+ * A block holds information about it's [creator].
+ * The [creator] creates a [signature][sign] on the [hash].
  * The block's validity is confirmed by the [validator].
- * A [validator] creates a [signature][validSign] on the block's [hash].
+ * A [validator] creates a [validation signature][validSign] on the block's [hash].
  * Each block stores [data].
  * The block's [hash] is used for chaining blocks together, as well as guarantee immutability of a block.
  *
@@ -38,14 +41,10 @@ data class Block(
     val height: Long,
     val timestamp: Long,
     val prevHash: Hash,
+    val creator: Address,
     val validator: Address,
     val data: BlockData,
     val hash: Hash?,
-    val validSign: String?
-) : Hashable {
-
-
-    override fun toHashableString(): String {
-        TODO("Not yet implemented")
-    }
-}
+    val sign: Signature?,
+    val validSign: Signature?
+)

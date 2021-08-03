@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.model.map.Tile
 import kotlinx.serialization.Serializable
 
@@ -26,14 +25,12 @@ import kotlinx.serialization.Serializable
  * The action for chunk genesis.
  *
  * @property produce generated tiles
- * @property sign the signature of the action's initiator
  *
  * @author Manuel Riesen
  */
 @Serializable
 data class ChunkGenesisAction(
-    override val produce: List<Tile>,
-    override val sign: Signature
+    override val produce: List<Tile>
 ) : Action, Producible<List<Tile>> {
     override val type = ActionType.CHUNK_GENESIS
 }

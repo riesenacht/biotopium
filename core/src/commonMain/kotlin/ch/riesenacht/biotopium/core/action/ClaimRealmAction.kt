@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.model.item.RealmClaimPaper
 import ch.riesenacht.biotopium.core.model.map.Realm
 import kotlinx.serialization.Serializable
@@ -28,15 +27,13 @@ import kotlinx.serialization.Serializable
  *
  * @property produce the claimed realm
  * @property consume the consumed claim paper
- * @property sign the signature of the action's initiator
  *
  * @author Manuel Riesen
  */
 @Serializable
 data class ClaimRealmAction(
     override val produce: Realm,
-    override val consume: RealmClaimPaper,
-    override val sign: Signature
+    override val consume: RealmClaimPaper
 ) : Action, Producible<Realm>, Consumable<RealmClaimPaper> {
     override val type = ActionType.CLAIM_REALM
 }

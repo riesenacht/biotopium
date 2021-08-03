@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.model.item.Hoe
 import ch.riesenacht.biotopium.core.model.map.Tile
 import kotlinx.serialization.Serializable
@@ -28,15 +27,13 @@ import kotlinx.serialization.Serializable
  *
  * @property produce the affected tile
  * @property consume the consumed hoe
- * @property sign the signature of the action's initiator
  *
  * @author Manuel Riesen
  */
 @Serializable
 data class CreatePlotAction(
     override val produce: Tile,
-    override val consume: Hoe,
-    override val sign: Signature
+    override val consume: Hoe
 ) : Action, Producible<Tile>, Consumable<Hoe> {
     override val type = ActionType.CREATE_PLOT
 }
