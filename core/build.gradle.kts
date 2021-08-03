@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 val jvmTargetVersion: String by project
@@ -38,6 +39,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":${biotopiumNetworkArtifactId}"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
             }
         }
         val commonTest by getting {
