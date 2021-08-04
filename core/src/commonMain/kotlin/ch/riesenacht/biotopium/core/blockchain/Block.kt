@@ -44,7 +44,7 @@ data class Block(
     val creator: Address,
     val validator: Address,
     val data: BlockData,
-    val hash: Hash?,
-    val sign: Signature?,
-    val validSign: Signature?
+    val hash: Hash? = null,
+    val sign: Signature? = null,
+    val validSign: Signature? = null
 )
