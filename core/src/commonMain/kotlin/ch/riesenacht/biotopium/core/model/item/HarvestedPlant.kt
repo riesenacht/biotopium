@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.model.item
 
 import ch.riesenacht.biotopium.core.model.Owner
 import ch.riesenacht.biotopium.core.model.plant.PlantType
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("HarvestedPlant")
 data class HarvestedPlant(
     override val owner: Owner,
     override val plantType: PlantType

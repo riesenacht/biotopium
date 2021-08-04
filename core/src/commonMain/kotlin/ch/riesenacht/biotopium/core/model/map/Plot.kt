@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.model.map
 
 import ch.riesenacht.biotopium.core.model.Coordinate
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("Plot")
 data class Plot(
     override val x: Coordinate,
     override val y: Coordinate

@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.model.item
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -30,6 +31,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("Harvest")
 data class Harvest(
     val plant: HarvestedPlant,
     val seeds: List<Seed>

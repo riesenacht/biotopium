@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.model.item.Hoe
 import ch.riesenacht.biotopium.core.model.map.Plot
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("CreatePlotAction")
 data class CreatePlotAction(
     val produce: Plot,
     override val consume: Hoe

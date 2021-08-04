@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.core.model.map
 import ch.riesenacht.biotopium.core.model.Element
 import ch.riesenacht.biotopium.core.model.Owner
 import ch.riesenacht.biotopium.core.model.RealmIndex
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("Realm")
 data class Realm(
     override val owner: Owner,
     val ix: RealmIndex,

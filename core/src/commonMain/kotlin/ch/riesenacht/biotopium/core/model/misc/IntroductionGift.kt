@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.core.model.misc
 import ch.riesenacht.biotopium.core.model.item.Hoe
 import ch.riesenacht.biotopium.core.model.item.RealmClaimPaper
 import ch.riesenacht.biotopium.core.model.item.Seed
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.serialization.Serializable
  * @property seeds seeds to seed
  */
 @Serializable
+@SerialName("IntroductionGift")
 data class IntroductionGift(
     val realmClaimPaper: RealmClaimPaper,
     val hoes: List<Hoe>,

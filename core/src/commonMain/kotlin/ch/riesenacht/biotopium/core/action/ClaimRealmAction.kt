@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.model.item.RealmClaimPaper
 import ch.riesenacht.biotopium.core.model.map.Realm
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("ClaimRealmAction")
 data class ClaimRealmAction(
     override val produce: Realm,
     override val consume: RealmClaimPaper

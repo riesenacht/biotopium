@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.model.misc.IntroductionGift
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("IntroductionAction")
 data class IntroductionAction(
     override val produce: IntroductionGift
 ) : Action, Producible<IntroductionGift> {

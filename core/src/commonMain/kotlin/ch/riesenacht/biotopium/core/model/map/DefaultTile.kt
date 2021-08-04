@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.model.map
 
 import ch.riesenacht.biotopium.core.model.Coordinate
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -28,6 +29,7 @@ import kotlinx.serialization.Serializable
  * @property y y-coordinate
  */
 @Serializable
+@SerialName("DefaultTile")
 data class DefaultTile(
     override val x: Coordinate,
     override val y: Coordinate
