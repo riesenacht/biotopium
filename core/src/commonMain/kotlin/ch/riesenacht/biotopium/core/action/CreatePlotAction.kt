@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.model.item.Hoe
-import ch.riesenacht.biotopium.core.model.map.Tile
+import ch.riesenacht.biotopium.core.model.map.Plot
 import kotlinx.serialization.Serializable
 
 /**
@@ -32,8 +32,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CreatePlotAction(
-    override val produce: Tile,
+    val produce: Plot,
     override val consume: Hoe
-) : Action, Producible<Tile>, Consumable<Hoe> {
+) : Action, Consumable<Hoe> {
     override val type = ActionType.CREATE_PLOT
 }
