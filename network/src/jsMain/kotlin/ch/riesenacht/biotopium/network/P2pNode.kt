@@ -76,7 +76,7 @@ actual class P2pNode actual constructor(
         libp2p.on("peer:discovery") { peerId ->
             println("[P2P] found peer: ${peerId.toB58String()}")
         }
-        libp2p.pubsub.on(BiotopiumProtocol.topic) { msg: dynamic ->
+        libp2p.pubsub.on(p2pConfig.topic) { msg: dynamic ->
             println("[P2P] received: ${msg.data}")
             val serializedMessage: SerializedMessage = (msg.data as ByteArray).decodeToString()
             receive(serializedMessage)

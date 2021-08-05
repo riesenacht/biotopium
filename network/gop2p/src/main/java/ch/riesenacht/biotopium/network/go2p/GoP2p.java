@@ -19,7 +19,6 @@
 package ch.riesenacht.biotopium.network.go2p;
 
 import jnr.ffi.LibraryLoader;
-import jnr.ffi.Memory;
 import jnr.ffi.Pointer;
 import jnr.ffi.Runtime;
 
@@ -38,6 +37,7 @@ public class GoP2p {
 
     private static final GoP2pLibrary GO_P2P_LIBRARY;
 
+    private final String topic;
     private final int port;
     private final String privateKeyBase64;
 
@@ -47,7 +47,8 @@ public class GoP2p {
         GO_P2P_LIBRARY = LibraryLoader.create(GoP2pLibrary.class).load(path);
     }
 
-    private GoP2p(int port, String privateKeyBase64) {
+    private GoP2p(String topic, int port, String privateKeyBase64) {
+        this.topic = topic;
         this.port = port;
         this.privateKeyBase64 = privateKeyBase64;
     }
@@ -57,10 +58,21 @@ public class GoP2p {
      */
     public static class Builder {
 
+        private String topic;
         private int port = 0;
         private String privateKeyBase64;
 
         private Builder() { }
+
+        /**
+         * Sets the topic to use of the new {@link GoP2p} instance.
+         * @param topic to use
+         * @return builder
+         */
+        public Builder topic(String topic) {
+            this.topic = topic;
+            return this;
+        }
 
         /**
          * Sets the port of the new {@link GoP2p} instance.
@@ -87,7 +99,7 @@ public class GoP2p {
          * @return new {@link GoP2p} instance
          */
         public GoP2p build() {
-            return new GoP2p(port, privateKeyBase64);
+            return new GoP2p(topic, port, privateKeyBase64);
         }
     }
 
@@ -107,7 +119,8 @@ public class GoP2p {
         if(privateKeyBase64 != null) {
             privateKeyPtr = createPointerFromString(privateKeyBase64);
         }
-        GO_P2P_LIBRARY.StartServer(port, privateKeyPtr);
+        Pointer topicPtr = createPointerFromString(topic);
+        GO_P2P_LIBRARY.StartServer(topicPtr, port, privateKeyPtr);
     }
 
     /**
@@ -153,7 +166,7 @@ public class GoP2p {
      * Represents the gop2p library.
      */
     public interface GoP2pLibrary {
-        void StartServer(int port, Pointer pkBase64Ptr);
+        void StartServer(Pointer topicPtr, int port, Pointer pkBase64Ptr);
         void StopServer();
         void Send(Pointer serialized);
         Pointer ListenBlocking();

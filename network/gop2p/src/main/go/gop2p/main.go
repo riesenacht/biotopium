@@ -28,7 +28,7 @@ import (
 
 // StartServer starts the peer-to-peer server.
 //export StartServer
-func StartServer(port int, pkBase64Ptr CString) {
+func StartServer(topicPtr CString, port int, pkBase64Ptr CString) {
     pkBase64 := C.GoString(pkBase64Ptr)
     var pkBytes []byte
     if len(pkBase64) > 0 {
@@ -36,7 +36,8 @@ func StartServer(port int, pkBase64Ptr CString) {
         check.Err(err)
         pkBytes = []byte(pkStr)
     }
-	config := p2p.NewConfig("/biotopium/0.1.0", port, pkBytes)
+    topic := C.GoString(topicPtr)
+	config := p2p.NewConfig(topic, port, pkBytes)
 	p2p.StartP2PServer(config)
 }
 

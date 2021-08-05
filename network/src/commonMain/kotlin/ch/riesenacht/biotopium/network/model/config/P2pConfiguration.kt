@@ -26,11 +26,13 @@ package ch.riesenacht.biotopium.network.model.config
  * @property listenPort port to listen on (if possible on platform)
  * @property bootstrapPeers bootstrap peers to use (if possible on platform)
  * @property privateKeyBase64 private key bytes, encoded in base64 to use (if possible on platform)
+ * @property topic topic to use
  *
  * @author Manuel Riesen
  */
 data class P2pConfiguration(
     val listenPort: Int,
     val bootstrapPeers: List<String> = emptyList(),
-    val privateKeyBase64: String? = null
+    val privateKeyBase64: String? = null,
+    val topic: String
 )

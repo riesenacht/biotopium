@@ -37,6 +37,7 @@ actual class P2pNode actual constructor(
 ): NetworkNode() {
 
     private val gop2p = GoP2p.builder()
+        .topic(p2pConfig.topic)
         .port(p2pConfig.listenPort)
         .privateKeyBase64(p2pConfig.privateKeyBase64)
         .build()
