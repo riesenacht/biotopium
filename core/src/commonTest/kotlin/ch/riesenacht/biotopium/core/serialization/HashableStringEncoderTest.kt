@@ -120,7 +120,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = SeedAction(plot, seed)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;SeedAction;Plot;1;0;1;me;1;1;4"
+        val expected = "1;1;prevHash;test;blocklord;SeedAction;1;0;1;me;1;1;4"
 
         val encoded = HashableStringEncoder.encode(block)
 

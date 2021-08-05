@@ -241,7 +241,7 @@ class JsonEncoderTest : EncoderTest() {
         val action = SeedAction(plot, seed)
         val block = generateDefaultBlock(action)
 
-        val expected = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"creator\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"SeedAction\",\"produce\":{\"class\":\"Plot\",\"x\":1,\"y\":0},\"consume\":{\"owner\":\"me\",\"plantType\":\"CORN\"}}}"
+        val expected = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"creator\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"SeedAction\",\"produce\":{\"x\":1,\"y\":0},\"consume\":{\"owner\":\"me\",\"plantType\":\"CORN\"}}}"
 
         val encoded = JsonEncoder.encode(block)
 
@@ -251,7 +251,7 @@ class JsonEncoderTest : EncoderTest() {
     @Test
     fun testDecodeSeedAction() {
 
-        val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"creator\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"SeedAction\",\"produce\":{\"class\":\"Plot\",\"x\":1,\"y\":0},\"consume\":{\"owner\":\"me\",\"plantType\":\"CORN\"}}}"
+        val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"creator\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"SeedAction\",\"produce\":{\"x\":1,\"y\":0},\"consume\":{\"owner\":\"me\",\"plantType\":\"CORN\"}}}"
 
         val plot = Plot(1, 0)
         val seed = Seed("me", PlantType.CORN)
