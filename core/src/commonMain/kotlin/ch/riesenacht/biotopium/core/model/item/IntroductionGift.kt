@@ -16,7 +16,7 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.model.misc
+package ch.riesenacht.biotopium.core.model.item
 
 import ch.riesenacht.biotopium.core.model.item.Hoe
 import ch.riesenacht.biotopium.core.model.item.RealmClaimPaper

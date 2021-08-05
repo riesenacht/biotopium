@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.model.item.Seed
-import ch.riesenacht.biotopium.core.model.map.Tile
+import ch.riesenacht.biotopium.core.model.map.Plot
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -35,8 +35,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("SeedAction")
 data class SeedAction(
-    override val produce: Tile,
+    override val produce: Plot,
     override val consume: Seed
-) : Action, Producible<Tile>, Consumable<Seed> {
+) : Action, Producible<Plot>, Consumable<Seed> {
     override val type = ActionType.SEED
 }

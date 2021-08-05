@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.model.misc.IntroductionGift
+import ch.riesenacht.biotopium.core.model.item.IntroductionGift
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
