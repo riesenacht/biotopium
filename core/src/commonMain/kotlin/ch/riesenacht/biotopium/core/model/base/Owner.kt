@@ -22,8 +22,7 @@ import ch.riesenacht.biotopium.core.model.blockchain.Address
 
 /**
  * Represents the owner of an [Element].
- * Elements without an owner are valid.
  *
  * @author Manuel Riesen
  */
-typealias Owner = Address?
+typealias Owner = Address
