@@ -18,7 +18,8 @@
 
 package ch.riesenacht.biotopium.core.serialization
 
-import ch.riesenacht.biotopium.core.model.base.ModelSerializationInfo
+import ch.riesenacht.biotopium.core.model.action.ActionSerializationInfo
+import ch.riesenacht.biotopium.core.model.base.BaseSerializationInfo
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 
@@ -27,14 +28,14 @@ import kotlinx.serialization.modules.plus
  *
  *  @author Manuel Riesen
  */
-object SerializationInfoCollection {
+object CoreSerializersModuleCollection {
 
-    private val infos: List<SerializationInfo> = listOf(
-        ModelSerializationInfo,
+    private val infos: Set<SerializationInfo> = setOf(
+        BaseSerializationInfo,
         ActionSerializationInfo
     )
 
-    private val emptyModule = SerializersModule { }
+    private val emptyModule = SerializersModule {  }
 
     /**
      * Sums up all modules to a single module.

@@ -22,13 +22,12 @@ import kotlinx.serialization.modules.SerializersModule
 
 /**
  * Holds the information about class hierarchies required for serialization.
+ * This is a wrapper for the [SerializersModule] since it cannot be extended.
+ *
+ * @property module serializers module
  *
  * @author Manuel Riesen
  */
-interface SerializationInfo {
-
-    /**
-     * The serializer module.
-     */
+abstract class SerializationInfo(
     val module: SerializersModule
-}
+)

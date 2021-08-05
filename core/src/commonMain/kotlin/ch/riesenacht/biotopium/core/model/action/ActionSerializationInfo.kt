@@ -30,22 +30,19 @@ import kotlinx.serialization.modules.subclass
  *
  * @author Manuel Riesen
  */
-object ActionSerializationInfo : SerializationInfo {
+object ActionSerializationInfo : SerializationInfo(SerializersModule {
 
-    override val module = SerializersModule {
-
-        fun PolymorphicModuleBuilder<Action>.registerActionSubclasses() {
-            subclass(ChunkGenesisAction::class)
-            subclass(ClaimRealmAction::class)
-            subclass(CreatePlotAction::class)
-            subclass(GrowAction::class)
-            subclass(GrowAction::class)
-            subclass(HarvestAction::class)
-            subclass(IntroductionAction::class)
-            subclass(SeedAction::class)
-        }
-
-        polymorphic(Action::class) { registerActionSubclasses() }
-        polymorphic(BlockData::class) { registerActionSubclasses() }
+    fun PolymorphicModuleBuilder<Action>.registerActionSubclasses() {
+        subclass(ChunkGenesisAction::class)
+        subclass(ClaimRealmAction::class)
+        subclass(CreatePlotAction::class)
+        subclass(GrowAction::class)
+        subclass(GrowAction::class)
+        subclass(HarvestAction::class)
+        subclass(IntroductionAction::class)
+        subclass(SeedAction::class)
     }
-}
+
+    polymorphic(Action::class) { registerActionSubclasses() }
+    polymorphic(BlockData::class) { registerActionSubclasses() }
+})

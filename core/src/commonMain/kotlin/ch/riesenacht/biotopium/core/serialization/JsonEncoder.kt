@@ -30,11 +30,16 @@ import kotlinx.serialization.json.Json
 object JsonEncoder {
 
     /**
+     * The name of the class discriminator property.
+     */
+    const val classDiscriminator = "class"
+
+    /**
      * Custom JSON format.
      */
     val format = Json {
-        classDiscriminator = "class"
-        serializersModule = SerializationInfoCollection.module
+        classDiscriminator = JsonEncoder.classDiscriminator
+        serializersModule = CoreSerializersModuleCollection.module
     }
 
     /**

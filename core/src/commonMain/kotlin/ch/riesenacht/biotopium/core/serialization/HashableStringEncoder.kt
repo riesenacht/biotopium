@@ -43,7 +43,7 @@ object HashableStringEncoder {
     @OptIn(ExperimentalSerializationApi::class)
     class ListEncoder : AbstractEncoder() {
 
-        override val serializersModule = SerializationInfoCollection.module
+        override val serializersModule = CoreSerializersModuleCollection.module
 
         /**
          * The list containing all values to create a hashable string from.

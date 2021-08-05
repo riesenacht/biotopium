@@ -32,22 +32,19 @@ import kotlinx.serialization.modules.subclass
  *
  * @author Manuel Riesen
  */
-object ModelSerializationInfo : SerializationInfo {
+object BaseSerializationInfo : SerializationInfo(SerializersModule {
 
-    override val module = SerializersModule {
-
-        // Item class hierarchy
-        polymorphic(Item::class) {
-            subclass(HarvestedPlant::class)
-            subclass(Hoe::class)
-            subclass(RealmClaimPaper::class)
-            subclass(Seed::class)
-        }
-
-        // Tile class hierarchy
-        polymorphic(Tile::class) {
-            subclass(DefaultTile::class)
-            subclass(Plot::class)
-        }
+    // Item class hierarchy
+    polymorphic(Item::class) {
+        subclass(HarvestedPlant::class)
+        subclass(Hoe::class)
+        subclass(RealmClaimPaper::class)
+        subclass(Seed::class)
     }
-}
+
+    // Tile class hierarchy
+    polymorphic(Tile::class) {
+        subclass(DefaultTile::class)
+        subclass(Plot::class)
+    }
+})
