@@ -16,27 +16,11 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
-
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+package ch.riesenacht.biotopium.core.model.blockchain
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents data stored in a [Block].
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
-}
+interface BlockData

@@ -16,27 +16,24 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.action
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import ch.riesenacht.biotopium.core.model.base.map.Plot
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * The action of growing a plant.
+ * A growth action describes the growth of a plant on a plot.
+ *
+ * @property produce the affected plot
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+@Serializable
+@SerialName("GrowAction")
+data class GrowAction(
+    override val produce: Plot
+) : Action, Producible<Plot> {
+    override val type = ActionType.GROW
 }

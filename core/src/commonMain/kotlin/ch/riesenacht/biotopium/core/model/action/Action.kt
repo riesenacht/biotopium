@@ -16,27 +16,21 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.action
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
 import ch.riesenacht.biotopium.core.model.blockchain.BlockData
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents an action performed by a player or the game itself.
+ * An action can be seen as an event in an event-sourced system.
+ * Actions are stored in the blockchain and are therefore immutable.
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
+sealed interface Action : BlockData {
 
     /**
-     * Generates a default block data object with a given block [data].
+     * The type of action
      */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+    val type: ActionType
 }

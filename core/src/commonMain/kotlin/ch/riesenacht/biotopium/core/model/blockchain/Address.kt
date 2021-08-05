@@ -16,27 +16,14 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.blockchain
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import ch.riesenacht.biotopium.core.crypto.model.PublicKey
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents the address of a cryptographic wallet.
+ * For simplicity, the address equals the [PublicKey].
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
-}
+typealias Address = PublicKey

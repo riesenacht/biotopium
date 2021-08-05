@@ -16,27 +16,14 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.base
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import ch.riesenacht.biotopium.core.model.blockchain.Address
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents the owner of an [Element].
+ * Elements without an owner are valid.
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
-}
+typealias Owner = Address?

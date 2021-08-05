@@ -16,27 +16,26 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.action
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import ch.riesenacht.biotopium.core.model.base.item.RealmClaimPaper
+import ch.riesenacht.biotopium.core.model.base.map.Realm
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * The action of claiming a realm.
+ *
+ * @property produce the claimed realm
+ * @property consume the consumed claim paper
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+@Serializable
+@SerialName("ClaimRealmAction")
+data class ClaimRealmAction(
+    override val produce: Realm,
+    override val consume: RealmClaimPaper
+) : Action, Producible<Realm>, Consumable<RealmClaimPaper> {
+    override val type = ActionType.CLAIM_REALM
 }

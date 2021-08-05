@@ -16,27 +16,26 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.action
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import ch.riesenacht.biotopium.core.model.base.item.Harvest
+import ch.riesenacht.biotopium.core.model.base.map.Plot
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * The action of harvesting a plant.
+ *
+ * @param produce the harvest
+ * @param consume the affected plot
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+@Serializable
+@SerialName("HarvestAction")
+data class HarvestAction(
+    override val produce: Harvest,
+    override val consume: Plot
+) : Action, Producible<Harvest>, Consumable<Plot> {
+    override val type = ActionType.HARVEST
 }

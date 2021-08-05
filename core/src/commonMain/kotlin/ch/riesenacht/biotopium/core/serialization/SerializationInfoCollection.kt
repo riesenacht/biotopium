@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.core.serialization
 
-import ch.riesenacht.biotopium.core.model.ModelSerializationInfo
+import ch.riesenacht.biotopium.core.model.base.ModelSerializationInfo
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
 

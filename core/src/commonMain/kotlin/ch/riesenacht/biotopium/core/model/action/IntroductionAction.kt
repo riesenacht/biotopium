@@ -16,27 +16,25 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.action
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import ch.riesenacht.biotopium.core.model.base.item.IntroductionGift
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * The action of introduction.
+ * This action is triggered at the very beginning, after the first sign-in of a player.
+ * The player receives an introduction gift.
+ *
+ * @property produce the introduction gift
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+@Serializable
+@SerialName("IntroductionAction")
+data class IntroductionAction(
+    override val produce: IntroductionGift
+) : Action, Producible<IntroductionGift> {
+    override val type = ActionType.INTRODUCTION
 }

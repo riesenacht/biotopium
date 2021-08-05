@@ -1,12 +1,11 @@
 package ch.riesenacht.biotopium.core.serialization
 
-import ch.riesenacht.biotopium.core.action.*
-import ch.riesenacht.biotopium.core.model.item.*
-import ch.riesenacht.biotopium.core.model.map.DefaultTile
-import ch.riesenacht.biotopium.core.model.map.Plot
-import ch.riesenacht.biotopium.core.model.map.Realm
-import ch.riesenacht.biotopium.core.model.misc.IntroductionGift
-import ch.riesenacht.biotopium.core.model.plant.PlantType
+import ch.riesenacht.biotopium.core.model.action.*
+import ch.riesenacht.biotopium.core.model.base.item.*
+import ch.riesenacht.biotopium.core.model.base.map.DefaultTile
+import ch.riesenacht.biotopium.core.model.base.map.Plot
+import ch.riesenacht.biotopium.core.model.base.map.Realm
+import ch.riesenacht.biotopium.core.model.base.plant.PlantType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

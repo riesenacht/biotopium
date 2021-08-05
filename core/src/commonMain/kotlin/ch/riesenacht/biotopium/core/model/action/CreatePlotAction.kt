@@ -16,27 +16,26 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.model.action
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import ch.riesenacht.biotopium.core.model.base.item.Hoe
+import ch.riesenacht.biotopium.core.model.base.map.Plot
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * The action of creating a plot out of another tile type.
+ *
+ * @property produce the affected tile
+ * @property consume the consumed hoe
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+@Serializable
+@SerialName("CreatePlotAction")
+data class CreatePlotAction(
+    val produce: Plot,
+    override val consume: Hoe
+) : Action, Consumable<Hoe> {
+    override val type = ActionType.CREATE_PLOT
 }
