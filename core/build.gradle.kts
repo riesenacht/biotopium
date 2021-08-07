@@ -14,7 +14,6 @@ version = biotopiumVersion
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 kotlin {
@@ -52,7 +51,7 @@ kotlin {
                 implementation(project(":${biotopiumNetworkArtifactId}"))
 
                 // LazySodium Java, libsodium for JVM
-                implementation("com.goterl.lazycode:lazysodium-java:4.3.4")
+                implementation("com.goterl:lazysodium-java:5.1.1")
             }
         }
         val jvmTest by getting

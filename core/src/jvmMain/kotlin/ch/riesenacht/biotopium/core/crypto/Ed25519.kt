@@ -22,11 +22,9 @@ import ch.riesenacht.biotopium.core.crypto.model.KeyPair
 import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
 import ch.riesenacht.biotopium.core.crypto.model.PublicKey
 import ch.riesenacht.biotopium.core.crypto.model.Signature
-import com.goterl.lazycode.lazysodium.LazySodiumJava
-import com.goterl.lazycode.lazysodium.SodiumJava
-import com.goterl.lazycode.lazysodium.interfaces.Sign
-import com.goterl.lazycode.lazysodium.utils.Key
-import java.security.*
+import com.goterl.lazysodium.LazySodiumJava
+import com.goterl.lazysodium.SodiumJava
+import com.goterl.lazysodium.interfaces.Sign
 import java.util.*
 
 
