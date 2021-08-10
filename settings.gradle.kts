@@ -13,7 +13,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "korge") {
-                useModule("com.soywiz.korlibs.korge.plugins:korge-gradle-plugin:${korgePluginVersion}")
+                useModule("com.soywiz.korlibs.korge.plugins:korge-gradle-plugin:$korgePluginVersion")
             }
         }
     }

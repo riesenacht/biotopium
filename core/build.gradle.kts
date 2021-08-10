@@ -38,8 +38,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":${biotopiumNetworkArtifactId}"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${kotlinxSerializationJsonVersion}")
+                implementation(project(":$biotopiumNetworkArtifactId"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationJsonVersion")
             }
         }
         val commonTest by getting {
@@ -49,7 +49,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation(project(":${biotopiumNetworkArtifactId}"))
+                implementation(project(":$biotopiumNetworkArtifactId"))
 
                 // LazySodium Java, libsodium for JVM
                 implementation("com.goterl:lazysodium-java:5.1.1")
@@ -58,7 +58,7 @@ kotlin {
         val jvmTest by getting
         val jsMain by getting {
             dependencies {
-                implementation(project(":${biotopiumNetworkArtifactId}"))
+                implementation(project(":$biotopiumNetworkArtifactId"))
 
                 // SHA-3 implementation for JavaScript (SHA-3 FIPS 202 standard)
                 implementation(npm("sha3", "2.1.4"))
