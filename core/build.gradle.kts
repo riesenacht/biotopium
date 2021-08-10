@@ -4,6 +4,7 @@ plugins {
 }
 
 val jvmTargetVersion: String by project
+val kotlinxSerializationJsonVersion: String by project
 val biotopiumNetworkArtifactId: String by project
 val biotopiumSubmoduleGroupId: String by project
 val biotopiumVersion: String by project
@@ -38,7 +39,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":${biotopiumNetworkArtifactId}"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${kotlinxSerializationJsonVersion}")
             }
         }
         val commonTest by getting {
