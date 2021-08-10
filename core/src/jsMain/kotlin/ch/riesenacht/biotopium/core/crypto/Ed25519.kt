@@ -113,7 +113,6 @@ private external interface Nacl {
         /**
          * Creates a key pair out of a seed.
          *
-         * @param seed seed to use
          * @return key pair
          */
         fun keyPair(): SignKeyPair

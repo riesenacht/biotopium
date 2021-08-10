@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 val jvmTargetVersion: String by project
@@ -13,7 +14,6 @@ version = biotopiumVersion
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 kotlin {
@@ -38,6 +38,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":${biotopiumNetworkArtifactId}"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
             }
         }
         val commonTest by getting {
@@ -50,7 +51,7 @@ kotlin {
                 implementation(project(":${biotopiumNetworkArtifactId}"))
 
                 // LazySodium Java, libsodium for JVM
-                implementation("com.goterl.lazycode:lazysodium-java:4.3.4")
+                implementation("com.goterl:lazysodium-java:5.1.1")
             }
         }
         val jvmTest by getting

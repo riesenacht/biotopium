@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2021 The biotopium Authors.
+ * This file is part of biotopium.
+ *
+ * biotopium is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * biotopium is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.riesenacht.biotopium.core.model.action
+
+import ch.riesenacht.biotopium.core.model.base.item.Harvest
+import ch.riesenacht.biotopium.core.model.base.map.Plot
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+/**
+ * The action of harvesting a plant.
+ *
+ * @param produce the harvest
+ * @param consume the affected plot
+ *
+ * @author Manuel Riesen
+ */
+@Serializable
+@SerialName("HarvestAction")
+data class HarvestAction(
+    override val produce: Harvest,
+    override val consume: Plot
+) : Action, Producible<Harvest>, Consumable<Plot> {
+    override val type = ActionType.HARVEST
+}
