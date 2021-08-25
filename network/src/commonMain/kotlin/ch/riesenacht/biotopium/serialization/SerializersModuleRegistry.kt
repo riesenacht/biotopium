@@ -16,27 +16,33 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.serialization
 
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.blockchain.BlockData
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.plus
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ *  The registry for [serializers modules][SerializersModule].
+ *  Contains all serializers [modules].
  *
- * @author Manuel Riesen
+ *  @author Manuel Riesen
  */
-abstract class EncoderTest {
+object SerializersModuleRegistry {
+
+    private val modules: MutableSet<SerializersModule> = mutableSetOf()
+
+    private val emptyModule = SerializersModule {  }
 
     /**
-     * Generates a default block data object with a given block [data].
+     * Accumulates all modules to a single module.
      */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+    val module: SerializersModule
+        get() = modules.fold(emptyModule) { acc, m -> acc + m }
+
+    /**
+     * Registers a serializers [module] on the registry.
+     */
+    fun register(module: SerializersModule) {
+        modules.add(module)
+    }
 }

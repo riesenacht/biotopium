@@ -16,35 +16,43 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network
+package ch.riesenacht.biotopium.serialization
 
-import ch.riesenacht.biotopium.network.model.message.Message
-import ch.riesenacht.biotopium.network.model.message.SerializedMessage
-import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 /**
- * Serializer for messages.
+ * The encoder for encoding and decoding to and from the JSON format.
  *
  * @author Manuel Riesen
  */
-object MessageSerializer {
+object JsonEncoder {
 
-    val format = Json {
-        classDiscriminator = "class"
+    /**
+     * The name of the class discriminator property.
+     */
+    private const val classDiscriminator = "class"
+
+    /**
+     * Custom JSON format.
+     */
+    val format: Json by lazy {
+        Json {
+            classDiscriminator = JsonEncoder.classDiscriminator
+            serializersModule = SerializersModuleRegistry.module
+        }
     }
 
     /**
-     * Serializes a [message].
-     * @return serialized message.
+     * Encodes a [value] to JSON.
+     * @return serialized value.
      */
-    inline fun <reified T : MessagePayload> serialize(message: Message<T>): SerializedMessage = format.encodeToString(message)
+    inline fun <reified T> encode(value: T): String = format.encodeToString(value)
 
     /**
-     * Deserializes a [serialized] message.
-     * @return message
+     * Decodes an [encoded] value.
+     * @return value
      */
-    fun deserialize(serialized: SerializedMessage): Message<MessagePayload> = format.decodeFromString(serialized)
+    inline fun <reified T> decode(encoded: String): T = format.decodeFromString(encoded)
 }

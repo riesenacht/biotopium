@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.core.model.action
 
 import ch.riesenacht.biotopium.core.model.blockchain.BlockData
-import ch.riesenacht.biotopium.core.serialization.SerializationInfo
+import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -27,10 +27,11 @@ import kotlinx.serialization.modules.subclass
 
 /**
  * Holds the serialization information about the action data classes.
+ * Registers the serializers module at the serializers module registry.
  *
  * @author Manuel Riesen
  */
-object ActionSerializationInfo : SerializationInfo(SerializersModule {
+object ActionSerializersModuleRegistrar : SerializersModuleRegistrar(SerializersModule {
 
     fun PolymorphicModuleBuilder<Action>.registerActionSubclasses() {
         subclass(ChunkGenesisAction::class)

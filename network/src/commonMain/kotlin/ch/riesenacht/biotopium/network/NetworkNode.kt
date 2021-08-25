@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.network
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import ch.riesenacht.biotopium.network.model.payload.MessagePayload
+import ch.riesenacht.biotopium.serialization.JsonEncoder
 import kotlin.reflect.KClass
 
 /**
@@ -51,7 +52,7 @@ abstract class NetworkNode {
      * Sends an unboxed [message].
      */
     inline fun <reified T : MessagePayload> send(message: Message<T>) {
-        val serialized = MessageSerializer.serialize(message)
+        val serialized = JsonEncoder.encode(message)
         sendSerialized(serialized)
     }
 
@@ -70,7 +71,7 @@ abstract class NetworkNode {
      * The corresponding message handlers are called.
      */
     fun receive(serialized: SerializedMessage) {
-        val message: Message<MessagePayload> = MessageSerializer.deserialize(serialized)
+        val message: Message<MessagePayload> = JsonEncoder.decode(serialized)
         handlerMap.entries.filter { it.key.isInstance(message) }
             .flatMap { it.value }
             .forEach {

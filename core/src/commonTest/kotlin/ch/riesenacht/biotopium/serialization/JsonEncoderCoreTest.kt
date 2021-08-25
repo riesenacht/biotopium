@@ -16,8 +16,9 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.serialization
 
+import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.model.action.*
 import ch.riesenacht.biotopium.core.model.blockchain.Block
 import ch.riesenacht.biotopium.core.model.base.item.*
@@ -25,6 +26,7 @@ import ch.riesenacht.biotopium.core.model.base.map.DefaultTile
 import ch.riesenacht.biotopium.core.model.base.map.Plot
 import ch.riesenacht.biotopium.core.model.base.map.Realm
 import ch.riesenacht.biotopium.core.model.base.plant.PlantType
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -33,7 +35,12 @@ import kotlin.test.assertEquals
  *
  * @author Manuel Riesen
  */
-class JsonEncoderTest : EncoderTest() {
+class JsonEncoderCoreTest : EncoderTest() {
+
+    @BeforeTest
+    fun init() {
+        applyEffect(CoreSerializersModuleEffect)
+    }
 
     @Test
     fun testEncodeChunkGenesisAction() {

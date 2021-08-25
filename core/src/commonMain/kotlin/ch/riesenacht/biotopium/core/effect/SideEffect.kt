@@ -16,18 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.core.effect
 
-import kotlinx.serialization.modules.SerializersModule
+import kotlin.reflect.KClass
 
 /**
- * Holds the information about class hierarchies required for serialization.
- * This is a wrapper for the [SerializersModule] since it cannot be extended.
- *
- * @property module serializers module
+ * Marks a type to have side effects on a [receiver].
+ * This is a hint for developers.
  *
  * @author Manuel Riesen
  */
-abstract class SerializationInfo(
-    val module: SerializersModule
-)
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class SideEffect(val receiver: KClass<*>)

@@ -22,17 +22,18 @@ import ch.riesenacht.biotopium.core.model.base.item.*
 import ch.riesenacht.biotopium.core.model.base.map.DefaultTile
 import ch.riesenacht.biotopium.core.model.base.map.Plot
 import ch.riesenacht.biotopium.core.model.base.map.Tile
-import ch.riesenacht.biotopium.core.serialization.SerializationInfo
+import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 
 /**
  * Holds the serialization information of the model data classes.
+ * Registers the serializers module at the serializers module registry.
  *
  * @author Manuel Riesen
  */
-object BaseSerializationInfo : SerializationInfo(SerializersModule {
+object BaseSerializersModuleRegistrar : SerializersModuleRegistrar(SerializersModule {
 
     // Item class hierarchy
     polymorphic(Item::class) {

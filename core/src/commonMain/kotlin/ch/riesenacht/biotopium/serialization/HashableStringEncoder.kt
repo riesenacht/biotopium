@@ -16,7 +16,7 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.serialization
+package ch.riesenacht.biotopium.serialization
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encoding.AbstractEncoder
@@ -43,7 +43,7 @@ object HashableStringEncoder {
     @OptIn(ExperimentalSerializationApi::class)
     class ListEncoder : AbstractEncoder() {
 
-        override val serializersModule = CoreSerializersModuleCollection.module
+        override val serializersModule = SerializersModuleRegistry.module
 
         /**
          * The list containing all values to create a hashable string from.
