@@ -1,30 +1,31 @@
-# About
-biotopium is a decentralized, platform-independent multiplayer game running on a custom blockchain.
+# biotopium
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.5.10-rebeccapurple.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+[![project chat](https://img.shields.io/badge/zulip-join_chat-blue.svg?style=flat&logo=zulip)](https://biotopium.zulipchat.com/join/lbvve3ohfx5wistgfwmpf6si/)
 
-# Implementation
-The core of the decentralized game is implemented in Kotlin.
-Kotlin is a multi-purpose and multi-paradigmal programming language developed by JetBrains.
-Kotlin brings the benefit of complete platform independence.
+## About
+biotopium is a distributed, platform-independent multiplayer game running on a custom blockchain.
 
-While the JVM acts as the default target, Kotlin can also be compiled to JavaScript or to a native binary.
-Leveraging the Kotlin Multiplatform feature as well as interoperability with Java and JavaScript, the project currently targets the platforms Browser and JVM.
+## Implementation
+The core of biotopium is implemented in Kotlin.
+Leveraging the Kotlin Multiplatform feature as well as interoperability with Java and JavaScript, 
+the project currently targets the platforms Browser and JVM.
 
-# Development
+## Development
 Currently, this is rather a Proof-of-Concept for decentralized game implementations than a production-ready game.
 We use a highly incremental approach for the development cycle.
 
 Since this is a prototype and in favor of rapid development many breaking changes will occur in the early phase of development.
 
-# Build Requirements
+## Build Requirements
 Besides JDK 11 and the Kotlin compiler the following tools are required to build this project:
 - GCC
 - Go 16
 
-# Contributors
+## Contributors
 This project was originally initiated by
 - Manuel Riesen
 - Sandro Rüfenacht
 
-# License
+## License
 This project is released under the GPLv3 license.
 For more information, see the COPYING file.
