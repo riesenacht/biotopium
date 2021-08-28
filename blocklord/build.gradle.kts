@@ -15,14 +15,6 @@ repositories {
 }
 
 kotlin {
-    js(IR) {
-        binaries.executable()
-        browser {
-            commonWebpackConfig {
-                cssSupport.enabled = true
-            }
-        }
-    }
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = jvmTargetVersion
@@ -40,7 +32,7 @@ kotlin {
         }
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test"))
+                implementation(kotlin("test-common"))
             }
         }
         val jvmMain by getting {
@@ -48,12 +40,11 @@ kotlin {
                 implementation(project(":${biotopiumCoreArtifactId}"))
             }
         }
-        val jvmTest by getting
-        val jsMain by getting {
+        val jvmTest by getting {
             dependencies {
-                implementation(project(":${biotopiumCoreArtifactId}"))
+                implementation(kotlin("test-junit"))
             }
+
         }
-        val jsTest by getting
     }
 }
