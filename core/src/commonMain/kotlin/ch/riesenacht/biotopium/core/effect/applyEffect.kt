@@ -20,9 +20,11 @@ package ch.riesenacht.biotopium.core.effect
 
 /**
  * Applies an [effect].
- * In order to trigger the init block of an object (singleton), it has to be called.
- * Calls all given module effects.
+ * In order to trigger the init block of an object (singleton), it has to be used.
+ * While mentioning the object in the code is sufficient for triggering initialization,
+ * it is not very expressive.
+ * It is strongly recommended using this function for applying effects.
  */
 fun applyEffect(vararg effect: ModuleEffect) {
-    effect.forEach { @Suppress("UNUSED_EXPRESSION") it }
+
 }

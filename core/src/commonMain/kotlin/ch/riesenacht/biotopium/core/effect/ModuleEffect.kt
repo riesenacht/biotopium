@@ -24,14 +24,15 @@ package ch.riesenacht.biotopium.core.effect
  * Effects and their effect receivers are usually objects (singletons).
  * Module effects are applied over the init-block.
  *
+ * Effects should be applied using the [applyEffect] function.
+ *
  * @param applier the function invoked on init
  * @param nested the nested module effects
  *
  * @author Manuel Riesen
  */
-abstract class ModuleEffect(applier: (() -> Unit)? = null, nested: Array<ModuleEffect>? = null) {
+abstract class ModuleEffect(applier: (() -> Unit)? = null, vararg nested: ModuleEffect) {
     init {
         applier?.invoke()
-        nested?.let { applyEffect(*it) }
     }
 }

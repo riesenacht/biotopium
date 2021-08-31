@@ -28,7 +28,8 @@ import ch.riesenacht.biotopium.core.model.base.BaseSerializersModuleRegistrar
  *
  * @author Manuel Riesen
  */
-object CoreSerializersModuleEffect : ModuleEffect(nested = arrayOf(
+object CoreSerializersModuleEffect : ModuleEffect(
+    nested = arrayOf(
     BaseSerializersModuleRegistrar,
     ActionSerializersModuleRegistrar
 ))

@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core
 
 import ch.riesenacht.biotopium.core.effect.ModuleEffect
+import ch.riesenacht.biotopium.serialization.CoreSerializersModuleEffect
 
 /**
  * The core module effect.
@@ -27,4 +28,4 @@ import ch.riesenacht.biotopium.core.effect.ModuleEffect
  *
  * @author Manuel Riesen
  */
-object CoreModuleEffect : ModuleEffect(nested = arrayOf(CoreModuleEffect))
+object CoreModuleEffect : ModuleEffect(nested = arrayOf(CoreSerializersModuleEffect))
