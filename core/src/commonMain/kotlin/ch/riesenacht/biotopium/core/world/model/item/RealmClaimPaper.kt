@@ -16,27 +16,24 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
+package ch.riesenacht.biotopium.core.world.model.item
 
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.world.model.Owner
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents a claim paper for a realm.
+ * With a claim paper a player can claim a realm.
+ *
+ * @property owner the realm claim paper's owner
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+@Serializable
+@SerialName("RealmClaimPaper")
+data class RealmClaimPaper(
+    override val owner: Owner
+) : Item {
+    override val type = ItemType.REALM_CLAIM_PAPER
 }

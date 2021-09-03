@@ -16,27 +16,15 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
-
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+package ch.riesenacht.biotopium.core.action.model
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Defines a consuming [Action].
+ * Consuming actions [consume] an element of type [T].
+ * The value of the consumed element is either decreased or the element itself is consumed completely.
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+interface Consumable<T> {
+    val consume: T
 }

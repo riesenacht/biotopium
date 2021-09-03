@@ -16,27 +16,20 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
+package ch.riesenacht.biotopium.core.world.model.item
 
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.world.model.Element
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents an item.
+ * An item is an [Element] which can be placed in the player's inventory.
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
+sealed interface Item : Element {
 
     /**
-     * Generates a default block data object with a given block [data].
+     * The type of item
      */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+    val type: ItemType
 }

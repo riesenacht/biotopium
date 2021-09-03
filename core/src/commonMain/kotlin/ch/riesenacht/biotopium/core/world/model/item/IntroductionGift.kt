@@ -16,27 +16,22 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
+package ch.riesenacht.biotopium.core.world.model.item
 
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents an introduction gift which is given to new players.
  *
- * @author Manuel Riesen
+ * @property realmClaimPaper realm claim paper to claim a realm
+ * @property hoes hoes to create plots
+ * @property seeds seeds to seed
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
-}
+@Serializable
+@SerialName("IntroductionGift")
+data class IntroductionGift(
+    val realmClaimPaper: RealmClaimPaper,
+    val hoes: List<Hoe>,
+    val seeds: List<Seed>
+)

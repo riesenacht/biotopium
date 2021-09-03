@@ -16,27 +16,26 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
+package ch.riesenacht.biotopium.core.world.model.plant
 
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.world.model.Element
+import ch.riesenacht.biotopium.core.world.model.Owner
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents a plant growing on a plot.
+ *
+ * @property owner the plant's owner
+ * @property type type of plant
+ * @property growth the plant's growth
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
-}
+@Serializable
+@SerialName("GrowingPlant")
+data class GrowingPlant(
+    override val owner: Owner,
+    val type: PlantType,
+    val growth: PlantGrowth
+) : Element

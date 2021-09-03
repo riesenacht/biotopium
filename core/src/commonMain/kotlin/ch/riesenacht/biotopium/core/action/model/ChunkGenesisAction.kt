@@ -16,27 +16,23 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
+package ch.riesenacht.biotopium.core.action.model
 
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.world.model.map.Tile
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * The action for chunk genesis.
+ *
+ * @property produce generated tiles
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+@Serializable
+@SerialName("ChunkGenesisAction")
+data class ChunkGenesisAction(
+    override val produce: List<Tile>
+) : Action, Producible<List<Tile>> {
+    override val type = ActionType.CHUNK_GENESIS
 }

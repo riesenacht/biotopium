@@ -16,27 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
-
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+package ch.riesenacht.biotopium.core.world.model
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents an element of the game.
+ * The most abstract representation of a game element.
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
+interface Element {
 
     /**
-     * Generates a default block data object with a given block [data].
+     * The element's owner
      */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+    val owner: Owner
 }

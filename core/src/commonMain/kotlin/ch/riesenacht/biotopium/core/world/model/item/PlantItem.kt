@@ -16,27 +16,19 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
+package ch.riesenacht.biotopium.core.world.model.item
 
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents a plant-related item.
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
+sealed interface PlantItem {
 
     /**
-     * Generates a default block data object with a given block [data].
+     * The type of plant
      */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
+    val plantType: PlantType
 }

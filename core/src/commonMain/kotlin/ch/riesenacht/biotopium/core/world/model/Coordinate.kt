@@ -16,27 +16,12 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.serialization
-
-import ch.riesenacht.biotopium.core.blockchain.model.Block
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+package ch.riesenacht.biotopium.core.world.model
 
 /**
- * Basic encoder test, extended by all encoder test classes.
+ * Represents a cartesian coordinate on the map.
+ * The coordinate and is used to locate tiles in 2-dimensional space.
  *
  * @author Manuel Riesen
  */
-abstract class EncoderTest {
-
-    /**
-     * Generates a default block data object with a given block [data].
-     */
-    protected fun generateDefaultBlock(data: BlockData) = Block(
-        1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
-        data
-    )
-}
+typealias Coordinate = Int

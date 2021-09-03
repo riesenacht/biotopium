@@ -19,14 +19,14 @@
 package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.core.CoreModuleEffect
+import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.effect.applyEffect
-import ch.riesenacht.biotopium.core.model.action.*
-import ch.riesenacht.biotopium.core.model.blockchain.Block
-import ch.riesenacht.biotopium.core.model.base.item.*
-import ch.riesenacht.biotopium.core.model.base.map.DefaultTile
-import ch.riesenacht.biotopium.core.model.base.map.Plot
-import ch.riesenacht.biotopium.core.model.base.map.Realm
-import ch.riesenacht.biotopium.core.model.base.plant.PlantType
+import ch.riesenacht.biotopium.core.blockchain.model.Block
+import ch.riesenacht.biotopium.core.world.model.item.*
+import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
+import ch.riesenacht.biotopium.core.world.model.map.Plot
+import ch.riesenacht.biotopium.core.world.model.map.Realm
+import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -171,10 +171,19 @@ class JsonEncoderCoreTest : EncoderTest() {
     fun testEncodeHarvestAction() {
         val plot = Plot(1, 0)
         val harvest = Harvest(
-            HarvestedPlant("me", PlantType.WHEAT),
+            HarvestedPlant(
+                "me",
+                PlantType.WHEAT
+            ),
             listOf(
-                Seed("me", PlantType.WHEAT),
-                Seed("me", PlantType.WHEAT)
+                Seed(
+                    "me",
+                    PlantType.WHEAT
+                ),
+                Seed(
+                    "me",
+                    PlantType.WHEAT
+                )
             )
         )
         val action = HarvestAction(harvest, plot)
@@ -193,10 +202,19 @@ class JsonEncoderCoreTest : EncoderTest() {
 
         val plot = Plot(1, 0)
         val harvest = Harvest(
-            HarvestedPlant("me", PlantType.WHEAT),
+            HarvestedPlant(
+                "me",
+                PlantType.WHEAT
+            ),
             listOf(
-                Seed("me", PlantType.WHEAT),
-                Seed("me", PlantType.WHEAT)
+                Seed(
+                    "me",
+                    PlantType.WHEAT
+                ),
+                Seed(
+                    "me",
+                    PlantType.WHEAT
+                )
             )
         )
         val action = HarvestAction(harvest, plot)
@@ -212,7 +230,16 @@ class JsonEncoderCoreTest : EncoderTest() {
         val introductionGift = IntroductionGift(
             RealmClaimPaper("me"),
             (0..8).map { Hoe("me") }.toList(),
-            listOf(Seed("me", PlantType.CORN), Seed("me", PlantType.WHEAT))
+            listOf(
+                Seed(
+                    "me",
+                    PlantType.CORN
+                ),
+                Seed(
+                    "me",
+                    PlantType.WHEAT
+                )
+            )
         )
         val action = IntroductionAction(introductionGift)
         val block = generateDefaultBlock(action)
@@ -232,7 +259,16 @@ class JsonEncoderCoreTest : EncoderTest() {
         val introductionGift = IntroductionGift(
             RealmClaimPaper("me"),
             (0..8).map { Hoe("me") }.toList(),
-            listOf(Seed("me", PlantType.CORN), Seed("me", PlantType.WHEAT))
+            listOf(
+                Seed(
+                    "me",
+                    PlantType.CORN
+                ),
+                Seed(
+                    "me",
+                    PlantType.WHEAT
+                )
+            )
         )
         val action = IntroductionAction(introductionGift)
         val block = generateDefaultBlock(action)
@@ -245,7 +281,10 @@ class JsonEncoderCoreTest : EncoderTest() {
     @Test
     fun testEncodeSeedAction() {
         val plot = Plot(1, 0)
-        val seed = Seed("me", PlantType.CORN)
+        val seed = Seed(
+            "me",
+            PlantType.CORN
+        )
         val action = SeedAction(plot, seed)
         val block = generateDefaultBlock(action)
 
@@ -262,7 +301,10 @@ class JsonEncoderCoreTest : EncoderTest() {
         val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"SeedAction\",\"produce\":{\"x\":1,\"y\":0},\"consume\":{\"owner\":\"me\",\"plantType\":\"CORN\"}}}"
 
         val plot = Plot(1, 0)
-        val seed = Seed("me", PlantType.CORN)
+        val seed = Seed(
+            "me",
+            PlantType.CORN
+        )
         val action = SeedAction(plot, seed)
         val block = generateDefaultBlock(action)
 
