@@ -22,11 +22,14 @@ import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.blockchain.model.Block
+import ch.riesenacht.biotopium.core.world.model.Owner
+import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.*
 import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
+import ch.riesenacht.biotopium.core.world.model.realmIndex
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -46,11 +49,11 @@ class JsonEncoderCoreTest : EncoderTest() {
     @Test
     fun testEncodeChunkGenesisAction() {
         val tiles = listOf(
-            DefaultTile(1, 1),
-            DefaultTile(2, 3),
-            DefaultTile(4, 5),
-            DefaultTile(6, 7),
-            DefaultTile(8, 9),
+            DefaultTile(1.coord, 1.coord),
+            DefaultTile(2.coord, 3.coord),
+            DefaultTile(4.coord, 5.coord),
+            DefaultTile(6.coord, 7.coord),
+            DefaultTile(8.coord, 9.coord)
         )
         val action = ChunkGenesisAction(tiles)
         val block = generateDefaultBlock(action)
@@ -69,11 +72,11 @@ class JsonEncoderCoreTest : EncoderTest() {
 
 
         val tiles = listOf(
-            DefaultTile(1, 1),
-            DefaultTile(2, 3),
-            DefaultTile(4, 5),
-            DefaultTile(6, 7),
-            DefaultTile(8, 9),
+            DefaultTile(1.coord, 1.coord),
+            DefaultTile(2.coord, 3.coord),
+            DefaultTile(4.coord, 5.coord),
+            DefaultTile(6.coord, 7.coord),
+            DefaultTile(8.coord, 9.coord)
         )
         val action = ChunkGenesisAction(tiles)
         val block = generateDefaultBlock(action)
@@ -85,8 +88,8 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeClaimRealmAction() {
-        val realm = Realm("me", 1, 0)
-        val realmClaimPaper = RealmClaimPaper("me")
+        val realm = Realm(Owner.fromBase64("me"), 1.realmIndex, 0.realmIndex)
+        val realmClaimPaper = RealmClaimPaper(Owner.fromBase64("me"))
         val action = ClaimRealmAction(realm, realmClaimPaper)
         val block = generateDefaultBlock(action)
 
@@ -102,8 +105,8 @@ class JsonEncoderCoreTest : EncoderTest() {
 
         val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ClaimRealmAction\",\"produce\":{\"owner\":\"me\",\"ix\":1,\"iy\":0},\"consume\":{\"owner\":\"me\"}}}"
 
-        val realm = Realm("me", 1, 0)
-        val realmClaimPaper = RealmClaimPaper("me")
+        val realm = Realm(Owner.fromBase64("me"), 1.realmIndex, 0.realmIndex)
+        val realmClaimPaper = RealmClaimPaper(Owner.fromBase64("me"))
         val action = ClaimRealmAction(realm, realmClaimPaper)
         val block = generateDefaultBlock(action)
 
@@ -114,8 +117,8 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeCreatePlotAction() {
-        val plot = Plot(1, 0)
-        val hoe = Hoe("me")
+        val plot = Plot(1.coord, 0.coord)
+        val hoe = Hoe(Owner.fromBase64("me"))
         val action = CreatePlotAction(plot, hoe)
         val block = generateDefaultBlock(action)
 
@@ -131,8 +134,8 @@ class JsonEncoderCoreTest : EncoderTest() {
 
         val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"CreatePlotAction\",\"produce\":{\"x\":1,\"y\":0},\"consume\":{\"owner\":\"me\"}}}"
 
-        val plot = Plot(1, 0)
-        val hoe = Hoe("me")
+        val plot = Plot(1.coord, 0.coord)
+        val hoe = Hoe(Owner.fromBase64("me"))
         val action = CreatePlotAction(plot, hoe)
         val block = generateDefaultBlock(action)
 
@@ -143,7 +146,7 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeGrowAction() {
-        val plot = Plot(1, 0)
+        val plot = Plot(1.coord, 0.coord)
         val action = GrowAction(plot)
         val block = generateDefaultBlock(action)
 
@@ -158,7 +161,7 @@ class JsonEncoderCoreTest : EncoderTest() {
     fun testDecodeGrowAction() {
         val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"GrowAction\",\"produce\":{\"x\":1,\"y\":0}}}"
 
-        val plot = Plot(1, 0)
+        val plot = Plot(1.coord, 0.coord)
         val action = GrowAction(plot)
         val block = generateDefaultBlock(action)
 
@@ -169,19 +172,20 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeHarvestAction() {
-        val plot = Plot(1, 0)
+        val plot = Plot(1.coord, 0.coord)
+        val owner = Owner.fromBase64("me")
         val harvest = Harvest(
             HarvestedPlant(
-                "me",
+                owner,
                 PlantType.WHEAT
             ),
             listOf(
                 Seed(
-                    "me",
+                    owner,
                     PlantType.WHEAT
                 ),
                 Seed(
-                    "me",
+                    owner,
                     PlantType.WHEAT
                 )
             )
@@ -199,20 +203,20 @@ class JsonEncoderCoreTest : EncoderTest() {
     @Test
     fun testDecodeHarvestAction() {
         val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"HarvestAction\",\"produce\":{\"plant\":{\"owner\":\"me\",\"plantType\":\"WHEAT\"},\"seeds\":[{\"owner\":\"me\",\"plantType\":\"WHEAT\"},{\"owner\":\"me\",\"plantType\":\"WHEAT\"}]},\"consume\":{\"x\":1,\"y\":0}}}"
-
-        val plot = Plot(1, 0)
+        val owner = Owner.fromBase64("me")
+        val plot = Plot(1.coord, 0.coord)
         val harvest = Harvest(
             HarvestedPlant(
-                "me",
+                owner,
                 PlantType.WHEAT
             ),
             listOf(
                 Seed(
-                    "me",
+                    owner,
                     PlantType.WHEAT
                 ),
                 Seed(
-                    "me",
+                    owner,
                     PlantType.WHEAT
                 )
             )
@@ -227,16 +231,17 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeIntroductionAction() {
+        val owner = Owner.fromBase64("me")
         val introductionGift = IntroductionGift(
-            RealmClaimPaper("me"),
-            (0..8).map { Hoe("me") }.toList(),
+            RealmClaimPaper(owner),
+            (0..8).map { Hoe(owner) }.toList(),
             listOf(
                 Seed(
-                    "me",
+                    owner,
                     PlantType.CORN
                 ),
                 Seed(
-                    "me",
+                    owner,
                     PlantType.WHEAT
                 )
             )
@@ -253,19 +258,19 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testDecodeIntroductionAction() {
-
         val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"IntroductionAction\",\"produce\":{\"realmClaimPaper\":{\"owner\":\"me\"},\"hoes\":[{\"owner\":\"me\"},{\"owner\":\"me\"},{\"owner\":\"me\"},{\"owner\":\"me\"},{\"owner\":\"me\"},{\"owner\":\"me\"},{\"owner\":\"me\"},{\"owner\":\"me\"},{\"owner\":\"me\"}],\"seeds\":[{\"owner\":\"me\",\"plantType\":\"CORN\"},{\"owner\":\"me\",\"plantType\":\"WHEAT\"}]}}}"
 
+        val owner = Owner.fromBase64("me")
         val introductionGift = IntroductionGift(
-            RealmClaimPaper("me"),
-            (0..8).map { Hoe("me") }.toList(),
+            RealmClaimPaper(owner),
+            (0..8).map { Hoe(owner) }.toList(),
             listOf(
                 Seed(
-                    "me",
+                    owner,
                     PlantType.CORN
                 ),
                 Seed(
-                    "me",
+                    owner,
                     PlantType.WHEAT
                 )
             )
@@ -280,9 +285,10 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeSeedAction() {
-        val plot = Plot(1, 0)
+        val owner = Owner.fromBase64("me")
+        val plot = Plot(1.coord, 0.coord)
         val seed = Seed(
-            "me",
+            owner,
             PlantType.CORN
         )
         val action = SeedAction(plot, seed)
@@ -300,9 +306,10 @@ class JsonEncoderCoreTest : EncoderTest() {
 
         val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"SeedAction\",\"produce\":{\"x\":1,\"y\":0},\"consume\":{\"owner\":\"me\",\"plantType\":\"CORN\"}}}"
 
-        val plot = Plot(1, 0)
+        val owner = Owner.fromBase64("me")
+        val plot = Plot(1.coord, 0.coord)
         val seed = Seed(
-            "me",
+            owner,
             PlantType.CORN
         )
         val action = SeedAction(plot, seed)

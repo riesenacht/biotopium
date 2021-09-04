@@ -18,8 +18,11 @@
 
 package ch.riesenacht.biotopium.serialization
 
+import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Block
 import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.crypto.model.Hash
+import ch.riesenacht.biotopium.core.crypto.model.PublicKey
 
 /**
  * Basic encoder test, extended by all encoder test classes.
@@ -32,11 +35,11 @@ abstract class EncoderTest {
      * Generates a default block data object with a given block [data].
      */
     protected fun generateDefaultBlock(data: BlockData) = Block(
+        1u,
         1,
-        1,
-        "prevHash",
-        "test",
-        "blocklord",
+        Hash("prevHash"),
+        Address.fromBase64("test"),
+        Address.fromBase64("blocklord"),
         data
     )
 }

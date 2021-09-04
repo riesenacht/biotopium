@@ -39,8 +39,8 @@ actual object Ed25519 {
      */
     actual fun generateKeyPair(): KeyPair {
         val naclKeyPair = nacl.sign.keyPair()
-        val privateKey = util.encodeBase64(naclKeyPair.secretKey)
-        val publicKey = util.encodeBase64(naclKeyPair.publicKey)
+        val privateKey = PrivateKey(util.encodeBase64(naclKeyPair.secretKey))
+        val publicKey = PublicKey(util.encodeBase64(naclKeyPair.publicKey))
         return KeyPair(privateKey, publicKey)
     }
 
@@ -53,10 +53,10 @@ actual object Ed25519 {
      * @return detached signature
      */
     actual fun sign(message: String, privateKey: PrivateKey): Signature {
-        val pkBytes = util.decodeBase64(privateKey)
+        val pkBytes = util.decodeBase64(privateKey.base64)
         val msgBytes = util.decodeUTF8(message)
         val signature = nacl.sign.detached(msgBytes, pkBytes)
-        return util.encodeBase64(signature)
+        return Signature(util.encodeBase64(signature))
     }
 
     /**
@@ -68,9 +68,9 @@ actual object Ed25519 {
      * @return the signature's validity
      */
     actual fun verify(signature: Signature, message: String, publicKey: PublicKey): Boolean {
-        val signatureBytes = util.decodeBase64(signature)
+        val signatureBytes = util.decodeBase64(signature.base64)
         val messageBytes = util.decodeUTF8(message)
-        val publicKeyBytes = util.decodeBase64(publicKey)
+        val publicKeyBytes = util.decodeBase64(publicKey.base64)
         return nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes)
     }
 }

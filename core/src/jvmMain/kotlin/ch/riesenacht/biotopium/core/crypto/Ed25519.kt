@@ -49,8 +49,8 @@ actual object Ed25519 {
         val lzKeyPair = lazySodium.cryptoSignKeypair()
         val privateKeyBytes = lzKeyPair.secretKey.asBytes
         val publicKeyBytes = lzKeyPair.publicKey.asBytes
-        val privateKey = base64Encoder.encodeToString(privateKeyBytes)
-        val publicKey = base64Encoder.encodeToString(publicKeyBytes)
+        val privateKey = PrivateKey(base64Encoder.encodeToString(privateKeyBytes))
+        val publicKey = PublicKey(base64Encoder.encodeToString(publicKeyBytes))
         return KeyPair(privateKey, publicKey)
     }
 
@@ -64,11 +64,11 @@ actual object Ed25519 {
      */
     actual fun sign(message: String, privateKey: PrivateKey): Signature {
         val messageBytes = message.encodeToByteArray()
-        val privateKeyBytes = base64Decoder.decode(privateKey)
+        val privateKeyBytes = base64Decoder.decode(privateKey.base64)
         val signatureBytes = ByteArray(Sign.ED25519_BYTES)
         lazySodium.cryptoSignDetached(signatureBytes, messageBytes,
             messageBytes.size.toLong(), privateKeyBytes)
-        return base64Encoder.encodeToString(signatureBytes)
+        return Signature(base64Encoder.encodeToString(signatureBytes))
     }
 
     /**
@@ -81,8 +81,8 @@ actual object Ed25519 {
      */
     actual fun verify(signature: Signature, message: String, publicKey: PublicKey): Boolean {
         val messageBytes = message.encodeToByteArray()
-        val publicKeyBytes = base64Decoder.decode(publicKey)
-        val signatureBytes = base64Decoder.decode(signature)
+        val publicKeyBytes = base64Decoder.decode(publicKey.base64)
+        val signatureBytes = base64Decoder.decode(signature.base64)
         return lazySodium.cryptoSignVerifyDetached(signatureBytes, messageBytes,
             messageBytes.size, publicKeyBytes)
     }

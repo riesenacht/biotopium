@@ -18,10 +18,15 @@
 
 package ch.riesenacht.biotopium.core.crypto.model
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 /**
  * Represents a private key, sometimes also called secret key.
  * The private key is formatted as base64 string.
  *
  * @author Manuel Riesen
  */
-typealias PrivateKey = String
+@Serializable
+@JvmInline
+value class PrivateKey(override val base64: String) : Key

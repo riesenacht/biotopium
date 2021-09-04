@@ -19,11 +19,24 @@
 package ch.riesenacht.biotopium.core.blockchain.model
 
 import ch.riesenacht.biotopium.core.crypto.model.PublicKey
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 
 /**
  * Represents the address of a cryptographic wallet.
- * For simplicity, the address equals the [PublicKey].
+ * For simplicity, the address equals the [publicKey].
  *
  * @author Manuel Riesen
  */
-typealias Address = PublicKey
+@Serializable
+@JvmInline
+value class Address(val publicKey: PublicKey) {
+
+    companion object {
+
+        /**
+         * Creates an address from a [base64] string.
+         */
+        fun fromBase64(base64: String): Address = Address(PublicKey(base64))
+    }
+}

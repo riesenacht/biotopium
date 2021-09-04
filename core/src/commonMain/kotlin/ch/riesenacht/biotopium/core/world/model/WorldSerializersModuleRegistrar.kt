@@ -33,7 +33,7 @@ import kotlinx.serialization.modules.subclass
  *
  * @author Manuel Riesen
  */
-object BaseSerializersModuleRegistrar : SerializersModuleRegistrar(SerializersModule {
+object WorldSerializersModuleRegistrar : SerializersModuleRegistrar(SerializersModule {
 
     // Item class hierarchy
     polymorphic(Item::class) {

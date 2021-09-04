@@ -18,10 +18,15 @@
 
 package ch.riesenacht.biotopium.core.world.model
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 /**
  * Represents an index of a realm.
  * Realm indices are used in a cartesian manner in 2-dimensional space.
  *
  * @author Manuel Riesen
  */
-typealias RealmIndex = Int
+@Serializable
+@JvmInline
+value class RealmIndex(val index: UInt)

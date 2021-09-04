@@ -38,7 +38,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Block(
-    val height: Long,
+    val height: ULong,
     val timestamp: Long,
     val prevHash: Hash,
     val author: Address,

@@ -16,21 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.crypto.model
-
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+package ch.riesenacht.biotopium.core.world.model
 
 /**
- * Represents a signature of a message.
- * A signature can be created for a message using a [PrivateKey].
- * The validity of a signature can be verified using the corresponding [PublicKey].
- * The signature is a so-called detached signature,
- * which means the signature itself does not contain its signed message.
- * The signature is formatted as base64 string.
- *
- * @author Manuel Riesen
+ * The integer in the [Coordinate] format.
+ * @throws NumberFormatException number is negative
  */
-@Serializable
-@JvmInline
-value class Signature(val base64: String)
+val Int.coord: Coordinate
+    get() = if(this >= 0) Coordinate(this.toUInt()) else throw NumberFormatException("number must not be negative")
+
+/**
+ * The integer in the [RealmIndex] format.
+ * @throws NumberFormatException number is negative
+ */
+val Int.realmIndex: RealmIndex
+    get() = if(this >= 0) RealmIndex(this.toUInt()) else throw NumberFormatException("number must not be negative")

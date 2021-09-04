@@ -18,19 +18,15 @@
 
 package ch.riesenacht.biotopium.core.crypto.model
 
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
-
 /**
- * Represents a signature of a message.
- * A signature can be created for a message using a [PrivateKey].
- * The validity of a signature can be verified using the corresponding [PublicKey].
- * The signature is a so-called detached signature,
- * which means the signature itself does not contain its signed message.
- * The signature is formatted as base64 string.
+ * Represents a cryptographic key.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@JvmInline
-value class Signature(val base64: String)
+interface Key {
+
+    /**
+     * The base64 representation of the key as string.
+     */
+    val base64: String
+}

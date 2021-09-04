@@ -18,10 +18,15 @@
 
 package ch.riesenacht.biotopium.core.world.model
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 /**
  * Represents a cartesian coordinate on the map.
  * The coordinate and is used to locate tiles in 2-dimensional space.
  *
  * @author Manuel Riesen
  */
-typealias Coordinate = Int
+@Serializable
+@JvmInline
+value class Coordinate(val coordinate: UInt)
