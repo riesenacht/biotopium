@@ -23,10 +23,10 @@ import ch.riesenacht.biotopium.core.blockchain.model.BlockData
 /**
  * Represents an action performed by a player or the game itself.
  * An action can be seen as an event in an event-sourced system.
- * Actions are stored in the blockchain and are therefore immutable.
+* Actions are stored on the blockchain and are therefore immutable.
  *
  * @author Manuel Riesen
- */
+*/
 sealed interface Action : BlockData {
 
     /**

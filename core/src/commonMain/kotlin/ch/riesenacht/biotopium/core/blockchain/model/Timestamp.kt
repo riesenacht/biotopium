@@ -18,9 +18,18 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents a timestamp.
+ * The timestamp is stored as [the number of milliseconds][epochMillis] since 1970-01-01.
  *
  * @author Manuel Riesen
  */
-interface BlockData
+@Serializable
+@JvmInline
+value class Timestamp(val epochMillis: Long) {
+
+    operator fun compareTo(timestamp: Timestamp) = epochMillis.compareTo(timestamp.epochMillis)
+}

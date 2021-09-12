@@ -16,11 +16,14 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.rule
+
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents a predicate for validating a block.
+ * The function needs a block to validate and the previous block.
  *
  * @author Manuel Riesen
  */
-interface BlockData
+typealias BlockPredicate = (Block, Block) -> Boolean

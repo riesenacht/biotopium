@@ -16,11 +16,20 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.utils
+
+import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
 
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Date utilities.
+ * Actual implementation for JVM platform.
  *
  * @author Manuel Riesen
  */
-interface BlockData
+actual object DateUtils {
+
+    /**
+     * Creates a timestamp of the current time.
+     */
+    actual fun currentTimestamp() = Timestamp(System.currentTimeMillis())
+}

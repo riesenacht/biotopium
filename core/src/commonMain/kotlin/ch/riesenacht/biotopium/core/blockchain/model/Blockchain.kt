@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+
 /**
  * Represents the blockchain itself.
  * A blockchain consists of a chain of [blocks][Block].

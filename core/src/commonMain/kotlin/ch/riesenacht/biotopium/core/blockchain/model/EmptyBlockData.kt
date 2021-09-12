@@ -18,9 +18,13 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model
 
+import kotlinx.serialization.Serializable
+
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents empty block data.
+ * This kind of block data should only occur on the genesis block.
  *
  * @author Manuel Riesen
  */
-interface BlockData
+@Serializable
+class EmptyBlockData : BlockData

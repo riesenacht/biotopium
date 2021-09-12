@@ -16,35 +16,45 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.model.block
 
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.crypto.model.Signature
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a block in the [Blockchain].
+ * Represents a block on the blockchain.
  * The [height] of a block shows the position on the blockchain.
  * A block contains the [timestamp] of its creation time.
- * Over the [previous hash][prevHash] the block is connected to the previous block in the chain.
- * A block holds information about it's [author].
- * The [author] creates a [signature][sign] on the [hash].
+ * The [previous hash][prevHash] connects the block to the previous block on the chain.
+ * A block holds information about its [author].
+ * The [author] creates a [signature][sign] on the block's   [hash].
+ * Each block acts as a storage for [data].
  * The block's validity is confirmed by the [validator].
  * A [validator] creates a [validation signature][validSign] on the block's [hash].
- * Each block stores [data].
- * The block's [hash] is used for chaining blocks together, as well as guarantee immutability of a block.
+ * The block's [hash] is used for chaining blocks together, as well as ensure immutability of the block.
+ *
+ * @see AbstractBlock
+ * @see Hashed
+ * @see Signed
+ * @see Validated
  *
  * @author Manuel Riesen
  */
 @Serializable
+@SerialName("Block")
 data class Block(
-    val height: ULong,
-    val timestamp: Long,
-    val prevHash: Hash,
-    val author: Address,
-    val validator: Address,
-    val data: BlockData,
-    val hash: Hash? = null,
-    val sign: Signature? = null,
-    val validSign: Signature? = null
-)
+    override val height: ULong,
+    override val timestamp: Timestamp,
+    override val prevHash: Hash,
+    override val author: Address,
+    override val validator: Address,
+    override val data: BlockData,
+    override val hash: Hash,
+    override val sign: Signature,
+    override val validSign: Signature
+) : AbstractBlock, Hashed, Signed, Validated

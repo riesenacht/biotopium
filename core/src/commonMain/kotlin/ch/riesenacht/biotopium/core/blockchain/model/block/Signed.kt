@@ -16,11 +16,19 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.model.block
+
+import ch.riesenacht.biotopium.core.crypto.model.Signature
 
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents a block which contains the author's signature [signature][sign].
  *
  * @author Manuel Riesen
  */
-interface BlockData
+sealed interface Signed {
+
+    /**
+     * The author's signature for ensuring integrity.
+     */
+    val sign: Signature
+}

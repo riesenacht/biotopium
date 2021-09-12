@@ -24,7 +24,7 @@ import kotlin.jvm.JvmInline
 
 /**
  * Represents the address of a cryptographic wallet.
- * For simplicity, the address equals the [publicKey].
+ * For simplicity, the address equals the wallet's [public key][publicKey].
  *
  * @author Manuel Riesen
  */

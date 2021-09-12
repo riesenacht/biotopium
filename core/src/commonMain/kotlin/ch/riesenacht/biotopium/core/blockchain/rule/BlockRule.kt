@@ -16,11 +16,25 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.rule
+
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents a rule for validating a block.
+ * A block rule consists of a [predicate].
  *
  * @author Manuel Riesen
  */
-interface BlockData
+class BlockRule(private val predicate: BlockPredicate) {
+
+    /**
+     * Invokes the predicate to validate the new [block] with the new block's
+     * and the [previous][prev] block's data.
+     */
+    operator fun invoke(block: Block, prev: Block) = predicate.invoke(block, prev)
+}
+
+
+
+

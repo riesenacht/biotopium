@@ -18,9 +18,13 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents a mutable blockchain.
+ *
+ * @see Blockchain
  *
  * @author Manuel Riesen
  */
-interface BlockData
+typealias MutableBlockchain = MutableList<Block>

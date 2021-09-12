@@ -39,7 +39,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
         val expected = "1;1;prevHash;test;blocklord;ChunkGenesisAction;DefaultTile;1;1;0;DefaultTile;2;3;0;DefaultTile;4;5;0;DefaultTile;6;7;0;DefaultTile;8;9;0;0"
 
-        val encoded = HashableStringEncoder.encode(block)
+        val encoded = HashableStringEncoder.encode(block.toHashable())
 
         assertEquals(expected, encoded)
     }
@@ -54,7 +54,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
         val expected = "1;1;prevHash;test;blocklord;ClaimRealmAction;me;1;0;me;2;2"
 
-        val encoded = HashableStringEncoder.encode(block)
+        val encoded = HashableStringEncoder.encode(block.toHashable())
 
         assertEquals(expected, encoded)
     }
@@ -68,7 +68,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
         val expected = "1;1;prevHash;test;blocklord;CreatePlotAction;1;0;1;me;0;3"
 
-        val encoded = HashableStringEncoder.encode(block)
+        val encoded = HashableStringEncoder.encode(block.toHashable())
 
         assertEquals(expected, encoded)
     }
@@ -81,7 +81,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
         val expected = "1;1;prevHash;test;blocklord;GrowAction;1;0;1;5"
 
-        val encoded = HashableStringEncoder.encode(block)
+        val encoded = HashableStringEncoder.encode(block.toHashable())
 
         assertEquals(expected, encoded)
     }
@@ -111,7 +111,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
         val expected = "1;1;prevHash;test;blocklord;HarvestAction;me;0;3;me;0;1;me;0;1;1;0;1;6"
 
-        val encoded = HashableStringEncoder.encode(block)
+        val encoded = HashableStringEncoder.encode(block.toHashable())
 
         assertEquals(expected, encoded)
     }
@@ -138,7 +138,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
         val expected = "1;1;prevHash;test;blocklord;IntroductionAction;me;2;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;1;1;me;0;1;1"
 
-        val encoded = HashableStringEncoder.encode(block)
+        val encoded = HashableStringEncoder.encode(block.toHashable())
 
         assertEquals(expected, encoded)
     }
@@ -156,7 +156,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
         val expected = "1;1;prevHash;test;blocklord;SeedAction;1;0;1;me;1;1;4"
 
-        val encoded = HashableStringEncoder.encode(block)
+        val encoded = HashableStringEncoder.encode(block.toHashable())
 
         assertEquals(expected, encoded)
     }

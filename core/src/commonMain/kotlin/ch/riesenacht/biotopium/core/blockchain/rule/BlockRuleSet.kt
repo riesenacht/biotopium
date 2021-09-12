@@ -16,11 +16,11 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.rule
 
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents a ruleset of block rules.
  *
  * @author Manuel Riesen
  */
-interface BlockData
+typealias BlockRuleSet = Array<BlockRule>
