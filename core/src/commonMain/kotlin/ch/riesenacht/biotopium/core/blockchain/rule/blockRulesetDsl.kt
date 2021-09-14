@@ -47,7 +47,7 @@ class BlockRuleSetBuilder {
 /**
  * Creates a block ruleset and applies the [init] function.
  */
-fun ruleset(init: BlockRuleSetBuilder.() -> Unit): BlockRuleSet {
+fun blockRuleset(init: BlockRuleSetBuilder.() -> Unit): BlockRuleSet {
     val ruleSetBuilder = BlockRuleSetBuilder()
     ruleSetBuilder.init()
     return ruleSetBuilder.rules.toTypedArray()

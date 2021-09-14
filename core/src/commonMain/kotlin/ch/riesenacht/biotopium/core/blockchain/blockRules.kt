@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.core.blockchain
 
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
-import ch.riesenacht.biotopium.core.blockchain.rule.ruleset
+import ch.riesenacht.biotopium.core.blockchain.rule.blockRuleset
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 
 /**
@@ -27,7 +27,7 @@ import ch.riesenacht.biotopium.core.crypto.Ed25519
  * Since the genesis block is a unique and special block, not
  * all block rules can be applied to it.
  */
-val genesisRules = ruleset {
+val genesisRules = blockRuleset {
 
     // The block's hash is valid
     rule { block: Block, _: Block -> block.hash == BlockUtils.hash(block) }
@@ -43,7 +43,7 @@ val genesisRules = ruleset {
  * The block rules for block validation.
  * Contains all [genesis block rules][genesisRules].
  */
-val blockRules = ruleset {
+val blockRules = blockRuleset {
 
     // The block's previous hash is equal to the hash of the previous block
     rule { block: Block, prev: Block -> block.prevHash == prev.hash }
