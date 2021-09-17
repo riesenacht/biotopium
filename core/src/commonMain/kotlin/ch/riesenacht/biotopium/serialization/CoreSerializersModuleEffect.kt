@@ -19,8 +19,9 @@
 package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.core.effect.ModuleEffect
-import ch.riesenacht.biotopium.core.model.action.ActionSerializersModuleRegistrar
-import ch.riesenacht.biotopium.core.model.base.BaseSerializersModuleRegistrar
+import ch.riesenacht.biotopium.core.action.model.ActionSerializersModuleRegistrar
+import ch.riesenacht.biotopium.core.blockchain.model.BlockchainSerializersModuleRegistrar
+import ch.riesenacht.biotopium.core.world.model.WorldSerializersModuleRegistrar
 
 /**
  * The effect for registering all serializer modules of the core
@@ -30,6 +31,8 @@ import ch.riesenacht.biotopium.core.model.base.BaseSerializersModuleRegistrar
  */
 object CoreSerializersModuleEffect : ModuleEffect(
     nested = arrayOf(
-    BaseSerializersModuleRegistrar,
-    ActionSerializersModuleRegistrar
-))
+        WorldSerializersModuleRegistrar,
+        ActionSerializersModuleRegistrar,
+        BlockchainSerializersModuleRegistrar
+    )
+)

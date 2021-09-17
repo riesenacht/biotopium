@@ -18,10 +18,15 @@
 
 package ch.riesenacht.biotopium.core.crypto.model
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 /**
  * Represents a public key, which can be shared.
  * The public key is formatted as base64 string.
  *
  * @author Manuel Riesen
  */
-typealias PublicKey = String
+@Serializable
+@JvmInline
+value class PublicKey(override val base64: String) : Key

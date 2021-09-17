@@ -19,6 +19,9 @@
 package ch.riesenacht.biotopium.core.crypto
 
 import ch.riesenacht.biotopium.core.crypto.model.KeyPair
+import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
+import ch.riesenacht.biotopium.core.crypto.model.PublicKey
+import ch.riesenacht.biotopium.core.crypto.model.Signature
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -34,44 +37,44 @@ class Ed25519Test {
     @Test
     fun testGenerateKeyPair() {
         val keyPair = Ed25519.generateKeyPair()
-        assertEquals(88, keyPair.privateKey.length)
-        assertEquals(44, keyPair.publicKey.length)
+        assertEquals(88, keyPair.privateKey.base64.length)
+        assertEquals(44, keyPair.publicKey.base64.length)
     }
 
     @Test
     fun testSigning_withKeyPairFromJs() {
         val keyPair = KeyPair(
-            "epRKupUuzYFAh1t2kELoLZIq7mCGB9IHW3gYYFI751bc0z2OOiRskQqxdv126DF4o+6RHBwlDzqUVaO5a8sqRg==",
-            "3NM9jjokbJEKsXb9dugxeKPukRwcJQ86lFWjuWvLKkY="
+            PrivateKey("epRKupUuzYFAh1t2kELoLZIq7mCGB9IHW3gYYFI751bc0z2OOiRskQqxdv126DF4o+6RHBwlDzqUVaO5a8sqRg=="),
+            PublicKey("3NM9jjokbJEKsXb9dugxeKPukRwcJQ86lFWjuWvLKkY=")
         )
         val message = "Hello world!"
         val signature = Ed25519.sign(message, keyPair.privateKey)
         assertEquals(
             "7RL1szrycVqExQRTdpk/0A3sEZhBCRVK6dSOdfIgOQW4wfUrxmiE2iFkGegrTOLGWQ4nK6Nzf58zdY9r9SoHDw==",
-            signature
+            signature.base64
         )
     }
 
     @Test
     fun testSigning_withKeyPairFromJvm() {
         val keyPair = KeyPair(
-            "F96yOkZaENPOzQs+ihhSICfpx3pga4ZvhqxyWkTN+G6pJUku+OJ+EAPvW6NvGrqfkAftgWGQC/n0DABI5F2c3g==",
-            "qSVJLvjifhAD71ujbxq6n5AH7YFhkAv59AwASORdnN4="
+            PrivateKey("F96yOkZaENPOzQs+ihhSICfpx3pga4ZvhqxyWkTN+G6pJUku+OJ+EAPvW6NvGrqfkAftgWGQC/n0DABI5F2c3g=="),
+            PublicKey("qSVJLvjifhAD71ujbxq6n5AH7YFhkAv59AwASORdnN4=")
         )
 
         val message = "Hello world!"
         val signature = Ed25519.sign(message, keyPair.privateKey)
         assertEquals(
             "EZbzNNPppQhfuCfWz5l6HvfnPirupcdon9u0mVT4LJaJQUI+fvUOpUuW9lk4oZt6c21/ev4RsGPoRp0CNqlsCA==",
-            signature
+            signature.base64
         )
     }
 
     @Test
     fun testVerify_positive_withKeyPairFromJs() {
         val message = "Hello world!"
-        val signature = "7RL1szrycVqExQRTdpk/0A3sEZhBCRVK6dSOdfIgOQW4wfUrxmiE2iFkGegrTOLGWQ4nK6Nzf58zdY9r9SoHDw=="
-        val publicKey = "3NM9jjokbJEKsXb9dugxeKPukRwcJQ86lFWjuWvLKkY="
+        val signature = Signature("7RL1szrycVqExQRTdpk/0A3sEZhBCRVK6dSOdfIgOQW4wfUrxmiE2iFkGegrTOLGWQ4nK6Nzf58zdY9r9SoHDw==")
+        val publicKey = PublicKey("3NM9jjokbJEKsXb9dugxeKPukRwcJQ86lFWjuWvLKkY=")
         val verified = Ed25519.verify(signature, message, publicKey)
         assertTrue(verified)
     }
@@ -79,8 +82,8 @@ class Ed25519Test {
     @Test
     fun testVerify_positive_withKeyPairFromJvm() {
         val message = "Hello world!"
-        val signature = "EZbzNNPppQhfuCfWz5l6HvfnPirupcdon9u0mVT4LJaJQUI+fvUOpUuW9lk4oZt6c21/ev4RsGPoRp0CNqlsCA=="
-        val publicKey = "qSVJLvjifhAD71ujbxq6n5AH7YFhkAv59AwASORdnN4="
+        val signature = Signature("EZbzNNPppQhfuCfWz5l6HvfnPirupcdon9u0mVT4LJaJQUI+fvUOpUuW9lk4oZt6c21/ev4RsGPoRp0CNqlsCA==")
+        val publicKey = PublicKey("qSVJLvjifhAD71ujbxq6n5AH7YFhkAv59AwASORdnN4=")
         val verified = Ed25519.verify(signature, message, publicKey)
         assertTrue(verified)
     }
@@ -88,8 +91,8 @@ class Ed25519Test {
     @Test
     fun testVerify_negative_withKeyPairFromJs() {
         val message = "Hello!"
-        val signature = "7RL1szrycVqExQRTdpk/0A3sEZhBCRVK6dSOdfIgOQW4wfUrxmiE2iFkGegrTOLGWQ4nK6Nzf58zdY9r9SoHDw=="
-        val publicKey = "3NM9jjokbJEKsXb9dugxeKPukRwcJQ86lFWjuWvLKkY="
+        val signature = Signature("7RL1szrycVqExQRTdpk/0A3sEZhBCRVK6dSOdfIgOQW4wfUrxmiE2iFkGegrTOLGWQ4nK6Nzf58zdY9r9SoHDw==")
+        val publicKey = PublicKey("3NM9jjokbJEKsXb9dugxeKPukRwcJQ86lFWjuWvLKkY=")
         val verified = Ed25519.verify(signature, message, publicKey)
         assertFalse(verified)
     }
@@ -97,8 +100,8 @@ class Ed25519Test {
     @Test
     fun testVerify_negative_withKeyPairFromJvm() {
         val message = "Hello!"
-        val signature = "EZbzNNPppQhfuCfWz5l6HvfnPirupcdon9u0mVT4LJaJQUI+fvUOpUuW9lk4oZt6c21/ev4RsGPoRp0CNqlsCA=="
-        val publicKey = "qSVJLvjifhAD71ujbxq6n5AH7YFhkAv59AwASORdnN4="
+        val signature = Signature("EZbzNNPppQhfuCfWz5l6HvfnPirupcdon9u0mVT4LJaJQUI+fvUOpUuW9lk4oZt6c21/ev4RsGPoRp0CNqlsCA==")
+        val publicKey = PublicKey("qSVJLvjifhAD71ujbxq6n5AH7YFhkAv59AwASORdnN4=")
         val verified = Ed25519.verify(signature, message, publicKey)
         assertFalse(verified)
     }

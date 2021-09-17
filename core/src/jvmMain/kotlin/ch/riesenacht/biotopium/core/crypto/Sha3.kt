@@ -44,5 +44,5 @@ actual object Sha3 {
      * @param input input
      * @return SHA3-256 hash
      */
-    actual fun sha256(input: String): Hash = bytesToHex(mdInstance.digest(input.toByteArray()))
+    actual fun sha256(input: String): Hash = Hash(bytesToHex(mdInstance.digest(input.toByteArray())))
 }

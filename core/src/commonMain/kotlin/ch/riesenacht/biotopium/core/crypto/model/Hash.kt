@@ -18,10 +18,15 @@
 
 package ch.riesenacht.biotopium.core.crypto.model
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 /**
  * Represents the output of a hash function,
  * formatted as hexadecimal string.
  *
  * @author Manuel Riesen
  */
-typealias Hash = String
+@Serializable
+@JvmInline
+value class Hash(val hex: String)

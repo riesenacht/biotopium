@@ -18,6 +18,9 @@
 
 package ch.riesenacht.biotopium.core.crypto.model
 
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
 /**
  * Represents a signature of a message.
  * A signature can be created for a message using a [PrivateKey].
@@ -28,4 +31,6 @@ package ch.riesenacht.biotopium.core.crypto.model
  *
  * @author Manuel Riesen
  */
-typealias Signature = String
+@Serializable
+@JvmInline
+value class Signature(val base64: String)

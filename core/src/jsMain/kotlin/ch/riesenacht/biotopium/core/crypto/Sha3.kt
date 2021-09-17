@@ -34,9 +34,11 @@ actual object Sha3 {
      * @param input input
      * @return SHA3-256 hash
      */
-    actual fun sha256(input: String): Hash = sha3.SHA3(256)
+    actual fun sha256(input: String): Hash = Hash(
+        sha3.SHA3(256)
         .update(input)
         .digest("hex")
+    )
 }
 
 /**
