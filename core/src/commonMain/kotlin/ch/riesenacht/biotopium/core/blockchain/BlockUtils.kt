@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.core.blockchain
 
 import ch.riesenacht.biotopium.core.blockchain.model.block.AbstractBlock
 import ch.riesenacht.biotopium.core.blockchain.model.block.Hashed
-import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.Sha3
 import ch.riesenacht.biotopium.core.crypto.model.Hash

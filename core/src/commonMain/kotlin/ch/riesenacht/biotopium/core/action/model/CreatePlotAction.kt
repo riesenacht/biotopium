@@ -34,8 +34,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("CreatePlotAction")
 data class CreatePlotAction(
-    val produce: Plot,
+    override val produce: Plot,
     override val consume: Hoe
-) : Action, Consumable<Hoe> {
+) : Action, Producible<Plot>, Consumable<Hoe> {
     override val type = ActionType.CREATE_PLOT
 }
