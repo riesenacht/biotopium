@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.world.model.map
 
 import ch.riesenacht.biotopium.core.world.model.Coordinate
+import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -35,7 +36,8 @@ import kotlinx.serialization.Serializable
 @SerialName("Plot")
 data class Plot(
     override val x: Coordinate,
-    override val y: Coordinate
+    override val y: Coordinate,
+    val plant: GrowingPlant? = null
 ) : Tile {
     override val type = TileType.PLOT
 }

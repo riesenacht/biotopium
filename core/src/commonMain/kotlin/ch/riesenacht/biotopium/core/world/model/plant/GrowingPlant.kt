@@ -32,7 +32,6 @@ import kotlinx.serialization.Serializable
  *
  * @author Manuel Riesen
  */
-//TODO class is never used
 @Serializable
 @SerialName("GrowingPlant")
 data class GrowingPlant(
