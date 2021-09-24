@@ -21,7 +21,7 @@ package ch.riesenacht.biotopium.core.world.model.plant
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a type of a [GrowingPlant].
+ * Represents a type of [GrowingPlant].
  *
  * @author Manuel Riesen
  */

@@ -21,7 +21,7 @@ package ch.riesenacht.biotopium.core.world.model.map
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a type of a [Tile].
+ * Represents a type of [Tile].
  *
  * @author Manuel Riesen
  */

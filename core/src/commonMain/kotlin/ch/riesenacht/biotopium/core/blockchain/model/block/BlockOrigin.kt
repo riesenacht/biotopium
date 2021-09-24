@@ -16,20 +16,25 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.model.block
 
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.time.model.Timestamp
+import ch.riesenacht.biotopium.core.blockchain.model.Address
 
 /**
- * Represents a timestamp.
- * The timestamp is stored as [the number of milliseconds][epochMillis] since 1970-01-01.
+ * Represents information about a block's origin.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@JvmInline
-value class Timestamp(val epochMillis: Long) {
+interface BlockOrigin {
 
-    operator fun compareTo(timestamp: Timestamp) = epochMillis.compareTo(timestamp.epochMillis)
+    /**
+     * The timestamp of the block's creation.
+     */
+    val timestamp: Timestamp
+
+    /**
+     * The author of the block.
+     */
+    val author: Address
 }

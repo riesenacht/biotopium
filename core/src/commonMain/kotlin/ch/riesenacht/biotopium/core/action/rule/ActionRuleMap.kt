@@ -16,19 +16,15 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.utils
+package ch.riesenacht.biotopium.core.action.rule
 
-import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.action.model.ActionType
+import kotlin.reflect.KClass
 
 /**
- * Date utilities.
+ * Represents a map of action rule sets.
  *
  * @author Manuel Riesen
  */
-expect object DateUtils {
-
-    /**
-     * Creates a timestamp of the current time.
-     */
-    fun currentTimestamp(): Timestamp
-}
+typealias ActionRuleMap = Map<ActionType, ActionRuleSet<out Action>>

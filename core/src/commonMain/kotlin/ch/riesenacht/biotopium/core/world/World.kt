@@ -16,30 +16,37 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.world.model.map
+package ch.riesenacht.biotopium.core.world
 
-import ch.riesenacht.biotopium.core.world.model.Element
-import ch.riesenacht.biotopium.core.world.model.Owner
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import ch.riesenacht.biotopium.core.world.model.map.Realm
+import ch.riesenacht.biotopium.core.world.model.map.Tile
 
 /**
- * Represents a realm of a player.
- * A realm is owned by an [owner]
- * and identifiable by the indices [ix] and [iy].
+ * Represents the world.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@SerialName("Realm")
-data class Realm(
-    override val owner: Owner,
-    val ix: RealmIndex,
-    val iy: RealmIndex
-) : Element
+interface World {
 
-/**
- * The size of a realm.
- */
-const val realmSize: UInt = 8u
+    /**
+     * All tiles as map.
+     * Each tile is mapped by its coordinates.
+     */
+    val tiles: Map<Pair<Coordinate, Coordinate>, Tile>
+
+    /**
+     * All realms as map.
+     * Each realm is mapped by its realm indices.
+     */
+    val realms: Map<Pair<RealmIndex, RealmIndex>, Realm>
+
+    /**
+     * All players as map.
+     * Each player is mapped by its wallet address.
+     */
+    val players: Map<Address, Player>
+
+}

@@ -16,25 +16,37 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.world.model
+package ch.riesenacht.biotopium.core.world
 
-import ch.riesenacht.biotopium.core.world.model.map.realmSize
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.world.model.item.Item
 
 /**
- * Represents a cartesian coordinate on the map.
- * The coordinate is used to locate tiles in 2-dimensional space.
+ * Represents a player.
+ * A player has a [name] and is identified by the [address].
  *
  * @author Manuel Riesen
  */
-@Serializable
-@JvmInline
-value class Coordinate(val coordinate: UInt) {
+data class Player(
+    val name: String,
+    val address: Address
+) {
 
     /**
-     * The realm index of the coordinate
+     * Mutable variant of the player's inventory.
      */
-    val realmIndex: RealmIndex
-    get() = RealmIndex(coordinate / realmSize)
+    private val mutableItems: MutableList<Item> = mutableListOf()
+
+    /**
+     * The player's inventory.
+     */
+    val items: List<Item>
+    get() = mutableItems
+
+    /**
+     * Adds an item to the player's inventory.
+     */
+    fun addItem(item: Item) {
+        mutableItems.add(item)
+    }
 }

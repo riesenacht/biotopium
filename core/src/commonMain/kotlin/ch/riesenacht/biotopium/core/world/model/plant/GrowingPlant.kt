@@ -18,10 +18,13 @@
 
 package ch.riesenacht.biotopium.core.world.model.plant
 
+import ch.riesenacht.biotopium.core.time.model.Timespan
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.Element
 import ch.riesenacht.biotopium.core.world.model.Owner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 /**
  * Represents a plant growing on a plot.
@@ -38,4 +41,16 @@ data class GrowingPlant(
     override val owner: Owner,
     val type: PlantType,
     val growth: PlantGrowth
-) : Element
+) : Element {
+
+    /**
+     * The last time of growth.
+     */
+    @Transient
+    var lastGrowth: Timestamp? = null
+}
+
+/**
+ * The growth rate of a plant.
+ */
+val growthRate: Timespan = Timespan(seconds = 600)

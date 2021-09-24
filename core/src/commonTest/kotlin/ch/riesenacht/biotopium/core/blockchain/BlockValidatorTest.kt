@@ -22,7 +22,7 @@ import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
 import ch.riesenacht.biotopium.core.blockchain.model.EmptyBlockData
-import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
 import ch.riesenacht.biotopium.core.crypto.Ed25519
