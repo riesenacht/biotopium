@@ -82,6 +82,10 @@ class ActionValidatorTest {
         applyEffect(CoreModuleEffect)
     }
 
+    /*
+     *  Tests for [ChunkGenesisAction].
+     */
+
     @Test
     fun testValidateChunkGenesisAction_positive() {
 
@@ -95,6 +99,10 @@ class ActionValidatorTest {
 
         assertTrue(ActionValidator.validate(action, block, world))
     }
+
+    /*
+     *  Tests for [ClaimRealmAction].
+     */
 
     @Test
     fun testValidateClaimRealmAction_positive() {
@@ -174,6 +182,10 @@ class ActionValidatorTest {
 
         assertFalse(ActionValidator.validate(action, block, world))
     }
+
+    /*
+     *  Tests for [CreatePlotAction].
+     */
 
     @Test
     fun testValidateCreatePlotAction_positive() {
@@ -290,6 +302,9 @@ class ActionValidatorTest {
 
     }
 
+    /*
+     *  Tests for [GrowAction].
+     */
 
     @Test
     fun testValidateGrowAction_positive_growSeed() {
@@ -382,6 +397,12 @@ class ActionValidatorTest {
         assertFalse(ActionValidator.validate(action, block, world))
 
     }
+
+
+    /*
+     *  Tests for [HarvestAction].
+     */
+
 
     @Test
     fun testValidateHarvestAction_positive() {
@@ -572,6 +593,10 @@ class ActionValidatorTest {
 
     }
 
+    /*
+     *  Tests for [SeedAction].
+     */
+
     @Test
     fun testValidateSeedAction_positive() {
 
@@ -742,7 +767,5 @@ class ActionValidatorTest {
         assertFalse(ActionValidator.validate(action, block, world))
 
     }
-
-    //TODO add more tests
 
 }

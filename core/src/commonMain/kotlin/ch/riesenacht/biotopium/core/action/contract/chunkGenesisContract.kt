@@ -16,23 +16,23 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.rule
+package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
-import ch.riesenacht.biotopium.core.world.World
+import ch.riesenacht.biotopium.core.action.exec.exec
+import ch.riesenacht.biotopium.core.action.model.ActionType
+import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
+import ch.riesenacht.biotopium.core.action.rule.rules
 
 /**
- * Represents a rule set for validating an action.
- * An action rule set consists of a list of [predicates].
- *
- * @author Manuel Riesen
+ * Action contract of the [ChunkGenesisAction].
  */
-class ActionRuleSet<T : Action>(private val predicates: List<(T, BlockOrigin, World) -> Boolean>) {
+val chunkGenesisContract = actionContract<ChunkGenesisAction>(
+    ActionType.CHUNK_GENESIS,
 
-    /**
-     * Invokes the predicate to validate the new [action] using the action itself, its [block] origin information
-     * and the [world].
-     */
-    operator fun invoke(action: T, block: BlockOrigin, world: World) = predicates.all { it.invoke(action, block, world) }
-}
+    rules {
+        alwaysValid()
+    },
+    exec { action, world ->
+        world.tiles.putAll( action.produce.map { (it.x to it.y) to it } )
+    }
+)

@@ -16,15 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.rule
+package ch.riesenacht.biotopium.core.action.contract
 
+import ch.riesenacht.biotopium.core.action.exec.ActionExec
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.action.model.ActionType
-import kotlin.reflect.KClass
+import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
 
 /**
- * Represents a map of action rule sets.
- *
- * @author Manuel Riesen
+ * Creates an action contract for the given [type] of action.
+ * The [rules] and the [execution][exec] are added to the contract.
  */
-typealias ActionRuleMap = Map<ActionType, ActionRuleSet<out Action>>
+fun <T : Action> actionContract(type: ActionType, rules: ActionRuleSet<T>, exec: ActionExec<T>): ActionContractHolder.() -> Unit = {
+    val contract = ActionContract(rules, exec)
+    add(type, contract)
+}

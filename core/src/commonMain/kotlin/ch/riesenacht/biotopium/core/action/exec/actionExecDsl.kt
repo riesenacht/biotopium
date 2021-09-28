@@ -16,23 +16,15 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.rule
+package ch.riesenacht.biotopium.core.action.exec
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
-import ch.riesenacht.biotopium.core.world.World
+import ch.riesenacht.biotopium.core.world.MutableWorld
+
 
 /**
- * Represents a rule set for validating an action.
- * An action rule set consists of a list of [predicates].
- *
- * @author Manuel Riesen
+ * Creates an action execution from the given [execution function][execFn].
  */
-class ActionRuleSet<T : Action>(private val predicates: List<(T, BlockOrigin, World) -> Boolean>) {
-
-    /**
-     * Invokes the predicate to validate the new [action] using the action itself, its [block] origin information
-     * and the [world].
-     */
-    operator fun invoke(action: T, block: BlockOrigin, world: World) = predicates.all { it.invoke(action, block, world) }
+fun <T : Action> exec(execFn: (T, MutableWorld) -> Unit): ActionExec<T> {
+    return ActionExec(execFn)
 }

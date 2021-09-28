@@ -16,23 +16,36 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.rule
+package ch.riesenacht.biotopium.core.world
 
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
-import ch.riesenacht.biotopium.core.world.World
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.world.model.Coordinate
+import ch.riesenacht.biotopium.core.world.model.RealmIndex
+import ch.riesenacht.biotopium.core.world.model.map.Realm
+import ch.riesenacht.biotopium.core.world.model.map.Tile
 
 /**
- * Represents a rule set for validating an action.
- * An action rule set consists of a list of [predicates].
+ * Represents the world in its mutable form.
  *
  * @author Manuel Riesen
  */
-class ActionRuleSet<T : Action>(private val predicates: List<(T, BlockOrigin, World) -> Boolean>) {
+interface MutableWorld {
 
     /**
-     * Invokes the predicate to validate the new [action] using the action itself, its [block] origin information
-     * and the [world].
+     * Mutable tile map.
      */
-    operator fun invoke(action: T, block: BlockOrigin, world: World) = predicates.all { it.invoke(action, block, world) }
+    val tiles: MutableMap<Pair<Coordinate, Coordinate>, Tile>
+
+
+    /**
+     * Mutable realm map.
+     */
+    val realms: MutableMap<Pair<RealmIndex, RealmIndex>, Realm>
+
+
+    /**
+     * Mutable player map.
+     */
+    val players: MutableMap<Address, Player>
+
 }
