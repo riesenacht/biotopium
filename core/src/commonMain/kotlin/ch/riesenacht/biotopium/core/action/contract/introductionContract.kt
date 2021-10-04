@@ -22,6 +22,7 @@ import ch.riesenacht.biotopium.core.action.exec.exec
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.IntroductionAction
 import ch.riesenacht.biotopium.core.action.rule.rules
+import ch.riesenacht.biotopium.core.world.Player
 
 /**
  * Action contract of the [IntroductionAction].
@@ -45,7 +46,17 @@ val introductionContract = actionContract<IntroductionAction>(
         }
 
     },
-    exec { action, world ->
-        TODO("not yet implemented")
+    exec { action, _, world ->
+
+        val gift = action.produce
+        val owner = gift.realmClaimPaper.owner
+
+        val player = Player("player", owner)
+
+        world.players[owner] = player
+
+        player.addAllItems(gift.hoes)
+        player.addAllItems(gift.seeds)
+        player.addItem(gift.realmClaimPaper)
     }
 )

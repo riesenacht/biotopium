@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.world
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.world.model.item.Item
+import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
 
 /**
  * Represents a player.
@@ -48,5 +49,13 @@ data class Player(
      */
     fun addItem(item: Item) {
         mutableItems.add(item)
+    }
+
+    fun removeItem(item: Item) {
+        mutableItems.remove(item)
+    }
+
+    fun addAllItems(items: List<Item>) {
+        mutableItems.addAll(items)
     }
 }

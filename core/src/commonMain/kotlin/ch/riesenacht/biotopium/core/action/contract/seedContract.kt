@@ -24,6 +24,8 @@ import ch.riesenacht.biotopium.core.action.model.SeedAction
 import ch.riesenacht.biotopium.core.action.rule.rules
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.TileType
+import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
+import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 
 /**
  * Action contract of the [SeedAction].
@@ -36,33 +38,60 @@ val seedContract = actionContract<SeedAction>(
         // the plot's tile is owned by the block author
         rule { action, block, world ->
             val plot = action.produce
+
             tileOwned(plot.x, plot.y, world, block.author)
+        }
+
+        // the plot contains a plant in seed state
+        rule { action, _, _ ->
+            val plot = action.produce
+
+            plot.plant?.growth == PlantGrowth.SEED
+        }
+
+        // the plant type equals the seed type
+        rule { action, _, _ ->
+            val plot = action.produce
+            val seed = action.consume
+
+            plot.plant?.type == seed.plantType
         }
 
         // the plot's tile is currently of type plot
         rule { action, _, world ->
             val plot = action.produce
-            world.tiles[Pair(plot.x, plot.y)]?.type == TileType.PLOT
+
+            world.tiles[plot.x to plot.y]?.type == TileType.PLOT
         }
 
         // the plot does not contain a plant
         rule { action, _, world ->
             val plot = action.produce
-            val mapTile = world.tiles[Pair(plot.x, plot.y)]
-            plot.plant == null
-                    && (mapTile is Plot) && (mapTile.plant == null)
+            val localPlot = world.tiles[plot.x to plot.y]
+
+            (localPlot is Plot) && (localPlot.plant == null)
         }
 
         // the owner of the seed equals the author of the block,
         // the player owns the seed
         rule { action, block, world ->
             val seed = action.consume
+
             seed.owner == block.author
                     && world.players[seed.owner]?.items?.contains(seed) ?: false
         }
 
     },
-    exec { action, world ->
-        TODO("not yet implemented")
+    exec { action, _, world ->
+
+        val plot = action.produce
+        val seed = action.consume
+
+        val owner = seed.owner
+
+        // remove seed item from player
+        world.players[owner]!!.removeItem(seed)
+
+        world.tiles[plot.x to plot.y] = plot
     }
 )

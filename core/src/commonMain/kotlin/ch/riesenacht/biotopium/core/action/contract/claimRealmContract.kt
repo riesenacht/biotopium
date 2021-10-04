@@ -34,7 +34,7 @@ val claimRealmContract = actionContract<ClaimRealmAction>(
         rule { action, _, world ->
             val realm = action.produce
 
-            !world.realms.containsKey(Pair(realm.ix, realm.iy))
+            !world.realms.containsKey(realm.ix to realm.iy)
         }
 
         // the author of the block equals the owner of the claim paper,
@@ -47,7 +47,16 @@ val claimRealmContract = actionContract<ClaimRealmAction>(
         }
     },
 
-    exec { action, mutableWorld ->
-        TODO("not yet implemented")
+    exec { action, _, world ->
+
+        val claimPaper = action.consume
+        val realm = action.produce
+        val owner = claimPaper.owner
+
+        // remove realm claim paper from the player's inventory
+        world.players[owner]!!.removeItem(claimPaper)
+
+        // add the new realm to the world
+        world.realms[realm.ix to realm.iy] = realm
     }
 )

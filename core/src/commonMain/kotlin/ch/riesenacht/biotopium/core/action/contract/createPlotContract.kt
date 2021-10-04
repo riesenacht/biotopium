@@ -48,10 +48,19 @@ val createPlotContract = actionContract<CreatePlotAction>(
         // the plot's tile is currently of type default
         rule { action, _, world ->
             val plot = action.produce
-            world.tiles[Pair(plot.x, plot.y)]?.type == TileType.DEFAULT
+            world.tiles[plot.x to plot.y]?.type == TileType.DEFAULT
         }
     },
-    exec { action, world ->
-        TODO("not yet implemented")
+    exec { action, _, world ->
+
+        val plot = action.produce
+        val hoe = action.consume
+        val owner = hoe.owner
+
+        // remove hoe item from player
+        world.players[owner]!!.removeItem(hoe)
+
+        // set plot tile
+        world.tiles[plot.x to plot.y] = plot
     }
 )

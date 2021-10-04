@@ -22,6 +22,7 @@ import ch.riesenacht.biotopium.core.action.exec.exec
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.HarvestAction
 import ch.riesenacht.biotopium.core.action.rule.rules
+import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 
 /**
@@ -39,9 +40,11 @@ val harvestContract = actionContract<HarvestAction>(
         }
 
         // the plant is fully grown
-        rule { action, _, _ ->
+        rule { action, _, world ->
             val plot = action.consume
-            plot.plant?.growth == PlantGrowth.GROWN
+            val localPlot = world.tiles[plot.x to plot.y] as Plot
+
+            localPlot.plant?.growth == PlantGrowth.GROWN
         }
 
         // all items of the harvest are owned by the block author
@@ -52,15 +55,35 @@ val harvestContract = actionContract<HarvestAction>(
         }
 
         // harvested plant and seeds must be of same plant type
-        rule { action, _, _ ->
+        rule { action, _, world ->
             val harvest = action.produce
             val plot = action.consume
-            harvest.plant.plantType == plot.plant?.type
-                    && harvest.seeds.all { it.plantType == plot.plant.type }
+            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            harvest.plant.plantType == localPlot.plant?.type
+                    && harvest.seeds.all { it.plantType == localPlot.plant.type }
+        }
+
+        // updated plot must not contain a plant
+        rule { action, _, _ ->
+            val plot = action.consume
+            plot.plant == null
         }
 
     },
-    exec { action, world ->
-        TODO("not yet implemented")
+    exec { action, _, world ->
+
+        val harvest = action.produce
+        val plot = action.consume
+
+        val localPlot = world.tiles[plot.x to plot.y] as Plot
+        val owner = localPlot.plant!!.owner
+
+        val player = world.players[owner]!!
+
+        // add harvested items
+        player.addItem(harvest.plant)
+        player.addAllItems(harvest.seeds)
+
+        world.tiles[plot.x to plot.y] = plot
     }
 )

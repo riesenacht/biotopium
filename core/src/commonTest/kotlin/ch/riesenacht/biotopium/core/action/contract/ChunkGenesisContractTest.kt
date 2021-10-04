@@ -18,21 +18,38 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.exec.exec
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
-import ch.riesenacht.biotopium.core.action.rule.rules
+import ch.riesenacht.biotopium.core.world.model.coord
+import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
+import kotlin.test.Test
+import kotlin.test.assertContains
 
 /**
- * Action contract of the [ChunkGenesisAction].
+ * Test class for [chunkGenesisContract].
+ *
+ * @author Manuel Riesen
  */
-val chunkGenesisContract = actionContract<ChunkGenesisAction>(
-    ActionType.CHUNK_GENESIS,
+class ChunkGenesisContractTest : ContractTest() {
 
-    rules {
-        alwaysValid()
-    },
-    exec { action, _, world ->
-        world.tiles.putAll( action.produce.map { (it.x to it.y) to it } )
+    @Test
+    fun testChunkGenesisExec_positive() {
+
+        val world = createMutableWorld()
+
+        val owner = createDefaultOwner()
+
+        val block = createDefaultBlockOrigin(owner)
+
+        val tile11 = DefaultTile(1.coord, 1.coord)
+
+        val action = ChunkGenesisAction(listOf(tile11))
+
+        val contract = useContract<ChunkGenesisAction>(ActionType.CHUNK_GENESIS)
+
+        contract.exec(action, block, world)
+
+        assertContains(world.tiles, tile11.x to tile11.y)
     }
-)
+
+}

@@ -35,7 +35,7 @@ class ActionRuleSetBuilder<T : Action> {
     /**
      * Checks if a tile (identified by [x] and [y]) is owned by a given [owner].
      */
-    fun tileOwned(x: Coordinate, y: Coordinate, world: World, owner: Owner) = world.realms[Pair(x.realmIndex, y.realmIndex)]?.owner == owner
+    fun tileOwned(x: Coordinate, y: Coordinate, world: World, owner: Owner) = world.realms[x.realmIndex to y.realmIndex]?.owner == owner
 
     /**
      * A rule which always results in `true`.

@@ -22,6 +22,7 @@ import ch.riesenacht.biotopium.core.action.exec.exec
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.GrowAction
 import ch.riesenacht.biotopium.core.action.rule.rules
+import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 import ch.riesenacht.biotopium.core.world.model.plant.growthRate
 
@@ -46,19 +47,37 @@ val growContract = actionContract<GrowAction>(
         }
 
         // the plot's plant is not yet fully grown
-        rule { action, _, _ ->
+        rule { action, _, world ->
             val plot = action.produce
-            plot.plant?.growth != PlantGrowth.GROWN
+            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            localPlot.plant?.growth != PlantGrowth.GROWN
         }
 
-        // the growth rate is taken into account
-        rule { action, block, _ ->
+        // the new plant's growth is equal to the current plant's growth plus 1
+        rule { action, _, world ->
             val plot = action.produce
-            plot.plant?.lastGrowth?.let {block.timestamp <= it + growthRate } ?: false
+            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            plot.plant?.growth?.ordinal == localPlot.plant?.growth?.ordinal?.plus(1)
+        }
+
+
+        // the growth rate is taken into account
+        rule { action, block, world ->
+            val plot = action.produce
+            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            localPlot.plant?.lastGrowth?.let {block.timestamp <= it + growthRate } ?: false
         }
 
     },
-    exec { action, world ->
-        TODO("not yet implemented")
+    exec { action, block, world ->
+
+        val plot = action.produce
+
+        // update last growth time
+        plot.plant?.lastGrowth = block.timestamp
+
+        // set the new plot tile
+        world.tiles[plot.x to plot.y] = plot
+
     }
 )
