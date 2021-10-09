@@ -16,25 +16,23 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.world.model
+package ch.riesenacht.biotopium.core.action.rule
 
-import ch.riesenacht.biotopium.core.world.model.map.realmSize
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
+import ch.riesenacht.biotopium.core.world.World
 
 /**
- * Represents a cartesian coordinate on the map.
- * The coordinate is used to locate tiles in 2-dimensional space.
+ * Represents a rule set for validating an action.
+ * An action rule set consists of a list of [predicates].
  *
  * @author Manuel Riesen
  */
-@Serializable
-@JvmInline
-value class Coordinate(val coordinate: UInt) {
+class ActionRuleSet<T : Action>(private val predicates: List<(T, BlockOrigin, World) -> Boolean>) {
 
     /**
-     * The realm index of the coordinate
+     * Invokes the predicate to validate the new [action] using the action itself, its [block] origin information
+     * and the [world].
      */
-    val realmIndex: RealmIndex
-    get() = RealmIndex(coordinate / realmSize)
+    operator fun invoke(action: T, block: BlockOrigin, world: World) = predicates.all { it.invoke(action, block, world) }
 }

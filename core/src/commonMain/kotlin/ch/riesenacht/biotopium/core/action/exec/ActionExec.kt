@@ -16,25 +16,27 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.world.model
+package ch.riesenacht.biotopium.core.action.exec
 
-import ch.riesenacht.biotopium.core.world.model.map.realmSize
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
+import ch.riesenacht.biotopium.core.world.MutableWorld
 
 /**
- * Represents a cartesian coordinate on the map.
- * The coordinate is used to locate tiles in 2-dimensional space.
+ * Represents the execution behavior of an [Action].
+ * The [execution function][execFun] is applied to the world.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@JvmInline
-value class Coordinate(val coordinate: UInt) {
+class ActionExec<T : Action>(
+    private val execFun: (T, BlockOrigin, MutableWorld) -> Unit
+) {
 
     /**
-     * The realm index of the coordinate
+     * Invokes the execution function of the [action] with the [block] origin information for context,
+     * applies the action on the [world].
      */
-    val realmIndex: RealmIndex
-    get() = RealmIndex(coordinate / realmSize)
+    operator fun invoke(action: T, block: BlockOrigin, world: MutableWorld) {
+        execFun(action, block, world)
+    }
 }

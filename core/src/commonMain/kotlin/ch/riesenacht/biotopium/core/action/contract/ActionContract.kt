@@ -16,25 +16,20 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.world.model
+package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.world.model.map.realmSize
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.action.exec.ActionExec
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
 
 /**
- * Represents a cartesian coordinate on the map.
- * The coordinate is used to locate tiles in 2-dimensional space.
+ * Represents the contract of an [Action].
+ * An action contract describes both the rules for applying an action
+ * and the behavior of an action.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@JvmInline
-value class Coordinate(val coordinate: UInt) {
-
-    /**
-     * The realm index of the coordinate
-     */
-    val realmIndex: RealmIndex
-    get() = RealmIndex(coordinate / realmSize)
-}
+class ActionContract<T : Action>(
+    val rules: ActionRuleSet<T>,
+    val exec: ActionExec<T>
+)

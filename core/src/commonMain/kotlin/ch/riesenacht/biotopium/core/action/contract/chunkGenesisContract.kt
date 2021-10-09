@@ -16,25 +16,23 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.world.model
+package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.world.model.map.realmSize
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.action.exec.exec
+import ch.riesenacht.biotopium.core.action.model.ActionType
+import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
+import ch.riesenacht.biotopium.core.action.rule.rules
 
 /**
- * Represents a cartesian coordinate on the map.
- * The coordinate is used to locate tiles in 2-dimensional space.
- *
- * @author Manuel Riesen
+ * Action contract of the [ChunkGenesisAction].
  */
-@Serializable
-@JvmInline
-value class Coordinate(val coordinate: UInt) {
+val chunkGenesisContract = actionContract<ChunkGenesisAction>(
+    ActionType.CHUNK_GENESIS,
 
-    /**
-     * The realm index of the coordinate
-     */
-    val realmIndex: RealmIndex
-    get() = RealmIndex(coordinate / realmSize)
-}
+    rules {
+        alwaysValid()
+    },
+    exec { action, _, world ->
+        world.tiles.putAll( action.produce.map { (it.x to it.y) to it } )
+    }
+)

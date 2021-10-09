@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.BlockData
-import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 
 
@@ -32,7 +31,7 @@ import ch.riesenacht.biotopium.core.crypto.model.Hash
  *
  * @author Manuel Riesen
 */
-sealed interface AbstractBlock {
+sealed interface AbstractBlock : BlockOrigin {
 
     /**
      * The position on the blockchain.
@@ -40,19 +39,9 @@ sealed interface AbstractBlock {
     val height: ULong
 
     /**
-     * The timestamp of the block's creation.
-     */
-    val timestamp: Timestamp
-
-    /**
      * The hash of the previous block.
      */
     val prevHash: Hash
-
-    /**
-     * The author of the block.
-     */
-    val author: Address
 
     /**
      * The validator of the block.

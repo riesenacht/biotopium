@@ -16,19 +16,24 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.utils
+package ch.riesenacht.biotopium.core.time.model
 
-import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 
 /**
- * Date utilities.
+ * Represents a timespan.
+ * The timespan is represented in [seconds].
  *
  * @author Manuel Riesen
  */
-expect object DateUtils {
+@Serializable
+@JvmInline
+value class Timespan(val seconds: Int) {
 
     /**
-     * Creates a timestamp of the current time.
+     * The timespan in milliseconds.
      */
-    fun currentTimestamp(): Timestamp
+    val millis: Long
+    get() = 1_000 * seconds.toLong()
 }

@@ -16,9 +16,9 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.utils
+package ch.riesenacht.biotopium.core.time
 
-import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import kotlin.js.Date
 
 /**

@@ -28,6 +28,8 @@ import ch.riesenacht.biotopium.core.world.model.item.*
 import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.Realm
+import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
+import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 import ch.riesenacht.biotopium.core.world.model.realmIndex
 import kotlin.test.BeforeTest
@@ -146,11 +148,13 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeGrowAction() {
-        val plot = Plot(1.coord, 0.coord)
+        val owner = Owner.fromBase64("me")
+        val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.SEED)
+        val plot = Plot(1.coord, 0.coord, plant)
         val action = GrowAction(plot)
         val block = generateDefaultBlock(action)
 
-        val expected = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"GrowAction\",\"produce\":{\"x\":1,\"y\":0}},\"hash\":\"1cdc08bad690be7a1b92fd994b2aa8f8933d235d6dd3e5452a1e4c5c0d4cea28\",\"sign\":\"d2FdV/JQBVGB0qIw3tzF0A9r+nHh0uY0P0VS4HGMEKXt7t2aXaLagzCV8Ta7oacP+ftsjxQ8kVyerCCHggQaAg==\",\"validSign\":\"BAwaVmpQb2Qr/yivS2zKZIJa6bpOXDJfmhEhvlftZAKn4aJR60l59BCm8gfL7s7E+NC2vWuOipdwdJWJi4azDw==\"}"
+        val expected = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"GrowAction\",\"produce\":{\"x\":1,\"y\":0,\"plant\":{\"owner\":\"me\",\"type\":\"CORN\",\"growth\":\"SEED\"}}},\"hash\":\"e061405e9335e33e5610c54c754d7a07f7c0e4c6b935919c4b23ef672cc5e129\",\"sign\":\"cDcdZpZArROhEnWG8hIiSQE21dP1ZMbgACT/Q3NwvjLk3FFYHqS741Am29AIm5hc0dixnNJIoq4rXDZSLdPACQ==\",\"validSign\":\"ii1I9YtlnzW3jHQsLrFg1b4zVO2Jl+XRmZrgFrhHjrFKRkjFZBUlwOvT8SGsOBI6cYK7wKl1I/M29cnulfPIBw==\"}"
 
         val encoded = JsonEncoder.encode(block)
 
@@ -160,9 +164,11 @@ class JsonEncoderCoreTest : EncoderTest() {
     @Test
     fun testDecodeGrowAction() {
 
-        val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"GrowAction\",\"produce\":{\"x\":1,\"y\":0}},\"hash\":\"1cdc08bad690be7a1b92fd994b2aa8f8933d235d6dd3e5452a1e4c5c0d4cea28\",\"sign\":\"d2FdV/JQBVGB0qIw3tzF0A9r+nHh0uY0P0VS4HGMEKXt7t2aXaLagzCV8Ta7oacP+ftsjxQ8kVyerCCHggQaAg==\",\"validSign\":\"BAwaVmpQb2Qr/yivS2zKZIJa6bpOXDJfmhEhvlftZAKn4aJR60l59BCm8gfL7s7E+NC2vWuOipdwdJWJi4azDw==\"}"
+        val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"GrowAction\",\"produce\":{\"x\":1,\"y\":0,\"plant\":{\"owner\":\"me\",\"type\":\"CORN\",\"growth\":\"SEED\"}}},\"hash\":\"e061405e9335e33e5610c54c754d7a07f7c0e4c6b935919c4b23ef672cc5e129\",\"sign\":\"cDcdZpZArROhEnWG8hIiSQE21dP1ZMbgACT/Q3NwvjLk3FFYHqS741Am29AIm5hc0dixnNJIoq4rXDZSLdPACQ==\",\"validSign\":\"ii1I9YtlnzW3jHQsLrFg1b4zVO2Jl+XRmZrgFrhHjrFKRkjFZBUlwOvT8SGsOBI6cYK7wKl1I/M29cnulfPIBw==\"}"
 
-        val plot = Plot(1.coord, 0.coord)
+        val owner = Owner.fromBase64("me")
+        val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.SEED)
+        val plot = Plot(1.coord, 0.coord, plant)
         val action = GrowAction(plot)
         val block = generateDefaultBlock(action)
 
@@ -173,8 +179,9 @@ class JsonEncoderCoreTest : EncoderTest() {
 
     @Test
     fun testEncodeHarvestAction() {
-        val plot = Plot(1.coord, 0.coord)
         val owner = Owner.fromBase64("me")
+        val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
+        val plot = Plot(1.coord, 0.coord, plant)
         val harvest = Harvest(
             HarvestedPlant(
                 owner,
@@ -194,7 +201,7 @@ class JsonEncoderCoreTest : EncoderTest() {
         val action = HarvestAction(harvest, plot)
         val block = generateDefaultBlock(action)
 
-        val expected = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"HarvestAction\",\"produce\":{\"plant\":{\"owner\":\"me\",\"plantType\":\"WHEAT\"},\"seeds\":[{\"owner\":\"me\",\"plantType\":\"WHEAT\"},{\"owner\":\"me\",\"plantType\":\"WHEAT\"}]},\"consume\":{\"x\":1,\"y\":0}},\"hash\":\"78d6588074922fc0a548a622208996011c77a2569123d94c3a3edfc893327cf7\",\"sign\":\"xOSCPKKtuKnyRLYQMyG5qXXJUNDfrzKeNLAyo5Dj760OYy3oxI/yE3Vk+nyxnI1lufEX1q0nfldIpQ2SIgoTBw==\",\"validSign\":\"2AQmi3BR6vuGwsLgQrxDUvZjedhguZMDrQ+kVtbR6MVHuKBA/Y4y5eyrxDT2GUNdbruSqDdWn3+LtHVWFvJwAA==\"}"
+        val expected = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"HarvestAction\",\"produce\":{\"plant\":{\"owner\":\"me\",\"plantType\":\"WHEAT\"},\"seeds\":[{\"owner\":\"me\",\"plantType\":\"WHEAT\"},{\"owner\":\"me\",\"plantType\":\"WHEAT\"}]},\"consume\":{\"x\":1,\"y\":0,\"plant\":{\"owner\":\"me\",\"type\":\"CORN\",\"growth\":\"GROWN\"}}},\"hash\":\"21b69fe70129097031e5e4b9f6a6b453020ae094f6d844cec4719818a1c15882\",\"sign\":\"g1E553WmNPvy/IStf+uK4c8hwKPMqlG7CpwuVLRi9hWc4YAZYCUN4p6PErUFGMFJctvmkwnmHClMzOx96omIAg==\",\"validSign\":\"dt6Gy3+EfKOXURuYU8JoXabB1uBQRx8PN3kog83JsoTGGPA/pTKN3Bhk7Zk0jaaeX3S09nl6LzLOSeu9gaytAA==\"}"
 
         val encoded = JsonEncoder.encode(block)
 
@@ -204,10 +211,11 @@ class JsonEncoderCoreTest : EncoderTest() {
     @Test
     fun testDecodeHarvestAction() {
 
-        val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"HarvestAction\",\"produce\":{\"plant\":{\"owner\":\"me\",\"plantType\":\"WHEAT\"},\"seeds\":[{\"owner\":\"me\",\"plantType\":\"WHEAT\"},{\"owner\":\"me\",\"plantType\":\"WHEAT\"}]},\"consume\":{\"x\":1,\"y\":0}},\"hash\":\"78d6588074922fc0a548a622208996011c77a2569123d94c3a3edfc893327cf7\",\"sign\":\"xOSCPKKtuKnyRLYQMyG5qXXJUNDfrzKeNLAyo5Dj760OYy3oxI/yE3Vk+nyxnI1lufEX1q0nfldIpQ2SIgoTBw==\",\"validSign\":\"2AQmi3BR6vuGwsLgQrxDUvZjedhguZMDrQ+kVtbR6MVHuKBA/Y4y5eyrxDT2GUNdbruSqDdWn3+LtHVWFvJwAA==\"}"
+        val encoded = "{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"HarvestAction\",\"produce\":{\"plant\":{\"owner\":\"me\",\"plantType\":\"WHEAT\"},\"seeds\":[{\"owner\":\"me\",\"plantType\":\"WHEAT\"},{\"owner\":\"me\",\"plantType\":\"WHEAT\"}]},\"consume\":{\"x\":1,\"y\":0,\"plant\":{\"owner\":\"me\",\"type\":\"CORN\",\"growth\":\"GROWN\"}}},\"hash\":\"21b69fe70129097031e5e4b9f6a6b453020ae094f6d844cec4719818a1c15882\",\"sign\":\"g1E553WmNPvy/IStf+uK4c8hwKPMqlG7CpwuVLRi9hWc4YAZYCUN4p6PErUFGMFJctvmkwnmHClMzOx96omIAg==\",\"validSign\":\"dt6Gy3+EfKOXURuYU8JoXabB1uBQRx8PN3kog83JsoTGGPA/pTKN3Bhk7Zk0jaaeX3S09nl6LzLOSeu9gaytAA==\"}"
 
         val owner = Owner.fromBase64("me")
-        val plot = Plot(1.coord, 0.coord)
+        val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
+        val plot = Plot(1.coord, 0.coord, plant)
         val harvest = Harvest(
             HarvestedPlant(
                 owner,

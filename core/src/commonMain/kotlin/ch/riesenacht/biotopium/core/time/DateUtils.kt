@@ -16,25 +16,19 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.world.model
+package ch.riesenacht.biotopium.core.time
 
-import ch.riesenacht.biotopium.core.world.model.map.realmSize
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 
 /**
- * Represents a cartesian coordinate on the map.
- * The coordinate is used to locate tiles in 2-dimensional space.
+ * Date utilities.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@JvmInline
-value class Coordinate(val coordinate: UInt) {
+expect object DateUtils {
 
     /**
-     * The realm index of the coordinate
+     * Creates a timestamp of the current time.
      */
-    val realmIndex: RealmIndex
-    get() = RealmIndex(coordinate / realmSize)
+    fun currentTimestamp(): Timestamp
 }

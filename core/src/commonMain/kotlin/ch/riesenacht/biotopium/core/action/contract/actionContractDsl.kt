@@ -16,20 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.utils
+package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
+import ch.riesenacht.biotopium.core.action.exec.ActionExec
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.action.model.ActionType
+import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
 
 /**
- * Date utilities.
- * Actual implementation for JVM platform.
- *
- * @author Manuel Riesen
+ * Creates an action contract for the given [type] of action.
+ * The [rules] and the [execution][exec] are added to the contract.
  */
-actual object DateUtils {
-
-    /**
-     * Creates a timestamp of the current time.
-     */
-    actual fun currentTimestamp() = Timestamp(System.currentTimeMillis())
+fun <T : Action> actionContract(type: ActionType, rules: ActionRuleSet<T>, exec: ActionExec<T>): ActionContractHolder.() -> Unit = {
+    val contract = ActionContract(rules, exec)
+    add(type, contract)
 }

@@ -18,11 +18,11 @@
 
 package ch.riesenacht.biotopium.serialization
 
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.*
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
-import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.model.*
 
 /**

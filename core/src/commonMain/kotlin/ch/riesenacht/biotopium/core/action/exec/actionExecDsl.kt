@@ -16,20 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.action.exec
 
-import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
+import ch.riesenacht.biotopium.core.world.MutableWorld
+
 
 /**
- * Represents a timestamp.
- * The timestamp is stored as [the number of milliseconds][epochMillis] since 1970-01-01.
- *
- * @author Manuel Riesen
+ * Creates an action execution from the given [execution function][execFn].
  */
-@Serializable
-@JvmInline
-value class Timestamp(val epochMillis: Long) {
-
-    operator fun compareTo(timestamp: Timestamp) = epochMillis.compareTo(timestamp.epochMillis)
+fun <T : Action> exec(execFn: (T, BlockOrigin, MutableWorld) -> Unit): ActionExec<T> {
+    return ActionExec(execFn)
 }

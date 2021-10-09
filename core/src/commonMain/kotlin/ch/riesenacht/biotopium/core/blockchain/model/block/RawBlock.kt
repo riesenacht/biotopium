@@ -20,7 +20,7 @@ package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.BlockData
-import ch.riesenacht.biotopium.core.blockchain.model.Timestamp
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
