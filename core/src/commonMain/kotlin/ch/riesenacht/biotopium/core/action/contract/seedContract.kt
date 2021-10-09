@@ -24,7 +24,6 @@ import ch.riesenacht.biotopium.core.action.model.SeedAction
 import ch.riesenacht.biotopium.core.action.rule.rules
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.TileType
-import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
 import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 
 /**

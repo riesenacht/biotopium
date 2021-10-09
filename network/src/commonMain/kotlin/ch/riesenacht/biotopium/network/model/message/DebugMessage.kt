@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
 /**
  * Message for debug purposes.
  *
- * @property message message
+ * @property payload message
  *
  * @author Manuel Riesen
  */

@@ -132,7 +132,7 @@ public class GoP2p {
 
     /**
      * Listens to new messages.
-     * This methods is blocking.
+     * This method is blocking.
      * @return received message
      */
     public String listenBlocking() {

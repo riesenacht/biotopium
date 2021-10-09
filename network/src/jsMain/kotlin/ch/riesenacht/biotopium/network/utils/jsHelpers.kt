@@ -16,7 +16,7 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.utils
+package ch.riesenacht.biotopium.network.utils
 
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -28,7 +28,7 @@ import kotlin.js.Promise
  * @param init init function
  * @return JavaScript object
  */
-inline fun jsObject(init: dynamic.() -> Unit): dynamic {
+inline fun jsObject(init: dynamic.() -> Unit) {
     val obj = js("{}")
     init(obj)
     return obj
@@ -39,7 +39,7 @@ inline fun jsObject(init: dynamic.() -> Unit): dynamic {
  * @param pairs pairs of properties and values
  * @return JavaScript object
  */
-fun jsObjectFromPairs(vararg pairs: Pair<Any, Any>) {
+fun jsObjectFromPairs(vararg pairs: Pair<Any, Any>): dynamic {
     val obj = js("{}")
     for((key, value) in pairs) {
         obj[key] = value

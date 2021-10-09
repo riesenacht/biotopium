@@ -67,7 +67,7 @@ abstract class NetworkNode {
     }
 
     /**
-     * Handles the receive of a [serialized] message.
+     * Handles the incoming [serialized] message.
      * The corresponding message handlers are called.
      */
     fun receive(serialized: SerializedMessage) {

@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.core.effect.ModuleEffect
 import ch.riesenacht.biotopium.core.effect.SideEffect
-import ch.riesenacht.biotopium.serialization.SerializersModuleRegistry
 import kotlinx.serialization.modules.SerializersModule
 
 /**

@@ -19,12 +19,9 @@
 package ch.riesenacht.biotopium.core.world
 
 import ch.riesenacht.biotopium.core.action.ActionValidator
-import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
 import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
-import ch.riesenacht.biotopium.core.world.model.item.Item
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
 

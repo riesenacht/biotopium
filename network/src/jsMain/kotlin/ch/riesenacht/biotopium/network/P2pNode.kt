@@ -20,10 +20,10 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
-import ch.riesenacht.biotopium.utils.await
-import ch.riesenacht.biotopium.utils.jsArray
-import ch.riesenacht.biotopium.utils.jsObject
-import ch.riesenacht.biotopium.utils.jsObjectFromPairs
+import ch.riesenacht.biotopium.network.utils.await
+import ch.riesenacht.biotopium.network.utils.jsArray
+import ch.riesenacht.biotopium.network.utils.jsObject
+import ch.riesenacht.biotopium.network.utils.jsObjectFromPairs
 
 /**
  * Represents a peer-to-peer node.

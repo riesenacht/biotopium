@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.core.world
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.world.model.item.Item
-import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
 
 /**
  * Represents a player.

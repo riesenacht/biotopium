@@ -1,14 +1,15 @@
 package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.core.action.model.*
-import ch.riesenacht.biotopium.core.crypto.model.PublicKey
 import ch.riesenacht.biotopium.core.effect.applyEffect
-import ch.riesenacht.biotopium.core.world.model.*
+import ch.riesenacht.biotopium.core.world.model.Owner
+import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.*
 import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
+import ch.riesenacht.biotopium.core.world.model.realmIndex
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -46,7 +47,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
     @Test
     fun testEncodeClaimRealmAction() {
-        val owner = Owner.fromBase64("me");
+        val owner = Owner.fromBase64("me")
         val realm = Realm(owner, 1.realmIndex, 0.realmIndex)
         val realmClaimPaper = RealmClaimPaper(owner)
         val action = ClaimRealmAction(realm, realmClaimPaper)

@@ -9,6 +9,7 @@ val biotopiumGroupId: String by project
 val biotopiumArtifactId: String by project
 val biotopiumVersion: String by project
 val biotopiumCoreArtifactId: String by project
+val jvmTargetVersion: String by project
 
 group = biotopiumGroupId
 version = biotopiumVersion
@@ -38,7 +39,7 @@ kotlin {
     }
     jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
+            kotlinOptions.jvmTarget = jvmTargetVersion
         }
         withJava()
         testRuns["test"].executionTask.configure {

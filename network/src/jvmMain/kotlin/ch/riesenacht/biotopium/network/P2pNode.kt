@@ -22,9 +22,6 @@ import ch.riesenacht.biotopium.network.go2p.GoP2p
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import kotlinx.coroutines.*
-import kotlin.concurrent.thread
-import kotlin.coroutines.coroutineContext
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Represents a peer-to-peer node.

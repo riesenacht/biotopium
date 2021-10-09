@@ -19,8 +19,8 @@
 package ch.riesenacht.biotopium.network.model.config
 
 /**
- * Represents the configuration of a [P2pNode].
- * Not all configuration values can and will be used by the [P2pNode].
+ * Represents the configuration of a [ch.riesenacht.biotopium.network.P2pNode].
+ * Not all configuration values can and will be used by the [ch.riesenacht.biotopium.network.P2pNode].
  * The usability of the values is dependent to the underlying platform capabilities.
  *
  * @property listenPort port to listen on (if possible on platform)
