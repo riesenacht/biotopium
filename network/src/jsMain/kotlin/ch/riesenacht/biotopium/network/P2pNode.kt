@@ -24,6 +24,7 @@ import ch.riesenacht.biotopium.network.utils.await
 import ch.riesenacht.biotopium.network.utils.jsArray
 import ch.riesenacht.biotopium.network.utils.jsObject
 import ch.riesenacht.biotopium.network.utils.jsObjectFromPairs
+import ch.riesenacht.biotopium.logging.Logging
 
 /**
  * Represents a peer-to-peer node.
@@ -34,6 +35,8 @@ import ch.riesenacht.biotopium.network.utils.jsObjectFromPairs
 actual class P2pNode actual constructor(
     private val p2pConfig: P2pConfiguration
 ) : NetworkNode() {
+
+    private val logger = Logging.logger("P2pNode")
 
     private var libp2p: Libp2pInstance? = null
 
@@ -74,10 +77,10 @@ actual class P2pNode actual constructor(
         this.libp2p = Libp2p.create(config).await()
         val libp2p = libp2p!!
         libp2p.on("peer:discovery") { peerId ->
-            println("[P2P] found peer: ${peerId.toB58String()}")
+            logger.debug { "found peer: ${peerId.toB58String()}" }
         }
         libp2p.pubsub.on(p2pConfig.topic) { msg: dynamic ->
-            println("[P2P] received: ${msg.data}")
+            logger.debug { "received: ${msg.data}" }
             val serializedMessage: SerializedMessage = (msg.data as ByteArray).decodeToString()
             receive(serializedMessage)
         }
@@ -87,7 +90,7 @@ actual class P2pNode actual constructor(
         //TODO fix non-blocking call
         libp2p.pubsub.subscribe(BiotopiumProtocol.topic)
 
-        println("[P2P] started with peerID ${libp2p.peerId.toB58String()}")
+        logger.debug { "started with peerID ${libp2p.peerId.toB58String()}" }
     }
 
     override suspend fun stop() {
@@ -95,7 +98,7 @@ actual class P2pNode actual constructor(
     }
 
     override fun sendSerialized(message: SerializedMessage) {
-        println("[P2P] sending: $message")
+        logger.debug { "sending: $message" }
         libp2p!!.pubsub.publish(BiotopiumProtocol.topic, message)
     }
 

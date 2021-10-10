@@ -3,11 +3,8 @@ plugins {
 }
 
 val jvmTargetVersion: String by project
-val kotlinxSerializationJsonVersion: String by project
 val biotopiumSubmoduleGroupId: String by project
-val biotopiumLoggingArtifactId: String by project
 val biotopiumVersion: String by project
-val kotlinVersion: String by project
 
 group = biotopiumSubmoduleGroupId
 version = biotopiumVersion

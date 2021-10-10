@@ -28,7 +28,7 @@ import kotlin.js.Promise
  * @param init init function
  * @return JavaScript object
  */
-inline fun jsObject(init: dynamic.() -> Unit) {
+inline fun jsObject(init: dynamic.() -> Unit): dynamic {
     val obj = js("{}")
     init(obj)
     return obj
