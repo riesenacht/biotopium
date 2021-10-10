@@ -8,6 +8,7 @@ plugins {
 val biotopiumGroupId: String by project
 val biotopiumArtifactId: String by project
 val biotopiumVersion: String by project
+val biotopiumLoggingArtifactId: String by project
 val biotopiumCoreArtifactId: String by project
 val jvmTargetVersion: String by project
 
@@ -19,7 +20,7 @@ repositories {
 }
 
 korge {
-    id = "${biotopiumGroupId}.${biotopiumArtifactId}"
+    id = "$biotopiumGroupId.$biotopiumArtifactId"
 
     targetJvm()
     targetJs()
@@ -47,6 +48,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(project(":$biotopiumLoggingArtifactId"))
                 implementation(project(":$biotopiumCoreArtifactId"))
             }
         }
