@@ -5,14 +5,11 @@ pluginManagement {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        jcenter()
         google()
-        maven { url = uri("https://dl.bintray.com/korlibs/korlibs") }
-        maven { url = uri("https://plugins.gradle.org/m2/") }
     }
     resolutionStrategy {
         eachPlugin {
-            if (requested.id.id == "korge") {
+            if (requested.id.id == "com.soywiz.korge") {
                 useModule("com.soywiz.korlibs.korge.plugins:korge-gradle-plugin:$korgePluginVersion")
             }
         }
@@ -22,6 +19,7 @@ pluginManagement {
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.serialization") version kotlinVersion
     }
+
 }
 
 val biotopiumArtifactId: String by settings

@@ -1,8 +1,8 @@
-import com.soywiz.korge.gradle.korge
+import com.soywiz.korge.gradle.*
 
 plugins {
     kotlin("multiplatform")
-    id("korge")
+    id("com.soywiz.korge")
 }
 
 val biotopiumGroupId: String by project
@@ -16,8 +16,6 @@ version = biotopiumVersion
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://dl.bintray.com/korlibs/korlibs") }
-    jcenter()
 }
 
 korge {

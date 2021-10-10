@@ -1,5 +1,5 @@
 # biotopium
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.5.10-rebeccapurple.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.5.31-rebeccapurple.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
 [![platform jvm](https://img.shields.io/badge/platform-jvm-red.svg?style=flat)]()
 [![platform browser](https://img.shields.io/badge/platform-js-yellow.svg?style=flat)]()
 
