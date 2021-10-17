@@ -16,20 +16,22 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message
+package ch.riesenacht.biotopium.network.go2p;
 
-import ch.riesenacht.biotopium.network.model.payload.StringPayload
-import ch.riesenacht.biotopium.network.model.PeerId
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+public class GoP2pMessage {
+    private final String peerId;
+    private final String message;
 
-/**
- * Message for debug purposes.
- *
- * @property payload message
- *
- * @author Manuel Riesen
- */
-@Serializable
-@SerialName("DebugMessage")
-data class DebugMessage(override val peerId: PeerId, override val payload: StringPayload) : Message<StringPayload>()
+    public GoP2pMessage(String peerId, String message) {
+        this.peerId = peerId;
+        this.message = message;
+    }
+
+    public String getPeerId() {
+        return peerId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}

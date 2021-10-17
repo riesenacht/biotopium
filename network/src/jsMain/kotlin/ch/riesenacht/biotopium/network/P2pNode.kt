@@ -24,6 +24,9 @@ import ch.riesenacht.biotopium.network.utils.await
 import ch.riesenacht.biotopium.network.utils.jsArray
 import ch.riesenacht.biotopium.network.utils.jsObject
 import ch.riesenacht.biotopium.network.utils.jsObjectFromPairs
+import ch.riesenacht.biotopium.network.TextDecoder
+import kotlin.js.console
+import org.khronos.webgl.Uint8Array
 import ch.riesenacht.biotopium.logging.Logging
 
 /**
@@ -36,9 +39,9 @@ actual class P2pNode actual constructor(
     private val p2pConfig: P2pConfiguration
 ) : NetworkNode() {
 
-    private val logger = Logging.logger("P2pNode")
-
     private var libp2p: Libp2pInstance? = null
+
+    private val decoder = TextDecoder("utf-8")
 
     override suspend fun start() {
 
@@ -77,11 +80,11 @@ actual class P2pNode actual constructor(
         this.libp2p = Libp2p.create(config).await()
         val libp2p = libp2p!!
         libp2p.on("peer:discovery") { peerId ->
-            logger.debug { "found peer: ${peerId.toB58String()}" }
+            logger.debug { "discovered peer: ${peerId.toB58String()}" }
         }
-        libp2p.pubsub.on(p2pConfig.topic) { msg: dynamic ->
-            logger.debug { "received: ${msg.data}" }
-            val serializedMessage: SerializedMessage = (msg.data as ByteArray).decodeToString()
+        libp2p.pubsub.on(p2pConfig.topic) { msg ->
+            val data: Uint8Array = msg.data as Uint8Array
+            val serializedMessage: SerializedMessage = decoder.decode(data)
             receive(serializedMessage)
         }
 
@@ -90,7 +93,7 @@ actual class P2pNode actual constructor(
         //TODO fix non-blocking call
         libp2p.pubsub.subscribe(BiotopiumProtocol.topic)
 
-        logger.debug { "started with peerID ${libp2p.peerId.toB58String()}" }
+        logger.debug { "P2P Node started with peer ID ${libp2p.peerId.toB58String()}" }
     }
 
     override suspend fun stop() {
@@ -98,7 +101,6 @@ actual class P2pNode actual constructor(
     }
 
     override fun sendSerialized(message: SerializedMessage) {
-        logger.debug { "sending: $message" }
         libp2p!!.pubsub.publish(BiotopiumProtocol.topic, message)
     }
 

@@ -16,20 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message
+package ch.riesenacht.biotopium.network
 
-import ch.riesenacht.biotopium.network.model.payload.StringPayload
-import ch.riesenacht.biotopium.network.model.PeerId
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import org.khronos.webgl.Uint8Array
 
 /**
- * Message for debug purposes.
- *
- * @property payload message
- *
- * @author Manuel Riesen
+ * Text decoder from JavaScript.
+ * The [encoding] can be set.
  */
-@Serializable
-@SerialName("DebugMessage")
-data class DebugMessage(override val peerId: PeerId, override val payload: StringPayload) : Message<StringPayload>()
+internal external class TextDecoder(encoding: String) {
+
+    /**
+     * Decodes a byte array (Uint8Array) to a string.
+     */
+    fun decode(arr: Uint8Array): String
+}

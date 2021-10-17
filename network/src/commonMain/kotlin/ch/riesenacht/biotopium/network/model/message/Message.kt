@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.network.model.message
 
 import ch.riesenacht.biotopium.network.model.payload.MessagePayload
+import ch.riesenacht.biotopium.network.model.PeerId
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 
@@ -29,6 +30,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 sealed class Message<T : MessagePayload> {
+
+    abstract val peerId: PeerId
 
     /**
      * The message's payload

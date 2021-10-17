@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.network
 
+import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 
 /**
@@ -25,4 +26,4 @@ import ch.riesenacht.biotopium.network.model.payload.MessagePayload
  *
  * @author Manuel Riesen
  */
-typealias MessageHandler = (MessagePayload) -> Unit
+typealias MessageHandler = (Message<MessagePayload>) -> Unit

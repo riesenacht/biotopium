@@ -20,32 +20,40 @@ package main
 
 //#include <stdlib.h>
 import "C"
-import (
-	"unsafe"
-)
+import "unsafe"
 
 // MemoryHandler is responsible for keeping track of C pointers
 // and freeing memory.
 type MemoryHandler struct {
 	stringPointers []CString // string pointers
+	sweep map[CString]bool // markers for sweeping
 }
 
 // AddString adds a CString to the memory handler.
 // A CString has to be given.
 func (mh *MemoryHandler) AddString(str CString) {
-	mh.Free()
+	mh.Sweep()
 	mh.stringPointers = append(mh.stringPointers, str)
 }
 
-// Free frees all C pointers known by the memory handler.
-func (mh *MemoryHandler) Free() {
-	for _, str := range mh.stringPointers {
-		C.free(unsafe.Pointer(str))
+// Sweep frees the memory of pointers which were marked for sweeping.
+func (mh *MemoryHandler) Sweep() {
+	for str, sweep := range mh.sweep {
+		if sweep {
+			C.free(unsafe.Pointer(str))
+		}
 	}
-	mh.stringPointers = make([]CString, 0, 1)
+	mh.sweep = make(map[CString]bool)
+}
+
+// Mark marks a C pointer for sweeping.
+// Once marked the memory of the C pointer will be freed at a given time.
+func (mh *MemoryHandler) Mark(str CString) {
+	mh.sweep[str] = true
 }
 
 // The memory handler instance.
 var memoryHandler = &MemoryHandler{
-	make([]CString, 0, 1),
+	stringPointers: make([]CString, 0, 1),
+	sweep: make(map[CString]bool),
 }

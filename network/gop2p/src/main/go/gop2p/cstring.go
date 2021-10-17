@@ -31,3 +31,12 @@ func NewCString(str string) CString {
 	memoryHandler.AddString(cstr)
 	return cstr
 }
+
+// NewCStringOnce is the factory function for CStrings which only live until
+// a new CString is constructed.
+// A string has to be given, a CString is returned.
+func NewCStringOnce(str string) CString {
+	cstr := NewCString(str)
+	memoryHandler.Mark(cstr)
+	return cstr
+}

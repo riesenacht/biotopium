@@ -16,20 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message
+package ch.riesenacht.biotopium.network.model
 
-import ch.riesenacht.biotopium.network.model.payload.StringPayload
-import ch.riesenacht.biotopium.network.model.PeerId
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 
 /**
- * Message for debug purposes.
- *
- * @property payload message
+ * Represents the ID of a peer.
  *
  * @author Manuel Riesen
  */
 @Serializable
-@SerialName("DebugMessage")
-data class DebugMessage(override val peerId: PeerId, override val payload: StringPayload) : Message<StringPayload>()
+@JvmInline
+value class PeerId(val base58: String)

@@ -28,12 +28,11 @@ import (
 // PubSubBufSize is the buffer size for pubsub
 const PubSubBufSize = 128
 
-// PubSubMessage represents a pubsub message.
-type PubSubMessage []byte
+
 
 // PubSubTopic represents a pubsub topic.
 type PubSubTopic struct {
-	Messages chan PubSubMessage // Message input channel
+	Messages chan *Message // Message input channel
 
 	ctx   context.Context      // Context
 	ps    *pubsub.PubSub       // PubSub instance
@@ -59,7 +58,7 @@ func listenTopic(ctx context.Context, ps *pubsub.PubSub, peerID peer.ID) *PubSub
 		topic:    topic,
 		sub:      sub,
 		peerID:   peerID,
-		Messages: make(chan PubSubMessage, PubSubBufSize),
+		Messages: make(chan *Message, PubSubBufSize),
 	}
 
 	go t.listen()
@@ -78,8 +77,9 @@ func (t *PubSubTopic) listen() {
 		if msg.ReceivedFrom == t.peerID {
 			continue
 		}
-
-		t.Messages <- msg.Data
+		peerID, err := msg.ReceivedFrom.MarshalText()
+		check.Err(err)
+		t.Messages <- NewMessage(peerID, msg.Data)
 	}
 }
 

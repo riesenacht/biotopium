@@ -16,20 +16,21 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message
+package p2p
 
-import ch.riesenacht.biotopium.network.model.payload.StringPayload
-import ch.riesenacht.biotopium.network.model.PeerId
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-/**
- * Message for debug purposes.
- *
- * @property payload message
- *
- * @author Manuel Riesen
- */
-@Serializable
-@SerialName("DebugMessage")
-data class DebugMessage(override val peerId: PeerId, override val payload: StringPayload) : Message<StringPayload>()
+// Message represents a pubsub message.
+type Message struct {
+	PeerID []byte // Peer ID
+	Data []byte // Message data
+}
+
+// NewMessage creates a new pubsub message.
+// The peer ID and the message's data must be given.
+// A pointer to a new pubsub message is returned.
+func NewMessage(peerId, data []byte) *Message {
+	return &Message {
+		PeerID: peerId,
+		Data: data,
+	}
+}

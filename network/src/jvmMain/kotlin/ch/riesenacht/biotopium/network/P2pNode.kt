@@ -61,7 +61,7 @@ actual class P2pNode actual constructor(
 
     private fun listenBlocking() {
         val serialized = gop2p.listenBlocking()
-        receive(serialized)
+        receive(serialized.message)
         listenBlocking()
     }
 }

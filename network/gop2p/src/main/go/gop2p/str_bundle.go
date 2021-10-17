@@ -16,20 +16,28 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message
+package main
 
-import ch.riesenacht.biotopium.network.model.payload.StringPayload
-import ch.riesenacht.biotopium.network.model.PeerId
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import (
+	"errors"
+	"strings"
+)
 
-/**
- * Message for debug purposes.
- *
- * @property payload message
- *
- * @author Manuel Riesen
- */
-@Serializable
-@SerialName("DebugMessage")
-data class DebugMessage(override val peerId: PeerId, override val payload: StringPayload) : Message<StringPayload>()
+// StrSeparator represents the used seperator for a string bundle.
+const StrSeparator = "~"
+
+// StrBundle creates a bundle out of given strings.
+// The strings are concatenated using a defined separator.
+func StrBundle(arr ...string) (string, error) {
+	bundle := ""
+	for i, str := range arr {
+		if strings.Contains(str, StrSeparator) {
+			return "", errors.New("Failed constructing string bundle: separator occurs in string")
+		}
+		if i > 0 {
+			bundle += StrSeparator
+		}
+		bundle += str
+	}
+	return bundle, nil
+}

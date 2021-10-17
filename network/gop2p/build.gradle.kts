@@ -32,7 +32,8 @@ val goModTidy = task<Exec>("goModTidy") {
 }
 
 val goBuild = task<Exec>("goBuild") {
-    dependsOn(goModTidy)
+    //TODO enable again
+    //dependsOn(goModTidy)
     workingDir("src/main/go/gop2p")
     val libraryName = "gop2p.$libraryEnding"
     val libraryPath = "${project.buildDir.absolutePath}${File.separator}$libraryName"

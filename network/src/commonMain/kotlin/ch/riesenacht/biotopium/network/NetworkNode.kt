@@ -23,6 +23,8 @@ import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 import ch.riesenacht.biotopium.serialization.JsonEncoder
 import kotlin.reflect.KClass
+import ch.riesenacht.biotopium.logging.Logging
+
 
 /**
  * Represents a network node.
@@ -32,6 +34,8 @@ import kotlin.reflect.KClass
 abstract class NetworkNode {
 
     private val handlerMap: MutableMap<KClass<*>, MutableList<MessageHandler>> = mutableMapOf()
+
+    val logger = Logging.logger("NetworkNode")
 
     /**
      * Starts the network node.
@@ -52,6 +56,8 @@ abstract class NetworkNode {
      * Sends an unboxed [message].
      */
     inline fun <reified T : MessagePayload> send(message: Message<T>) {
+        logger.debug { "sending message: $message" }
+
         val serialized = JsonEncoder.encode(message)
         sendSerialized(serialized)
     }
@@ -72,10 +78,11 @@ abstract class NetworkNode {
      */
     fun receive(serialized: SerializedMessage) {
         val message: Message<MessagePayload> = JsonEncoder.decode(serialized)
+
+        logger.debug { "received message: $message" }
+
         handlerMap.entries.filter { it.key.isInstance(message) }
             .flatMap { it.value }
-            .forEach {
-                it.invoke(message.payload)
-        }
+            .forEach { it.invoke(message) }
     }
 }

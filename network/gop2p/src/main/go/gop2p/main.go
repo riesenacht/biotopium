@@ -34,7 +34,7 @@ func StartServer(topicPtr CString, port int, pkBase64Ptr CString) {
     if len(pkBase64) > 0 {
         pkStr, err := base64.StdEncoding.DecodeString(string(pkBase64))
         check.Err(err)
-        pkBytes = []byte(pkStr)
+        pkBytes = pkStr
     }
     topic := C.GoString(topicPtr)
 	config := p2p.NewConfig(topic, port, pkBytes)
@@ -49,10 +49,13 @@ func StopServer() {
 
 // ListenBlocking listens for new messages.
 // This is a blocking function, waiting on a channel.
+// TODO return message struct containing peer ID and message data
 //export ListenBlocking
 func ListenBlocking() CString {
 	message := <-p2p.Instance().PubSub.Messages
-	return NewCString(string(message))
+	bundle, err := StrBundle(string(message.PeerID), string(message.Data))
+	check.Err(err)
+	return NewCStringOnce(bundle)
 }
 
 // Send sends a message to all known peers.
@@ -60,6 +63,7 @@ func ListenBlocking() CString {
 //export Send
 func Send(serialized *C.char) {
 	str := C.GoString(serialized)
+	println(str)
 	p2p.Instance().PubSub.Publish([]byte(str))
 }
 

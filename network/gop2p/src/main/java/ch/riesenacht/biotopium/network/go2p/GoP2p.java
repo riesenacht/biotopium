@@ -18,12 +18,12 @@
 
 package ch.riesenacht.biotopium.network.go2p;
 
-import jnr.ffi.LibraryLoader;
-import jnr.ffi.Pointer;
+import jnr.ffi.*;
 import jnr.ffi.Runtime;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLOutput;
 
 /**
  * Wrapper for the gop2p library.
@@ -36,6 +36,8 @@ public class GoP2p {
     private static final String LIBRARY_NAME = System.mapLibraryName("gop2p");
 
     private static final GoP2pLibrary GO_P2P_LIBRARY;
+
+    private static final String STRING_BUNDLE_SEPARATOR = "~";
 
     private final String topic;
     private final int port;
@@ -135,9 +137,22 @@ public class GoP2p {
      * This method is blocking.
      * @return received message
      */
-    public String listenBlocking() {
+    public GoP2pMessage listenBlocking() {
         Pointer result = GO_P2P_LIBRARY.ListenBlocking();
-        return result.getString(0);
+        String str = result.getString(0);
+        return unbundleMessage(str);
+    }
+
+    /**
+     * Unbundles a message.
+     * @param bundle bundled message
+     * @return message
+     */
+    private GoP2pMessage unbundleMessage(String bundle) {
+        int separatorIndex = bundle.indexOf(STRING_BUNDLE_SEPARATOR);
+        String peerId = bundle.substring(0, separatorIndex);
+        String message = bundle.substring(separatorIndex + 1);
+        return new GoP2pMessage(peerId, message);
     }
 
     /**
