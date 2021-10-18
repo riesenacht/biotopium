@@ -1,7 +1,7 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
-    java
+    kotlin("multiplatform")
 }
 
 repositories {
@@ -16,8 +16,21 @@ val biotopiumVersion: String by project
 group = biotopiumNetworkArtifactId
 version = biotopiumVersion
 
-dependencies {
-    implementation("com.github.jnr:jnr-ffi:2.2.4")
+kotlin {
+    jvm {
+        withJava()
+        compilations.all {
+            kotlinOptions.jvmTarget = jvmTargetVersion
+        }
+    }
+
+    sourceSets {
+        val jvmMain by getting {
+            dependencies {
+                implementation("com.github.jnr:jnr-ffi:2.2.4")
+            }
+        }
+    }
 }
 
 val libraryEnding = when {
@@ -32,8 +45,7 @@ val goModTidy = task<Exec>("goModTidy") {
 }
 
 val goBuild = task<Exec>("goBuild") {
-    //TODO enable again
-    //dependsOn(goModTidy)
+    dependsOn(goModTidy)
     workingDir("src/main/go/gop2p")
     val libraryName = "gop2p.$libraryEnding"
     val libraryPath = "${project.buildDir.absolutePath}${File.separator}$libraryName"
