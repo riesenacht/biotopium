@@ -24,6 +24,7 @@ import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 import ch.riesenacht.biotopium.serialization.JsonEncoder
 import kotlin.reflect.KClass
 import ch.riesenacht.biotopium.logging.Logging
+import ch.riesenacht.biotopium.network.model.PeerId
 
 
 /**
@@ -48,18 +49,30 @@ abstract class NetworkNode {
     abstract suspend fun stop()
 
     /**
-     * Sends a serialized [message].
+     * Sends a serialized [message] to all connected peers.
      */
-    abstract fun sendSerialized(message: SerializedMessage)
+    abstract fun sendBroadcastSerialized(message: SerializedMessage)
 
     /**
-     * Sends an unboxed [message].
+     * Sends an unboxed [message] to all connected peers.
      */
-    inline fun <reified T : MessagePayload> send(message: Message<T>) {
-        logger.debug { "sending message: $message" }
+    inline fun <reified T : MessagePayload> sendBroadcast(message: Message<T>) {
+        logger.debug { "sending message $message to all" }
 
         val serialized = JsonEncoder.encode(message)
-        sendSerialized(serialized)
+        sendBroadcastSerialized(serialized)
+    }
+
+    /**
+     * Sends a serialized [mesasge] to a peer with the given [peerId].
+     */
+    abstract fun sendSerialized(peerId: PeerId, message: SerializedMessage)
+
+    inline fun <reified T : MessagePayload> send(peerId: PeerId, message: Message<T>) {
+        logger.debug { "sending message $message to $peerId" }
+
+        val serialized = JsonEncoder.encode(message)
+        sendSerialized(peerId, serialized)
     }
 
     /**

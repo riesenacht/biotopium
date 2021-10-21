@@ -58,6 +58,7 @@ kotlin {
                 implementation(npm("libp2p-floodsub", "0.27.0"))
                 implementation(npm("peer-id", "0.15.1"))
                 implementation(npm("multiaddr", "10.0.0"))
+                implementation(npm("it-pipe", "1.1.0"))
             }
         }
         val jsTest by getting

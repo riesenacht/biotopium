@@ -23,7 +23,6 @@ import jnr.ffi.Runtime;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
 
 /**
  * Wrapper for the gop2p library.
@@ -40,6 +39,7 @@ public class GoP2p {
     private static final String STRING_BUNDLE_SEPARATOR = "~";
 
     private final String topic;
+    private final String protocolName;
     private final int port;
     private final String privateKeyBase64;
 
@@ -49,8 +49,9 @@ public class GoP2p {
         GO_P2P_LIBRARY = LibraryLoader.create(GoP2pLibrary.class).load(path);
     }
 
-    private GoP2p(String topic, int port, String privateKeyBase64) {
+    private GoP2p(String topic, String protocolName, int port, String privateKeyBase64) {
         this.topic = topic;
+        this.protocolName = protocolName;
         this.port = port;
         this.privateKeyBase64 = privateKeyBase64;
     }
@@ -61,18 +62,29 @@ public class GoP2p {
     public static class Builder {
 
         private String topic;
+        private String protocolName;
         private int port = 0;
         private String privateKeyBase64;
 
         private Builder() { }
 
         /**
-         * Sets the topic to use of the new {@link GoP2p} instance.
+         * Sets the topic of the new {@link GoP2p} instance.
          * @param topic to use
          * @return builder
          */
         public Builder topic(String topic) {
             this.topic = topic;
+            return this;
+        }
+
+        /**
+         * Sets the protocol name of the {@link GoP2p} instance.
+         * @param protocolName protocol name to use
+         * @return builder
+         */
+        public Builder protocolName(String protocolName) {
+            this.protocolName = protocolName;
             return this;
         }
 
@@ -101,7 +113,7 @@ public class GoP2p {
          * @return new {@link GoP2p} instance
          */
         public GoP2p build() {
-            return new GoP2p(topic, port, privateKeyBase64);
+            return new GoP2p(topic, protocolName, port, privateKeyBase64);
         }
     }
 
@@ -122,7 +134,8 @@ public class GoP2p {
             privateKeyPtr = createPointerFromString(privateKeyBase64);
         }
         Pointer topicPtr = createPointerFromString(topic);
-        GO_P2P_LIBRARY.StartServer(topicPtr, port, privateKeyPtr);
+        Pointer protocolNamePtr = createPointerFromString(protocolName);
+        GO_P2P_LIBRARY.StartServer(topicPtr, protocolNamePtr, port, privateKeyPtr);
     }
 
     /**
@@ -132,36 +145,49 @@ public class GoP2p {
         GO_P2P_LIBRARY.StopServer();
     }
 
+    public String getPeerId() {
+        Pointer result = GO_P2P_LIBRARY.PeerID();
+        return result.getString(0);
+    }
+
     /**
      * Listens to new messages.
      * This method is blocking.
      * @return received message
      */
-    public GoP2pMessage listenBlocking() {
-        Pointer result = GO_P2P_LIBRARY.ListenBlocking();
-        String str = result.getString(0);
-        return unbundleMessage(str);
+    public String listenPubSubBlocking() {
+        Pointer result = GO_P2P_LIBRARY.ListenPubSubBlocking();
+        return result.getString(0);
     }
 
     /**
-     * Unbundles a message.
-     * @param bundle bundled message
-     * @return message
+     * Listens to new messages on the stream.
+     * This message is blocking.
+     * @return received message
      */
-    private GoP2pMessage unbundleMessage(String bundle) {
-        int separatorIndex = bundle.indexOf(STRING_BUNDLE_SEPARATOR);
-        String peerId = bundle.substring(0, separatorIndex);
-        String message = bundle.substring(separatorIndex + 1);
-        return new GoP2pMessage(peerId, message);
+    public String listenStreamBlocking() {
+        Pointer result = GO_P2P_LIBRARY.ListenStreamBlocking();
+        return result.getString(0);
     }
 
     /**
-     * Sends a message.
+     * Broadcasts a message.
      * @param serialized serialized message
      */
-    public void send(String serialized) {
+    public void sendPubSub(String serialized) {
         Pointer ptr = createPointerFromString(serialized);
-        GO_P2P_LIBRARY.Send(ptr);
+        GO_P2P_LIBRARY.SendPubSub(ptr);
+    }
+
+    /**
+     * Sends a message to a peer.
+     * @param peerId peer ID of receiver
+     * @param serialized serialized message
+     */
+    public void sendStream(String peerId, String serialized) {
+        Pointer peerIdPtr = createPointerFromString(peerId);
+        Pointer serializedPtr = createPointerFromString(serialized);
+        GO_P2P_LIBRARY.SendStream(peerIdPtr, serializedPtr);
     }
 
     /**
@@ -181,10 +207,13 @@ public class GoP2p {
      * Represents the gop2p library.
      */
     public interface GoP2pLibrary {
-        void StartServer(Pointer topicPtr, int port, Pointer pkBase64Ptr);
+        void StartServer(Pointer topicPtr, Pointer protocolName, int port, Pointer pkBase64Ptr);
         void StopServer();
-        void Send(Pointer serialized);
-        Pointer ListenBlocking();
+        void SendPubSub(Pointer serialized);
+        void SendStream(Pointer peerId, Pointer serialized);
+        Pointer PeerID();
+        Pointer ListenPubSubBlocking();
+        Pointer ListenStreamBlocking();
     }
 
 }

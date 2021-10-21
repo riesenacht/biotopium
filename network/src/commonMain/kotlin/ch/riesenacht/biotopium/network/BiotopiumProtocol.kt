@@ -24,5 +24,7 @@ package ch.riesenacht.biotopium.network
  * @author Manuel Riesen
  */
 object BiotopiumProtocol {
-    const val topic = "/biotopium/0.1.0"
+    const val protoPrefix = "/biotopium/0.1.0"
+    const val topic = "$protoPrefix/public"
+    const val protocolName = "$protoPrefix/direct"
 }

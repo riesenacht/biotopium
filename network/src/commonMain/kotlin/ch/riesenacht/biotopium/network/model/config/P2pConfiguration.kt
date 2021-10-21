@@ -34,5 +34,6 @@ data class P2pConfiguration(
     val listenPort: Int,
     val bootstrapPeers: List<String> = emptyList(),
     val privateKeyBase64: String? = null,
-    val topic: String
+    val topic: String,
+    val protocolName: String
 )

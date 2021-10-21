@@ -19,18 +19,5 @@
 package p2p
 
 
-// Message represents a pubsub message.
-type Message struct {
-	PeerID []byte // Peer ID
-	Data []byte // Message data
-}
-
-// NewMessage creates a new pubsub message.
-// The peer ID and the message's data must be given.
-// A pointer to a new pubsub message is returned.
-func NewMessage(peerId, data []byte) *Message {
-	return &Message {
-		PeerID: peerId,
-		Data: data,
-	}
-}
+// Message represents a message.
+type Message []byte

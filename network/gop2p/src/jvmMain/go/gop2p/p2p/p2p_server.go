@@ -24,19 +24,21 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/routing"
+	dht "github.com/libp2p/go-libp2p-kad-dht"
 	noise "github.com/libp2p/go-libp2p-noise"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	dht "github.com/libp2p/go-libp2p-kad-dht"
-	"github.com/libp2p/go-libp2p-core/routing"
+	"github.com/libp2p/go-libp2p-core/peer"
 	"log"
 	"riesenacht.ch/biotopium/network/gop2p/check"
 )
 
 // server represents a peer-to-peer server.
 type server struct {
-	Host host.Host            // P2P host
+	Host   host.Host          // P2P host
 	Config *config            // configuration
 	PubSub *PubSubTopic       // ps network
+	Stream *Stream            // stream
 	Cancel context.CancelFunc // running state
 }
 
@@ -51,6 +53,10 @@ func Instance() *server {
 		return nil
 	}
 	return instance
+}
+
+func PeerID() peer.ID {
+	return instance.Host.ID()
 }
 
 // StartP2PServer starts the peer-to-peer server with a given configuration.
@@ -78,17 +84,17 @@ func StartP2PServer(config *config) {
 		libp2p.ListenAddrStrings(
 			fmt.Sprintf("/ip4/0.0.0.0/tcp/%d/ws/", config.Port),
 		),
-		libp2p.NATPortMap(), // Try to open ports over uPnP
+		libp2p.NATPortMap(),      // Try to open ports over uPnP
 		libp2p.EnableAutoRelay(), // Advertise node on relays
 		libp2p.DefaultTransports, // default transports, includes WebSockets and TCP
 		libp2p.Security(noise.ID, noise.New),
 		libp2p.Routing(func(h host.Host) (routing.PeerRouting, error) {
-            dhtInstance, err := dht.New(
-                ctx,
-                h,
-            )
-            return dhtInstance, err
-        }),
+			dhtInstance, err := dht.New(
+				ctx,
+				h,
+			)
+			return dhtInstance, err
+		}),
 	)
 	check.Err(err)
 	instance.Host = h
@@ -99,6 +105,9 @@ func StartP2PServer(config *config) {
 	psNet := listenTopic(ctx, ps, h.ID())
 	instance.PubSub = psNet
 
+	stream := listenProtocol(h, config.ProtocolName)
+	instance.Stream = stream
+
 	log.Printf("P2P Server started with peer ID %s\n", h.ID())
 }
 
@@ -108,6 +117,3 @@ func StopP2PServer() {
 	err := instance.Host.Close()
 	check.Err(err)
 }
-
-
-

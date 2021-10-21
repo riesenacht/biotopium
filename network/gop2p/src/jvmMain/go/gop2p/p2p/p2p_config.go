@@ -20,18 +20,20 @@ package p2p
 
 // config represent the configuration of a peer-to-peer instance.
 type config struct {
-	Topic string // topic to listen to
-	Port int // port to listen on
-	PKBytes []byte // bytes for private key
+	Topic        string // topic to listen to
+	ProtocolName string // protocol name
+	Port         int    // port to listen on
+	PKBytes      []byte // bytes for private key
 }
 
 // NewConfig is the factory function of the config struct.
-// A topic, a port and private key bytes have to be given.
+// A topic, a protocol name and a port and private key bytes have to be given.
 // A pointer to a new P2PConfig is returned.
-func NewConfig(topic string, port int, pkByte []byte) *config {
+func NewConfig(topic string, protocolName string, port int, pkByte []byte) *config {
 	return &config{
-		Topic: topic,
-		Port: port,
-		PKBytes: pkByte,
+		Topic:        topic,
+		ProtocolName: protocolName,
+		Port:         port,
+		PKBytes:      pkByte,
 	}
 }

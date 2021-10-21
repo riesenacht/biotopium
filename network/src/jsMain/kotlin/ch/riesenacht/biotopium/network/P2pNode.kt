@@ -18,16 +18,14 @@
 
 package ch.riesenacht.biotopium.network
 
+import ch.riesenacht.biotopium.network.model.PeerId
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import ch.riesenacht.biotopium.network.utils.await
 import ch.riesenacht.biotopium.network.utils.jsArray
 import ch.riesenacht.biotopium.network.utils.jsObject
 import ch.riesenacht.biotopium.network.utils.jsObjectFromPairs
-import ch.riesenacht.biotopium.network.TextDecoder
-import kotlin.js.console
 import org.khronos.webgl.Uint8Array
-import ch.riesenacht.biotopium.logging.Logging
 
 /**
  * Represents a peer-to-peer node.
@@ -42,6 +40,9 @@ actual class P2pNode actual constructor(
     private var libp2p: Libp2pInstance? = null
 
     private val decoder = TextDecoder("utf-8")
+
+    actual val peerId: PeerId
+        get() = PeerId(libp2p!!.peerId.toB58String())
 
     override suspend fun start() {
 
@@ -91,7 +92,18 @@ actual class P2pNode actual constructor(
         libp2p.start().await()
 
         //TODO fix non-blocking call
-        libp2p.pubsub.subscribe(BiotopiumProtocol.topic)
+        libp2p.pubsub.subscribe(p2pConfig.topic)
+
+        libp2p.handle(p2pConfig.protocolName) {
+            val stream = it.stream
+            pipe(stream) { source ->
+                source.next()?.then { wrapper ->
+                    val bufferList = wrapper.value
+                    val message: SerializedMessage = bufferList.toString()
+                    receive(message)
+                }
+            }
+        }
 
         logger.debug { "P2P Node started with peer ID ${libp2p.peerId.toB58String()}" }
     }
@@ -100,8 +112,15 @@ actual class P2pNode actual constructor(
         libp2p?.stop()?.await()
     }
 
-    override fun sendSerialized(message: SerializedMessage) {
-        libp2p!!.pubsub.publish(BiotopiumProtocol.topic, message)
+    override fun sendBroadcastSerialized(message: SerializedMessage) {
+        libp2p!!.pubsub.publish(p2pConfig.topic, message)
+    }
+
+    override fun sendSerialized(peerId: PeerId, message: SerializedMessage) {
+        libp2p!!.dialProtocol(peerId.base58, p2pConfig.protocolName).then {
+            val stream = it.stream
+            pipe(arrayOf(message), stream, stream.sink)
+        }
     }
 
 

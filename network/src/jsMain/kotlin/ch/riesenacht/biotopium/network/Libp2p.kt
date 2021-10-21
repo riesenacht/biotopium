@@ -75,10 +75,46 @@ internal external object Libp2p {
     fun create(options: dynamic): Promise<Libp2pInstance>
 }
 
+@JsModule("it-pipe")
+@JsNonModule
+internal external fun pipe(input: Array<String>, stream: Stream, sink: Sink)
+
+@JsModule("it-pipe")
+@JsNonModule
+internal external fun pipe(stream: Stream, fn: (AsyncGenerator) -> Unit)
+
+internal external class AsyncGenerator {
+    fun next(): Promise<BufferListWrapper>?
+}
+
+internal external class BufferListWrapper {
+    val value: BufferList
+}
+
+internal external class BufferList {
+    override fun toString(): String
+}
+
+internal external class Sink
+
+internal external class Stream {
+    val sink: Sink
+}
+
+internal external class StreamWrapper {
+    val stream: Stream
+}
+
+internal external class LibP2pPeerId {
+    fun toB58String(): String
+}
+
 internal external class Libp2pInstance {
     val pubsub: FloodSub
-    val peerId: dynamic
+    val peerId: LibP2pPeerId
     fun start(): Promise<Unit>
     fun stop(): Promise<Unit>
     fun on(event: String, fn: (dynamic) -> Unit)
+    fun handle(protocolName: String, fn: (dynamic) -> Unit)
+    fun dialProtocol(addr: String, protocolName: String): Promise<StreamWrapper>
 }

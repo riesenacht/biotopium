@@ -25,8 +25,8 @@ import "unsafe"
 // MemoryHandler is responsible for keeping track of C pointers
 // and freeing memory.
 type MemoryHandler struct {
-	stringPointers []CString // string pointers
-	sweep map[CString]bool // markers for sweeping
+	stringPointers []CString        // string pointers
+	sweep          map[CString]bool // markers for sweeping
 }
 
 // AddString adds a CString to the memory handler.
@@ -55,5 +55,5 @@ func (mh *MemoryHandler) Mark(str CString) {
 // The memory handler instance.
 var memoryHandler = &MemoryHandler{
 	stringPointers: make([]CString, 0, 1),
-	sweep: make(map[CString]bool),
+	sweep:          make(map[CString]bool),
 }

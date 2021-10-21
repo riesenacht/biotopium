@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.go2p.GoP2p
+import ch.riesenacht.biotopium.network.model.PeerId
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import kotlinx.coroutines.*
@@ -33,35 +34,57 @@ actual class P2pNode actual constructor(
     p2pConfig: P2pConfiguration
 ): NetworkNode() {
 
+    actual val peerId: PeerId
+        get() = PeerId(gop2p.peerId!!)
+
     private val gop2p = GoP2p.builder()
         .topic(p2pConfig.topic)
+        .protocolName(p2pConfig.protocolName)
         .port(p2pConfig.listenPort)
         .privateKeyBase64(p2pConfig.privateKeyBase64)
         .build()
 
-    private var listenJob: Job? = null
+    private var listenPubSubJob: Job? = null
+
+    private var listenStreamJob: Job? = null
 
     override suspend fun start() {
         gop2p.start()
-        startListening()
+        startListeningPubSub()
+        startListeningStream()
     }
 
     override suspend fun stop() {
         gop2p.stop()
-        listenJob?.cancelAndJoin()
+        listenPubSubJob?.cancelAndJoin()
     }
 
-    override fun sendSerialized(message: SerializedMessage) {
-        gop2p.send(message)
+    override fun sendBroadcastSerialized(message: SerializedMessage) {
+        gop2p.sendPubSub(message)
     }
 
-    private suspend fun startListening(): Unit = withContext(Dispatchers.Default) {
-        listenJob = launch(Job()) { listenBlocking() }
+    override fun sendSerialized(peerId: PeerId, message: SerializedMessage) {
+        gop2p.sendStream(peerId.base58, message)
     }
 
-    private fun listenBlocking() {
-        val serialized = gop2p.listenBlocking()
-        receive(serialized.message)
-        listenBlocking()
+    private suspend fun startListeningStream(): Unit = withContext(Dispatchers.Default) {
+        listenStreamJob = launch(Job()) { listenStreamBlocking() }
     }
+
+    private suspend fun startListeningPubSub(): Unit = withContext(Dispatchers.Default) {
+        listenPubSubJob = launch(Job()) { listenPubSubBlocking() }
+    }
+
+    private fun listenStreamBlocking() {
+        val serialized = gop2p.listenStreamBlocking()
+        receive(serialized)
+        listenStreamBlocking()
+    }
+
+    private fun listenPubSubBlocking() {
+        val serialized = gop2p.listenPubSubBlocking()
+        receive(serialized)
+        listenPubSubBlocking()
+    }
+
 }

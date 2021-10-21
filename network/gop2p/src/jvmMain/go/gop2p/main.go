@@ -21,23 +21,25 @@ package main
 //#include <stdlib.h>
 import "C"
 import (
-	"riesenacht.ch/biotopium/network/gop2p/p2p"
-	"riesenacht.ch/biotopium/network/gop2p/check"
 	"encoding/base64"
+	"github.com/libp2p/go-libp2p-core/peer"
+	"riesenacht.ch/biotopium/network/gop2p/check"
+	"riesenacht.ch/biotopium/network/gop2p/p2p"
 )
 
 // StartServer starts the peer-to-peer server.
 //export StartServer
-func StartServer(topicPtr CString, port int, pkBase64Ptr CString) {
-    pkBase64 := C.GoString(pkBase64Ptr)
-    var pkBytes []byte
-    if len(pkBase64) > 0 {
-        pkStr, err := base64.StdEncoding.DecodeString(string(pkBase64))
-        check.Err(err)
-        pkBytes = pkStr
-    }
-    topic := C.GoString(topicPtr)
-	config := p2p.NewConfig(topic, port, pkBytes)
+func StartServer(topicPtr CString, protocolNamePtr CString, port int, pkBase64Ptr CString) {
+	pkBase64 := C.GoString(pkBase64Ptr)
+	var pkBytes []byte
+	if len(pkBase64) > 0 {
+		pkStr, err := base64.StdEncoding.DecodeString(string(pkBase64))
+		check.Err(err)
+		pkBytes = pkStr
+	}
+	topic := C.GoString(topicPtr)
+	protocolName := C.GoString(protocolNamePtr)
+	config := p2p.NewConfig(topic, protocolName, port, pkBytes)
 	p2p.StartP2PServer(config)
 }
 
@@ -47,24 +49,48 @@ func StopServer() {
 	p2p.StopP2PServer()
 }
 
-// ListenBlocking listens for new messages.
-// This is a blocking function, waiting on a channel.
-// TODO return message struct containing peer ID and message data
-//export ListenBlocking
-func ListenBlocking() CString {
-	message := <-p2p.Instance().PubSub.Messages
-	bundle, err := StrBundle(string(message.PeerID), string(message.Data))
-	check.Err(err)
-	return NewCStringOnce(bundle)
+// PeerID returns the ID of the local peer.
+//export PeerID
+func PeerID() CString {
+	peerID := string(p2p.PeerID())
+	return NewCStringOnce(peerID)
 }
 
-// Send sends a message to all known peers.
+// ListenBlocking listens for new messages.
+// This is a blocking function, waiting on a channel.
+//export ListenPubSubBlocking
+func ListenPubSubBlocking() CString {
+	message := <-p2p.Instance().PubSub.Messages
+	return NewCStringOnce(string(message))
+}
+
+// ListenStreamBlocking listens for new messages on the stream.
+// This is a blocking function, waiting on a channel.
+//export ListenStreamBlocking
+func ListenStreamBlocking() CString {
+	message := <-p2p.Instance().Stream.Messages
+	return NewCStringOnce(string(message))
+}
+
+
+// SendPubSub sends a message to all known peers.
 // The serialized message as pointer to a C character (array) has to be given.
-//export Send
-func Send(serialized *C.char) {
+//export SendPubSub
+func SendPubSub(serialized *C.char) {
 	str := C.GoString(serialized)
 	println(str)
 	p2p.Instance().PubSub.Publish([]byte(str))
+}
+
+// SendStream sends a message to a specific peer.
+// The peer ID and the serialized message as pointer to a C character (array) must be given.
+//export SendStream
+func SendStream(peerIdPtr, serializedPtr *C.char) {
+	encodedPeerID := C.GoString(peerIdPtr)
+	peerID, err := peer.Decode(encodedPeerID)
+	check.Err(err)
+	str := C.GoString(serializedPtr)
+	p2p.Instance().Stream.Send(peerID, []byte(str))
 }
 
 func main() {}

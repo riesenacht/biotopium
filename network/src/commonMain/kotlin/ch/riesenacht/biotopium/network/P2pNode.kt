@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.network
 
+import ch.riesenacht.biotopium.network.model.PeerId
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 
 /**
@@ -25,4 +26,6 @@ import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
  *
  * @author Manuel Riesen
  */
-expect class P2pNode(p2pConfig: P2pConfiguration) : NetworkNode
+expect class P2pNode(p2pConfig: P2pConfiguration) : NetworkNode {
+    val peerId: PeerId
+}
