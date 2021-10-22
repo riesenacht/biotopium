@@ -105,8 +105,16 @@ internal external class StreamWrapper {
     val stream: Stream
 }
 
+
+@JsModule("peer-id")
+@JsNonModule
 internal external class LibP2pPeerId {
+
     fun toB58String(): String
+
+    companion object {
+        fun createFromB58String(str: String): LibP2pPeerId
+    }
 }
 
 internal external class Libp2pInstance {
@@ -116,5 +124,5 @@ internal external class Libp2pInstance {
     fun stop(): Promise<Unit>
     fun on(event: String, fn: (dynamic) -> Unit)
     fun handle(protocolName: String, fn: (dynamic) -> Unit)
-    fun dialProtocol(addr: String, protocolName: String): Promise<StreamWrapper>
+    fun dialProtocol(addr: LibP2pPeerId, protocolName: String): Promise<StreamWrapper>
 }

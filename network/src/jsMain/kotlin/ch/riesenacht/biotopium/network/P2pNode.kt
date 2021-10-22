@@ -117,7 +117,7 @@ actual class P2pNode actual constructor(
     }
 
     override fun sendSerialized(peerId: PeerId, message: SerializedMessage) {
-        libp2p!!.dialProtocol(peerId.base58, p2pConfig.protocolName).then {
+        libp2p!!.dialProtocol(LibP2pPeerId.createFromB58String(peerId.base58), p2pConfig.protocolName).then {
             val stream = it.stream
             pipe(arrayOf(message), stream, stream.sink)
         }
