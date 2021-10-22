@@ -27,7 +27,7 @@ import ch.riesenacht.biotopium.network.model.PeerId
  *
  * @author Manuel Riesen
  */
-object PeerAddressBook {
+class PeerAddressBook {
 
     /**
      * Mutable version of the address to peer ID map.
