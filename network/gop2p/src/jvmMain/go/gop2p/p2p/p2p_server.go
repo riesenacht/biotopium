@@ -55,6 +55,7 @@ func Instance() *server {
 	return instance
 }
 
+// PeerID returns the peer ID of the current instance's host.
 func PeerID() peer.ID {
 	return instance.Host.ID()
 }

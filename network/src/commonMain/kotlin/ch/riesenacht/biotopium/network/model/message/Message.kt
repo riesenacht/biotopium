@@ -29,12 +29,15 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
-sealed class Message<T : MessagePayload> {
+abstract class Message<T : MessagePayload> {
 
+    /**
+     * The peer ID of the sender.
+     */
     abstract val peerId: PeerId
 
     /**
-     * The message's payload
+     * The message's payload.
      */
     @Polymorphic
     abstract val payload: T
