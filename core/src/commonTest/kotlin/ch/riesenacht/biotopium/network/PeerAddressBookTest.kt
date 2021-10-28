@@ -34,12 +34,27 @@ class PeerAddressBookTest {
     fun testAddPeerIdAndAddress_positive() {
         val peerAddressBook = PeerAddressBook()
         val address = Address.fromBase64("ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=")
-        val peerID = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
+        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
 
-        peerAddressBook.add(peerID, address)
+        peerAddressBook.add(peerId, address)
 
-        assertEquals(address, peerAddressBook.address[peerID])
-        assertEquals(peerID, peerAddressBook.peerId[address])
+        assertEquals(address, peerAddressBook.address[peerId])
+        assertEquals(peerId, peerAddressBook.peerId[address])
+    }
+
+
+    @Test
+    fun testAddPeerIdAndAddress_positive_doublePeerId() {
+        val peerAddressBook = PeerAddressBook()
+        val address = Address.fromBase64("ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=")
+        val peerId1 = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
+        val peerId2 = PeerId("QmTcmQf63aYNkUyEiZzGqqVHeNi1tjSpTqGcwYkz19iGCF")
+        peerAddressBook.add(peerId1, address)
+        peerAddressBook.add(peerId2, address)
+
+        assertEquals(address, peerAddressBook.address[peerId2])
+        assertEquals(peerId2, peerAddressBook.peerId[address])
+        assertEquals(1, peerAddressBook.address.filter { it.value == address }.size)
     }
 
 
@@ -47,11 +62,11 @@ class PeerAddressBookTest {
     fun testAddAddressAndPeerId_positive() {
         val peerAddressBook = PeerAddressBook()
         val address = Address.fromBase64("ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=")
-        val peerID = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
+        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
 
-        peerAddressBook.add(peerID, address)
+        peerAddressBook.add(peerId, address)
 
-        assertEquals(address, peerAddressBook.address[peerID])
-        assertEquals(peerID, peerAddressBook.peerId[address])
+        assertEquals(address, peerAddressBook.address[peerId])
+        assertEquals(peerId, peerAddressBook.peerId[address])
     }
 }

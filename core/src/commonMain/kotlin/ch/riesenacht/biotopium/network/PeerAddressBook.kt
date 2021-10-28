@@ -55,15 +55,16 @@ class PeerAddressBook {
      * Adds the relation between a [peerId] and an [address].
      */
     fun add(peerId: PeerId, address: Address) {
-        mutableAddress[peerId] = address
         mutablePeerId[address] = peerId
+        mutableAddress.filter { it.value == address }
+            .forEach { mutableAddress.remove(it.key) }
+        mutableAddress[peerId] = address
     }
 
     /**
      * Adds the relation between an [address] and a [peerId].
      */
     fun add(address: Address, peerId: PeerId) {
-        mutableAddress[peerId] = address
-        mutablePeerId[address] = peerId
+        add(peerId, address)
     }
 }
