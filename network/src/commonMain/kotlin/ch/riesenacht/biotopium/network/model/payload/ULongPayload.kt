@@ -18,19 +18,12 @@
 
 package ch.riesenacht.biotopium.network.model.payload
 
-import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.network.model.PeerId
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the message payload containing a [peer ID][peerId] and an [address].
+ * Represents a payload consisting of a [ULong] [value].
  *
  * @author Manuel Riesen
  */
 @Serializable
-@SerialName("PeerAddressPayload")
-data class PeerAddressPayload(
-    val peerId: PeerId,
-    val address: Address
-) : MessagePayload
+data class ULongPayload(val value: ULong) : MessagePayload

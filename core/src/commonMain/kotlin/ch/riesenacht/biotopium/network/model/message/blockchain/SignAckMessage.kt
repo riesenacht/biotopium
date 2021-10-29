@@ -16,21 +16,26 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.payload
+package ch.riesenacht.biotopium.network.model.message.blockchain
 
-import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.network.model.BlockchainSignal
 import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.payload.BlockPayload
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the message payload containing a [peer ID][peerId] and an [address].
+ * Represents the message sent if a [SignReqMessage] is accepted
+ * and the block is signed.
  *
  * @author Manuel Riesen
  */
 @Serializable
-@SerialName("PeerAddressPayload")
-data class PeerAddressPayload(
-    val peerId: PeerId,
-    val address: Address
-) : MessagePayload
+@SerialName("SignAckMessage")
+data class SignAckMessage(
+    override val peerId: PeerId,
+    override val payload: BlockPayload
+) : BlockchainMessage<BlockPayload>() {
+
+    override val signal = BlockchainSignal.SIGN_ACK
+}

@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.network.model
 import ch.riesenacht.biotopium.network.model.message.DebugMessage
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.*
 import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -37,6 +38,12 @@ object MessageSerializersModuleRegistrar : SerializersModuleRegistrar(Serializer
     polymorphic(Message::class) {
         subclass(DebugMessage::class)
         subclass(PeerAddressInfoMessage::class)
+
+        subclass(BlockAddMessage::class)
+        subclass(ChainFwdMessage::class)
+        subclass(ChainReqMessage::class)
+        subclass(SignAckMessage::class)
+        subclass(SignReqMessage::class)
     }
 
 })

@@ -31,7 +31,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @SerialName("PeerAddressInfoMessage")
-class PeerAddressInfoMessage(
+data class PeerAddressInfoMessage(
     override val peerId: PeerId,
     override val payload: PeerAddressPayload
 ) : Message<PeerAddressPayload>()

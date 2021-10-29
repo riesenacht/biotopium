@@ -18,19 +18,17 @@
 
 package ch.riesenacht.biotopium.network.model.payload
 
-import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the message payload containing a [peer ID][peerId] and an [address].
+ * Represents the payload of a message containing a hashed [block].
+ * The block does not contain a signature.
  *
  * @author Manuel Riesen
  */
 @Serializable
-@SerialName("PeerAddressPayload")
-data class PeerAddressPayload(
-    val peerId: PeerId,
-    val address: Address
-) : MessagePayload
+@SerialName("UnsignedBlockPayload")
+data class UnsignedBlockPayload(val block: HashedBlock) : MessagePayload

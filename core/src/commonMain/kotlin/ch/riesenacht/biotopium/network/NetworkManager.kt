@@ -18,7 +18,9 @@
 
 package ch.riesenacht.biotopium.network
 
+import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
+import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
 import ch.riesenacht.biotopium.network.model.payload.PeerAddressPayload
 
@@ -38,6 +40,10 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
         p2pNode.registerMessageHandler(PeerAddressInfoMessage::class) {
             val payload = it.payload as PeerAddressPayload
             peerAddressBook.add(payload.peerId, payload.address)
+        }
+        p2pNode.registerMessageHandler(BlockAddMessage::class) {
+            val message = it as BlockAddMessage
+            BlockchainManager.add(message.payload.block)
         }
 
     }

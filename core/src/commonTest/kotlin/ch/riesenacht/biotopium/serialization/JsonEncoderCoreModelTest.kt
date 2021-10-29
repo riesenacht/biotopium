@@ -37,11 +37,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * Test class for [EncoderTest].
+ * Test class for [EncoderTest], testing core model serialization.
  *
  * @author Manuel Riesen
  */
-class JsonEncoderCoreTest : EncoderTest() {
+class JsonEncoderCoreModelTest : EncoderTest() {
 
     @BeforeTest
     fun init() {

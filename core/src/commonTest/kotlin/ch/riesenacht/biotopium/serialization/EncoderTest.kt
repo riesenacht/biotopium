@@ -18,10 +18,12 @@
 
 package ch.riesenacht.biotopium.serialization
 
+import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
 import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.*
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
 import ch.riesenacht.biotopium.core.crypto.model.*
 
@@ -43,9 +45,15 @@ abstract class EncoderTest {
     )
 
     /**
-     * Generates a default block data object with a given block [data].
+     * Generates a default test action.
      */
-    protected fun generateDefaultBlock(data: BlockData): Block {
+    protected fun generateDefaultTestAction() = ChunkGenesisAction(emptyList())
+
+    /**
+     * Generates a default hashed block data object with a given block [data].
+     * If no block [data] is given, the default test action is used.
+     */
+    protected fun generateDefaultHashedBlock(data: BlockData = generateDefaultTestAction()): HashedBlock {
         val raw = RawBlock(
             1u,
             Timestamp(1),
@@ -54,8 +62,17 @@ abstract class EncoderTest {
             Address.fromBase64("blocklord"),
             data
         )
-        val hashed = raw.toHashedBlock(BlockUtils.hash(raw.toHashable()))
+        return raw.toHashedBlock(BlockUtils.hash(raw.toHashable()))
+    }
+
+    /**
+     * Generates a default block data object with a given block [data].
+     * If no block [data] is given, the default test action is used.
+     */
+    protected fun generateDefaultBlock(data: BlockData = generateDefaultTestAction()): Block {
+        val hashed = generateDefaultHashedBlock(data)
         return hashed.toSignedBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
             .toBlock(BlockUtils.sign(hashed, validatorKeyPair.privateKey))
     }
+
 }
