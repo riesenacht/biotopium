@@ -19,9 +19,15 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
+import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
+import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.ChainFwdMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.ChainReqMessage
+import ch.riesenacht.biotopium.network.model.payload.BlockListPayload
+import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 import ch.riesenacht.biotopium.network.model.payload.PeerAddressPayload
 
 /**
@@ -31,21 +37,51 @@ import ch.riesenacht.biotopium.network.model.payload.PeerAddressPayload
  */
 class NetworkManager(p2pConfig: P2pConfiguration) {
 
+    private val blockchainManager = BlockchainManager
+
     val peerAddressBook: PeerAddressBook = PeerAddressBook()
 
     val p2pNode: P2pNode = P2pNode(p2pConfig)
 
     init {
-
         p2pNode.registerMessageHandler(PeerAddressInfoMessage::class) {
             val payload = it.payload as PeerAddressPayload
             peerAddressBook.add(payload.peerId, payload.address)
         }
         p2pNode.registerMessageHandler(BlockAddMessage::class) {
             val message = it as BlockAddMessage
-            BlockchainManager.add(message.payload.block)
+            blockchainManager.add(message.payload.block)
+        }
+        p2pNode.registerMessageHandler(ChainFwdMessage::class) {
+            val message = it as ChainFwdMessage
+            blockchainManager.addAll(message.payload.blocks)
+        }
+        p2pNode.registerMessageHandler(ChainReqMessage::class) { message ->
+            val reqMessage = message as ChainReqMessage
+            val height = reqMessage.payload.value
+            if(height <= blockchainManager.maxHeight) {
+                val startIndex = blockchainManager.blockchain.indexOfFirst { it.height == height }
+                val blockchain = blockchainManager.blockchain.drop(startIndex)
+
+                val fwdMessage = ChainFwdMessage(p2pNode.peerId, BlockListPayload(blockchain))
+
+                p2pNode.send(fwdMessage.peerId, fwdMessage)
+            }
         }
 
+    }
+
+    /**
+     * Sends a [message] to the host of a [address].
+     * @throws AddressUnreachableException the address cannot be mapped to a peer ID
+     */
+    @Throws(AddressUnreachableException::class)
+    inline fun <reified T : MessagePayload> send(address: Address, message: Message<T>) {
+        if(!peerAddressBook.peerId.containsKey(address)) {
+            throw AddressUnreachableException(address)
+        }
+        val peerId = peerAddressBook.peerId[address]!!
+        p2pNode.send(peerId, message)
     }
 
 }

@@ -30,6 +30,12 @@ import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
 object BlockchainManager {
 
     /**
+     * The maximum height on the blockchain.
+     */
+    val maxHeight: ULong
+    get() = blockchain.last().height
+
+    /**
      * Mutable variant of the blockchain.
      */
     private val mutableBlockchain: MutableBlockchain = mutableListOf()
@@ -47,7 +53,7 @@ object BlockchainManager {
         get() = mutableBlockchain
 
     /**
-     * Adds a block to the blockchain.
+     * Adds a [block] to the blockchain.
      * @return block is valid and was added
      */
     fun add(block: Block): Boolean {
@@ -55,6 +61,14 @@ object BlockchainManager {
             return mutableBlockchain.add(block)
         }
         return false
+    }
+
+    /**
+     * Adds all [blocks] to the blockchain.
+     * @return all blocks are valid and were added
+     */
+    fun addAll(blocks: List<Block>): Boolean {
+        return blocks.all { add(it) }
     }
 
 }
