@@ -18,27 +18,9 @@
 
 package ch.riesenacht.biotopium.network.model.message
 
-import ch.riesenacht.biotopium.network.model.payload.MessagePayload
-import ch.riesenacht.biotopium.network.model.PeerId
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.Serializable
-
 /**
  * Represents a message sent over the network.
  *
  * @author Manuel Riesen
  */
-@Serializable
-abstract class Message<T : MessagePayload> {
-
-    /**
-     * The peer ID of the sender.
-     */
-    abstract val peerId: PeerId
-
-    /**
-     * The message's payload.
-     */
-    @Polymorphic
-    abstract val payload: T
-}
+interface Message

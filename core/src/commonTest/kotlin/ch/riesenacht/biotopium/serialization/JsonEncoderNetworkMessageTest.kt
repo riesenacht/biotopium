@@ -26,7 +26,6 @@ import ch.riesenacht.biotopium.network.model.message.DebugMessage
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
 import ch.riesenacht.biotopium.network.model.message.blockchain.*
-import ch.riesenacht.biotopium.network.model.payload.*
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -45,11 +44,9 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
 
     @Test
     fun testEncodeDebugMessage() {
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
-        val message = DebugMessage(peerId, StringPayload("Hello world!"))
+        val message = DebugMessage("Hello world!")
 
-        val expected =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"string\":\"Hello world!\"}}"
+        val expected = "{\"text\":\"Hello world!\"}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -60,12 +57,9 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeDebugMessage() {
 
-        val encoded =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"string\":\"Hello world!\"}}"
+        val encoded = "{\"text\":\"Hello world!\"}"
 
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
-        val message = DebugMessage(peerId, StringPayload("Hello world!"))
-
+        val message = DebugMessage("Hello world!")
 
         val decoded: DebugMessage = JsonEncoder.decode(encoded)
 
@@ -76,10 +70,9 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     fun testEncodePeerAddressInfoMessage() {
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val address = Address.fromBase64("ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=")
-        val message = PeerAddressInfoMessage(peerId, PeerAddressPayload(peerId, address))
+        val message = PeerAddressInfoMessage(peerId, address)
 
-        val expected =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"address\":\"ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=\"}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"address\":\"ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=\"}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -90,12 +83,11 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodePeerAddressInfoMessage() {
 
-        val encoded =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"address\":\"ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=\"}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"address\":\"ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=\"}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val address = Address.fromBase64("ePkipaiMvPxnkZ/+F+jlFBvj4IWcYOQewHVSFt64uGo=")
-        val message = PeerAddressInfoMessage(peerId, PeerAddressPayload(peerId, address))
+        val message = PeerAddressInfoMessage(peerId, address)
 
         val decoded: PeerAddressInfoMessage = JsonEncoder.decode(encoded)
 
@@ -104,12 +96,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
 
     @Test
     fun testEncodeBlockAddMessage() {
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
-        val message = BlockAddMessage(peerId, BlockPayload(block))
+        val message = BlockAddMessage(block)
 
-        val expected =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}}"
+        val expected = "{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -119,12 +109,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeBlockAddMessage() {
 
-        val encoded =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}}"
+        val encoded = "{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}"
 
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
-        val message = BlockAddMessage(peerId, BlockPayload(block))
+        val message = BlockAddMessage(block)
 
         val decoded: BlockAddMessage = JsonEncoder.decode(encoded)
 
@@ -134,10 +122,9 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
 
     @Test
     fun testEncodeChainReqMessage() {
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
-        val message = ChainReqMessage(peerId, ULongPayload(1u))
+        val message = ChainReqMessage(1u)
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"value\":1}}"
+        val expected = "{\"height\":1}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -147,10 +134,9 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeChainReqMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"value\":1}}"
+        val encoded = "{\"height\":1}"
 
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
-        val message = ChainReqMessage(peerId, ULongPayload(1u))
+        val message = ChainReqMessage(1u)
 
         val decoded: ChainReqMessage = JsonEncoder.decode(encoded)
 
@@ -159,12 +145,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
 
     @Test
     fun testEncodeChainFwdMessage() {
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
-        val message = ChainFwdMessage(peerId, BlockListPayload(listOf(block)))
+        val message = ChainFwdMessage(listOf(block))
 
-        val expected =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}]}}"
+        val expected = "{\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}]}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -174,12 +158,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeChainFwdMessage() {
 
-        val encoded =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}]}}"
+        val encoded = "{\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}]}"
 
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
-        val message = ChainFwdMessage(peerId, BlockListPayload(listOf(block)))
+        val message = ChainFwdMessage(listOf(block))
 
         val decoded: ChainFwdMessage = JsonEncoder.decode(encoded)
 
@@ -188,12 +170,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
 
     @Test
     fun testEncodeSignReqMessage() {
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultHashedBlock()
-        val message = SignReqMessage(peerId, UnsignedBlockPayload(block))
+        val message = SignReqMessage(block)
 
-        val expected =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\"}}}"
+        val expected = "{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\"}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -203,12 +183,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeSignReqMessage() {
 
-        val encoded =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\"}}}"
+        val encoded = "{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\"}}"
 
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultHashedBlock()
-        val message = SignReqMessage(peerId, UnsignedBlockPayload(block))
+        val message = SignReqMessage(block)
 
         val decoded: SignReqMessage = JsonEncoder.decode(encoded)
 
@@ -217,12 +195,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
 
     @Test
     fun testEncodeSignAckMessage() {
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
-        val message = SignAckMessage(peerId, BlockPayload(block))
+        val message = SignAckMessage(block)
 
-        val expected =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}}"
+        val expected = "{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -232,12 +208,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeSignAckMessage() {
 
-        val encoded =
-            "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"payload\":{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}}"
+        val encoded = "{\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"1f071ca5d4853022e5ab49ca45c9c48fd74f09b8ee4dc583441999d690fff177\",\"sign\":\"CkB7P3M9UL40jPhoUuCA4JCP9wgEGt4eVHkywqcX/SfvrlYoQlfpVc8UXddv0d2/1VxJQSF+5B5PCXMQO6RTAA==\",\"validSign\":\"i1CGH6yAzv1YcAZukyA9pIqRQ6R/D6VIoRaXXERJ5ds+p3mZsYOa/IwCkmKtGmtaRFioACxq7/XY4fzcYKURCA==\"}}"
 
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
-        val message = SignAckMessage(peerId, BlockPayload(block))
+        val message = SignAckMessage(block)
 
         val decoded: SignAckMessage = JsonEncoder.decode(encoded)
 

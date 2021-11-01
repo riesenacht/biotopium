@@ -20,11 +20,11 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
-import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 import ch.riesenacht.biotopium.serialization.JsonEncoder
 import kotlin.reflect.KClass
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.message.MessageWrapper
 
 
 /**
@@ -34,9 +34,11 @@ import ch.riesenacht.biotopium.network.model.PeerId
  */
 abstract class NetworkNode {
 
-    private val handlerMap: MutableMap<KClass<*>, MutableList<MessageHandler>> = mutableMapOf()
+    private val handlerMap: MutableMap<KClass<out Message>, MutableList<MessageHandler>> = mutableMapOf()
 
     val logger = Logging.logger("NetworkNode")
+
+    abstract val peerId: PeerId
 
     /**
      * Starts the network node.
@@ -56,29 +58,43 @@ abstract class NetworkNode {
     /**
      * Sends an unboxed [message] to all connected peers.
      */
-    inline fun <reified T : MessagePayload> sendBroadcast(message: Message<T>) {
+    inline fun <reified T : Message> sendBroadcast(message: T) {
         logger.debug { "sending message $message to all" }
 
-        val serialized = JsonEncoder.encode(message)
+        val wrapper = wrapMessage(message)
+
+        val serialized = JsonEncoder.encode(wrapper)
         sendBroadcastSerialized(serialized)
     }
 
     /**
-     * Sends a serialized [mesasge] to a peer with the given [peerId].
+     * Sends a serialized [message] to a peer with the given [peerId].
      */
     abstract fun sendSerialized(peerId: PeerId, message: SerializedMessage)
 
-    inline fun <reified T : MessagePayload> send(peerId: PeerId, message: Message<T>) {
+    /**
+     * Wraps a [message] in a message wrapper.
+     */
+    fun <T : Message> wrapMessage(message: T): MessageWrapper<T> {
+        return MessageWrapper(peerId, message)
+    }
+
+    /**
+     * Sends a [message] to a peer with the given [peer ID][peerId].
+     */
+    inline fun <reified T : Message> send(peerId: PeerId, message: T) {
         logger.debug { "sending message $message to $peerId" }
 
-        val serialized = JsonEncoder.encode(message)
+        val wrapper = wrapMessage(message)
+
+        val serialized = JsonEncoder.encode(wrapper)
         sendSerialized(peerId, serialized)
     }
 
     /**
      * Registers a [handler] for a message [type].
      */
-    fun <T : Message<*>> registerMessageHandler(type: KClass<T>, handler: MessageHandler) {
+    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: MessageHandler) {
         if(!handlerMap.containsKey(type)) {
             handlerMap[type] = mutableListOf()
         }
@@ -90,7 +106,7 @@ abstract class NetworkNode {
      * The corresponding message handlers are called.
      */
     fun receive(serialized: SerializedMessage) {
-        val message: Message<MessagePayload> = JsonEncoder.decode(serialized)
+        val message: MessageWrapper<Message> = JsonEncoder.decode(serialized)
 
         logger.debug { "received message: $message" }
 

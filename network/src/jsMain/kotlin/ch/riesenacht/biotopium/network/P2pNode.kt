@@ -41,7 +41,7 @@ actual class P2pNode actual constructor(
 
     private val decoder = TextDecoder("utf-8")
 
-    actual val peerId: PeerId
+    override val peerId: PeerId
         get() = PeerId(libp2p!!.peerId.toB58String())
 
     override suspend fun start() {

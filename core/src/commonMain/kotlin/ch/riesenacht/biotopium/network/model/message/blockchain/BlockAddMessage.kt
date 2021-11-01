@@ -18,24 +18,23 @@
 
 package ch.riesenacht.biotopium.network.model.message.blockchain
 
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
 import ch.riesenacht.biotopium.network.model.PeerId
-import ch.riesenacht.biotopium.network.model.payload.BlockPayload
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Represents the message sent if a block is added to the blockchain.
- * The added block is contained in the [payload].
+ * The message contains the added [block].
  *
  * @author Manuel Riesen
  */
 @Serializable
 @SerialName("BlockAddMessage")
 data class BlockAddMessage(
-    override val peerId: PeerId,
-    override val payload: BlockPayload
-) : BlockchainMessage<BlockPayload>() {
+    val block: Block
+) : BlockchainMessage() {
 
     override val signal = BlockchainSignal.BLOCK_ADD
 }

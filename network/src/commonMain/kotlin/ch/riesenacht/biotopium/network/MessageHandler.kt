@@ -19,11 +19,11 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.model.message.Message
-import ch.riesenacht.biotopium.network.model.payload.MessagePayload
+import ch.riesenacht.biotopium.network.model.message.MessageWrapper
 
 /**
  * Represents a message handler.
  *
  * @author Manuel Riesen
  */
-typealias MessageHandler = (Message<MessagePayload>) -> Unit
+typealias MessageHandler = (MessageWrapper<Message>) -> Unit

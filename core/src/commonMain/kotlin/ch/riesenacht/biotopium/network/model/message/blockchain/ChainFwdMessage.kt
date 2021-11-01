@@ -18,15 +18,15 @@
 
 package ch.riesenacht.biotopium.network.model.message.blockchain
 
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
 import ch.riesenacht.biotopium.network.model.PeerId
-import ch.riesenacht.biotopium.network.model.payload.BlockListPayload
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Represents the message sent for forwarding the blockchain.
- * The [payload] contains the list of blocks.
+ * The requested [blocks] are contained in the message.
  * This is the response to the [ChainReqMessage].
  *
  * @author Manuel Riesen
@@ -34,9 +34,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("ChainForwardMessage")
 data class ChainFwdMessage(
-    override val peerId: PeerId,
-    override val payload: BlockListPayload
-) : BlockchainMessage<BlockListPayload>() {
+    val blocks: List<Block>
+) : BlockchainMessage() {
 
     override val signal = BlockchainSignal.CHAIN_FWD
 }

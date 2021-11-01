@@ -18,20 +18,20 @@
 
 package ch.riesenacht.biotopium.network.model.message
 
+import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.network.model.PeerId
-import ch.riesenacht.biotopium.network.model.payload.PeerAddressPayload
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Represents the peer address info message.
- * This message is used to publish the relationship between an address and a peer ID.
+ * This message is used to publish the relationship between a [peer ID][peerId] and an [address].
  *
  * @author Manuel Riesen
  */
 @Serializable
 @SerialName("PeerAddressInfoMessage")
 data class PeerAddressInfoMessage(
-    override val peerId: PeerId,
-    override val payload: PeerAddressPayload
-) : Message<PeerAddressPayload>()
+    val peerId: PeerId,
+    val address: Address
+) : Message

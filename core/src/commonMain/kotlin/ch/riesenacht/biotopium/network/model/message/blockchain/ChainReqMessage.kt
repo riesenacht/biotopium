@@ -19,23 +19,20 @@
 package ch.riesenacht.biotopium.network.model.message.blockchain
 
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
-import ch.riesenacht.biotopium.network.model.PeerId
-import ch.riesenacht.biotopium.network.model.payload.ULongPayload
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Represents the message sent for requesting the blockchain.
- * The initial height is sent in the [payload].
+ * The initial [height] is sent.
  *
  * @author Manuel Riesen
  */
 @Serializable
 @SerialName("ChainRequestMessage")
 data class ChainReqMessage(
-    override val peerId: PeerId,
-    override val payload: ULongPayload
-) : BlockchainMessage<ULongPayload>() {
+    val height: ULong
+) : BlockchainMessage() {
 
     override val signal = BlockchainSignal.CHAIN_REQ
 }

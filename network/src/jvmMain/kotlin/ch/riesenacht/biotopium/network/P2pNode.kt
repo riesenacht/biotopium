@@ -34,7 +34,7 @@ actual class P2pNode actual constructor(
     p2pConfig: P2pConfiguration
 ): NetworkNode() {
 
-    actual val peerId: PeerId
+    override val peerId: PeerId
         get() = PeerId(gop2p.peerId!!)
 
     private val gop2p = GoP2p.builder()

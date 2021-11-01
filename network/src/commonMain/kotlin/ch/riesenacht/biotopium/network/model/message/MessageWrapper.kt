@@ -16,17 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.payload
+package ch.riesenacht.biotopium.network.model.message
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import ch.riesenacht.biotopium.network.model.PeerId
 
 /**
- * Represents the payload of a message containing a [block].
+ * The wrapper of a message.
+ *
+ * @property peerId the ID of the sender
  *
  * @author Manuel Riesen
  */
-@Serializable
-@SerialName("BlockPayload")
-data class BlockPayload(val block: Block) : MessagePayload
+data class MessageWrapper<T : Message> (
+    val peerId: PeerId,
+    val message: T
+)

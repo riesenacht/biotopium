@@ -20,14 +20,13 @@ package ch.riesenacht.biotopium.network.model.message.blockchain
 
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
 import ch.riesenacht.biotopium.network.model.message.Message
-import ch.riesenacht.biotopium.network.model.payload.MessagePayload
 
 /**
  * Represents a message following the blockchain network protocol.
  *
  * @author Manuel Riesen
  */
-abstract class BlockchainMessage<T : MessagePayload> : Message<T>() {
+abstract class BlockchainMessage : Message {
 
     /**
      * The signal of the blockchain network protocol.

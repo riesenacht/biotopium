@@ -18,18 +18,18 @@
 
 package ch.riesenacht.biotopium.network.model.message
 
-import ch.riesenacht.biotopium.network.model.payload.StringPayload
-import ch.riesenacht.biotopium.network.model.PeerId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Message for debug purposes.
  *
- * @property payload message
+ * @property text message
  *
  * @author Manuel Riesen
  */
 @Serializable
 @SerialName("DebugMessage")
-data class DebugMessage(override val peerId: PeerId, override val payload: StringPayload) : Message<StringPayload>()
+data class DebugMessage(
+    val text: String
+) : Message
