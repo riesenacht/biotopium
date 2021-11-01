@@ -85,7 +85,7 @@ abstract class NetworkNode {
     inline fun <reified T : Message> send(peerId: PeerId, message: T) {
         logger.debug { "sending message $message to $peerId" }
 
-        val wrapper = wrapMessage(message)
+        val wrapper: MessageWrapper<T> = wrapMessage(message)
 
         val serialized = JsonEncoder.encode(wrapper)
         sendSerialized(peerId, serialized)

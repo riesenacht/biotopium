@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
@@ -38,24 +39,30 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
 
     val peerAddressBook: PeerAddressBook = PeerAddressBook()
 
+    private val logger = Logging.logger { }
+
     val p2pNode: P2pNode = P2pNode(p2pConfig)
 
     init {
         p2pNode.registerMessageHandler(PeerAddressInfoMessage::class) {
             val message = it.message as PeerAddressInfoMessage
             peerAddressBook.add(message.peerId, message.address)
+            logger.debug { "added peer address book entry: ${message.peerId} <=> ${message.address}" }
         }
         p2pNode.registerMessageHandler(BlockAddMessage::class) {
             val message = it.message as BlockAddMessage
             blockchainManager.add(message.block)
+            logger.debug { "added block: ${message.block}" }
         }
         p2pNode.registerMessageHandler(ChainFwdMessage::class) {
             val message = it.message as ChainFwdMessage
             blockchainManager.addAll(message.blocks)
+            logger.debug { "added missing chain parts: ${message.blocks}" }
         }
         p2pNode.registerMessageHandler(ChainReqMessage::class) { wrapper ->
             val reqMessage = wrapper.message as ChainReqMessage
             val height = reqMessage.height
+            logger.debug { "received chain request for height: $height" }
             if(height <= blockchainManager.maxHeight) {
                 val startIndex = blockchainManager.blockchain.indexOfFirst { it.height == height }
                 val blockchain = blockchainManager.blockchain.drop(startIndex)
@@ -63,6 +70,10 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
                 val fwdMessage = ChainFwdMessage(blockchain)
 
                 p2pNode.send(wrapper.peerId, fwdMessage)
+
+                logger.debug { "answered chain request with $fwdMessage" }
+            } else {
+                logger.debug { "could not answer chain request, height too high" }
             }
         }
 

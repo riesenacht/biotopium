@@ -19,6 +19,9 @@
 package ch.riesenacht.biotopium.network.model.message
 
 import ch.riesenacht.biotopium.network.model.PeerId
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Polymorphic
 
 /**
  * The wrapper of a message.
@@ -27,7 +30,10 @@ import ch.riesenacht.biotopium.network.model.PeerId
  *
  * @author Manuel Riesen
  */
+@Serializable
+@SerialName("MessageWrapper")
 data class MessageWrapper<T : Message> (
     val peerId: PeerId,
+    @Polymorphic
     val message: T
 )
