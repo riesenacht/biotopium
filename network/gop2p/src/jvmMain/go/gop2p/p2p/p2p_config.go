@@ -24,16 +24,18 @@ type config struct {
 	ProtocolName string // protocol name
 	Port         int    // port to listen on
 	PKBytes      []byte // bytes for private key
+	BootstrapPeers []string // bootstrap peers
 }
 
 // NewConfig is the factory function of the config struct.
-// A topic, a protocol name and a port and private key bytes have to be given.
+// A topic, a protocol name, a port, bootstrap peers and private key bytes have to be given.
 // A pointer to a new P2PConfig is returned.
-func NewConfig(topic string, protocolName string, port int, pkByte []byte) *config {
+func NewConfig(topic string, protocolName string, port int, bootstrapPeers []string, pkByte []byte) *config {
 	return &config{
 		Topic:        topic,
 		ProtocolName: protocolName,
 		Port:         port,
+		BootstrapPeers: bootstrapPeers,
 		PKBytes:      pkByte,
 	}
 }

@@ -24,13 +24,15 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/routing"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
 	noise "github.com/libp2p/go-libp2p-noise"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
-	"github.com/libp2p/go-libp2p-core/peer"
+	maddr "github.com/multiformats/go-multiaddr"
 	"log"
 	"riesenacht.ch/biotopium/network/gop2p/check"
+	"sync"
 )
 
 // server represents a peer-to-peer server.
@@ -80,6 +82,7 @@ func StartP2PServer(config *config) {
 			-1,
 		)
 	}
+
 	h, err := libp2p.New(ctx,
 		libp2p.Identity(privateKey),
 		libp2p.ListenAddrStrings(
@@ -98,6 +101,30 @@ func StartP2PServer(config *config) {
 		}),
 	)
 	check.Err(err)
+
+	// connect to bootstrap peers concurrently
+	var wg sync.WaitGroup
+	for _, peerAddrStr := range config.BootstrapPeers {
+		peerAddr, err := maddr.NewMultiaddr(peerAddrStr)
+		check.Err(err)
+		peerInfo, err := peer.AddrInfoFromP2pAddr(peerAddr)
+		check.Err(err)
+		wg.Add(1)
+		peerAddrStr := peerAddrStr
+
+		// start establishing connection
+		go func() {
+			defer wg.Done()
+			err := h.Connect(ctx, *peerInfo)
+			if err != nil {
+				fmt.Printf("Failed to connect to bootstrap peer: %s\n", peerAddrStr)
+			} else {
+				fmt.Printf("Conntected to bootstrap peer: %s\n", peerAddrStr)
+			}
+		}()
+	}
+	wg.Wait()
+
 	instance.Host = h
 
 	ps, err := pubsub.NewGossipSub(ctx, h)
@@ -109,7 +136,7 @@ func StartP2PServer(config *config) {
 	stream := listenProtocol(h, config.ProtocolName)
 	instance.Stream = stream
 
-	log.Printf("P2P Server started with peer ID %s\n", h.ID())
+	log.Printf("P2P Server started with peer ID: %s\n", h.ID())
 }
 
 // StopP2PServer stops the peer-to-peer instance.

@@ -23,6 +23,8 @@ import jnr.ffi.Runtime;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Wrapper for the gop2p library.
@@ -36,11 +38,12 @@ public class GoP2p {
 
     private static final GoP2pLibrary GO_P2P_LIBRARY;
 
-    private static final String STRING_BUNDLE_SEPARATOR = "~";
+    private static final String STRING_BUNDLE_SEPARATOR = ";";
 
     private final String topic;
     private final String protocolName;
     private final int port;
+    private final String[] bootstrapPeers;
     private final String privateKeyBase64;
 
     static {
@@ -49,10 +52,11 @@ public class GoP2p {
         GO_P2P_LIBRARY = LibraryLoader.create(GoP2pLibrary.class).load(path);
     }
 
-    private GoP2p(String topic, String protocolName, int port, String privateKeyBase64) {
+    private GoP2p(String topic, String protocolName, int port, String[] bootstrapPeers, String privateKeyBase64) {
         this.topic = topic;
         this.protocolName = protocolName;
         this.port = port;
+        this.bootstrapPeers = bootstrapPeers;
         this.privateKeyBase64 = privateKeyBase64;
     }
 
@@ -63,7 +67,8 @@ public class GoP2p {
 
         private String topic;
         private String protocolName;
-        private int port = 0;
+        private int port;
+        private String[] bootstrapPeers;
         private String privateKeyBase64;
 
         private Builder() { }
@@ -99,6 +104,16 @@ public class GoP2p {
         }
 
         /**
+         * Sets the bootstrap peers of the new {@link GoP2p} instance.
+         * @param bootstrapPeers bootstrap peers to connect to
+         * @return builder
+         */
+        public Builder bootstrapPeers(String[] bootstrapPeers) {
+            this.bootstrapPeers = bootstrapPeers;
+            return this;
+        }
+
+        /**
          * Sets the private key of the new {@link GoP2p} instance.
          * @param privateKeyBase64 private key in base64 format
          * @return builder
@@ -113,7 +128,10 @@ public class GoP2p {
          * @return new {@link GoP2p} instance
          */
         public GoP2p build() {
-            return new GoP2p(topic, protocolName, port, privateKeyBase64);
+            if(bootstrapPeers == null) {
+                bootstrapPeers = new String[0];
+            }
+            return new GoP2p(topic, protocolName, port, bootstrapPeers, privateKeyBase64);
         }
     }
 
@@ -135,7 +153,8 @@ public class GoP2p {
         }
         Pointer topicPtr = createPointerFromString(topic);
         Pointer protocolNamePtr = createPointerFromString(protocolName);
-        GO_P2P_LIBRARY.StartServer(topicPtr, protocolNamePtr, port, privateKeyPtr);
+        Pointer bootstrapPeerBundlePtr = createPointerFromString(String.join(STRING_BUNDLE_SEPARATOR, bootstrapPeers));
+        GO_P2P_LIBRARY.StartServer(topicPtr, protocolNamePtr, port, bootstrapPeerBundlePtr, privateKeyPtr);
     }
 
     /**
@@ -207,7 +226,7 @@ public class GoP2p {
      * Represents the gop2p library.
      */
     public interface GoP2pLibrary {
-        void StartServer(Pointer topicPtr, Pointer protocolName, int port, Pointer pkBase64Ptr);
+        void StartServer(Pointer topicPtr, Pointer protocolNamePtr, int port, Pointer bootstrapPeerBundlePtr, Pointer pkBase64Ptr);
         void StopServer();
         void SendPubSub(Pointer serialized);
         void SendStream(Pointer peerId, Pointer serialized);

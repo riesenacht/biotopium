@@ -25,11 +25,15 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	"riesenacht.ch/biotopium/network/gop2p/check"
 	"riesenacht.ch/biotopium/network/gop2p/p2p"
+	"strings"
 )
+
+// The delimiter for string bundles.
+const stringBundleDelimiter = ";"
 
 // StartServer starts the peer-to-peer server.
 //export StartServer
-func StartServer(topicPtr CString, protocolNamePtr CString, port int, pkBase64Ptr CString) {
+func StartServer(topicPtr CString, protocolNamePtr CString, port int, bootstrapPeerBundlePtr CString, pkBase64Ptr CString) {
 	pkBase64 := C.GoString(pkBase64Ptr)
 	var pkBytes []byte
 	if len(pkBase64) > 0 {
@@ -39,7 +43,15 @@ func StartServer(topicPtr CString, protocolNamePtr CString, port int, pkBase64Pt
 	}
 	topic := C.GoString(topicPtr)
 	protocolName := C.GoString(protocolNamePtr)
-	config := p2p.NewConfig(topic, protocolName, port, pkBytes)
+	bootstrapPeerBundle := C.GoString(bootstrapPeerBundlePtr)
+	var bootstrapPeers []string
+	if len(bootstrapPeerBundle) != 0 {
+		bootstrapPeers = strings.Split(bootstrapPeerBundle, stringBundleDelimiter)
+	} else {
+		bootstrapPeers = make([]string, 0, 0)
+	}
+
+	config := p2p.NewConfig(topic, protocolName, port, bootstrapPeers, pkBytes)
 	p2p.StartP2PServer(config)
 }
 

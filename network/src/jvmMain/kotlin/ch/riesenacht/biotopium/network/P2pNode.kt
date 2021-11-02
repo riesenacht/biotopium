@@ -41,6 +41,7 @@ actual class P2pNode actual constructor(
         .topic(p2pConfig.topic)
         .protocolName(p2pConfig.protocolName)
         .port(p2pConfig.listenPort)
+        .bootstrapPeers(p2pConfig.bootstrapPeers.toTypedArray())
         .privateKeyBase64(p2pConfig.privateKeyBase64)
         .build()
 
