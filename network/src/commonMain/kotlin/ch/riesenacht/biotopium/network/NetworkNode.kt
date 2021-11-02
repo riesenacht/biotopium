@@ -110,7 +110,7 @@ abstract class NetworkNode {
 
         logger.debug { "received message: $message" }
 
-        handlerMap.entries.filter { it.key.isInstance(message) }
+        handlerMap.entries.filter { it.key.isInstance(message.message) }
             .flatMap { it.value }
             .forEach { it.invoke(message) }
     }

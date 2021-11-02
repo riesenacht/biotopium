@@ -59,7 +59,7 @@ func Instance() *server {
 
 // PeerID returns the peer ID of the current instance's host.
 func PeerID() peer.ID {
-	return instance.Host.ID()
+	return Instance().Host.ID()
 }
 
 // StartP2PServer starts the peer-to-peer server with a given configuration.

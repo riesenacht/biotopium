@@ -64,11 +64,13 @@ func StopServer() {
 // PeerID returns the ID of the local peer.
 //export PeerID
 func PeerID() CString {
-	peerID := string(p2p.PeerID())
-	return NewCStringOnce(peerID)
+	peerID := p2p.PeerID()
+	idBytes, err := peerID.MarshalText()
+	check.Err(err)
+	return NewCStringOnce(string(idBytes))
 }
 
-// ListenBlocking listens for new messages.
+// ListenPubSubBlocking listens for new messages.
 // This is a blocking function, waiting on a channel.
 //export ListenPubSubBlocking
 func ListenPubSubBlocking() CString {

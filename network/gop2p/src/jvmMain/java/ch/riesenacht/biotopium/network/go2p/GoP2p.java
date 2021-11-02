@@ -166,7 +166,11 @@ public class GoP2p {
 
     public String getPeerId() {
         Pointer result = GO_P2P_LIBRARY.PeerID();
-        return result.getString(0);
+        String peerId = result.getString(0);
+        if(peerId.isEmpty()) {
+            return null;
+        }
+        return peerId;
     }
 
     /**
