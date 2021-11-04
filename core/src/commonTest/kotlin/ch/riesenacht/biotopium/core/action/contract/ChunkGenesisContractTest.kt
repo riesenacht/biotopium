@@ -45,9 +45,7 @@ class ChunkGenesisContractTest : ContractTest() {
 
         val action = ChunkGenesisAction(listOf(tile11))
 
-        val contract = useContract<ChunkGenesisAction>(ActionType.CHUNK_GENESIS)
-
-        contract.exec(action, block, world)
+        execContract(action, block, world)
 
         assertContains(world.tiles, tile11.x to tile11.y)
     }

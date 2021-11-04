@@ -59,9 +59,7 @@ class CreatePlotContractTest : ContractTest() {
 
         val action = CreatePlotAction(plot, hoe)
 
-        val contract = useContract<CreatePlotAction>(ActionType.CREATE_PLOT)
-
-        contract.exec(action, block, world)
+        execContract(action, block, world)
 
         assertFalse(world.players[owner]!!.items.contains(hoe))
         assertEquals(TileType.PLOT, world.tiles[plot.x to plot.y]!!.type)

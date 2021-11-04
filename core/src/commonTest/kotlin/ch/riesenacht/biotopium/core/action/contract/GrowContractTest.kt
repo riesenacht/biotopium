@@ -58,9 +58,7 @@ class GrowContractTest : ContractTest() {
 
         val action = GrowAction(plot.copy(plant = plant.copy(growth = PlantGrowth.HALF_GROWN)))
 
-        val contract = useContract<GrowAction>(ActionType.GROW)
-
-        contract.exec(action, block, world)
+        execContract(action, block, world)
 
         assertEquals(PlantGrowth.HALF_GROWN, (world.tiles[plot.x to plot.y] as Plot).plant!!.growth)
         assertEquals(timestamp, (world.tiles[plot.x to plot.y] as Plot).plant!!.lastGrowth)

@@ -61,9 +61,7 @@ class SeedContractTest : ContractTest() {
 
         val action = SeedAction(plot.copy(plant = plant), seed)
 
-        val contract = useContract<SeedAction>(ActionType.SEED)
-
-        contract.exec(action, block, world)
+        execContract(action, block, world)
 
         assertNotNull((world.tiles[plot.x to plot.y] as Plot).plant)
         assertEquals(plant.type, (world.tiles[plot.x to plot.y] as Plot).plant!!.type)

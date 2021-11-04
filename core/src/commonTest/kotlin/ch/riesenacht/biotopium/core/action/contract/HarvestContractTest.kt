@@ -63,9 +63,7 @@ class HarvestContractTest : ContractTest() {
 
         val action = HarvestAction(harvest, plot.copy(plant = null))
 
-        val contract = useContract<HarvestAction>(ActionType.HARVEST)
-
-        contract.exec(action, block, world)
+        execContract(action, block, world)
 
         assertTrue(world.players[owner]!!.items.contains(harvest.plant))
         assertTrue(harvest.seeds.all { world.players[owner]!!.items.contains(it) })

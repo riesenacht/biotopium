@@ -54,9 +54,7 @@ class IntroductionContractTest : ContractTest() {
 
         val action = IntroductionAction(gift)
 
-        val contract = useContract<IntroductionAction>(ActionType.INTRODUCTION)
-
-        contract.exec(action, block, world)
+        execContract(action, block, world)
 
         assertNotNull(world.players[owner])
         assertEquals(owner, world.players[owner]!!.address)

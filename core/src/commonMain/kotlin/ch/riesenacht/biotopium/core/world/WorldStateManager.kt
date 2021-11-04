@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.world
 
-import ch.riesenacht.biotopium.core.action.ActionValidator
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
@@ -31,8 +30,6 @@ import ch.riesenacht.biotopium.core.world.model.map.Tile
  * @author Manuel Riesen
  */
 object WorldStateManager: World {
-
-    private val validator = ActionValidator
 
     /**
      * Mutable tile map.

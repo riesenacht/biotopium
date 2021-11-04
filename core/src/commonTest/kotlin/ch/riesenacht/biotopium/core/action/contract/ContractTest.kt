@@ -89,10 +89,7 @@ abstract class ContractTest {
         return TestMutableWorld()
     }
 
-    protected fun <T : Action> useContract(type: ActionType): ActionContract<T> {
-        @Suppress("UNCHECKED_CAST")
-        return ActionContractHolder.contracts[type] as ActionContract<T>
+    protected fun <T : Action> execContract(action: T, block: BlockOrigin, world: MutableWorld) {
+        ActionContractManager.executeContract(action, block, world)
     }
-
-
 }

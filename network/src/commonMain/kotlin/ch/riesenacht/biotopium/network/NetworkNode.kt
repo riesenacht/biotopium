@@ -34,7 +34,7 @@ import ch.riesenacht.biotopium.network.model.message.MessageWrapper
  */
 abstract class NetworkNode {
 
-    private val handlerMap: MutableMap<KClass<out Message>, MutableList<MessageHandler>> = mutableMapOf()
+    private val handlerMap: MutableMap<KClass<out Message>, MutableList<MessageHandler<*>>> = mutableMapOf()
 
     val logger = Logging.logger("NetworkNode")
 
@@ -94,11 +94,11 @@ abstract class NetworkNode {
     /**
      * Registers a [handler] for a message [type].
      */
-    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: MessageHandler) {
+    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: (MessageWrapper<T>) -> Unit) {
         if(!handlerMap.containsKey(type)) {
             handlerMap[type] = mutableListOf()
         }
-        handlerMap[type]!!.add(handler)
+        handlerMap[type]!!.add(MessageHandler(handler))
     }
 
     /**
@@ -106,12 +106,21 @@ abstract class NetworkNode {
      * The corresponding message handlers are called.
      */
     fun receive(serialized: SerializedMessage) {
-        val message: MessageWrapper<Message> = JsonEncoder.decode(serialized)
+        val message: MessageWrapper<out Message> = JsonEncoder.decode(serialized)
 
         logger.debug { "received message: $message" }
 
-        handlerMap.entries.filter { it.key.isInstance(message.message) }
-            .flatMap { it.value }
-            .forEach { it.invoke(message) }
+        dispatchToHandler(message)
+    }
+
+    /**
+     * Dispatches the [message] to the correct handler.
+     */
+    private fun <T : Message> dispatchToHandler(message: MessageWrapper<T>) {
+        //TODO technical debt here
+        //unchecked cast in order to retrieve the type of the message handler
+        @Suppress("UNCHECKED_CAST")
+        val handlerList = handlerMap[message.message::class] as List<MessageHandler<T>>
+        handlerList.forEach { it.invoke(message) }
     }
 }

@@ -53,9 +53,7 @@ class ClaimRealmContractTest : ContractTest() {
 
         val action = ClaimRealmAction(realm, realmClaimPaper)
 
-        val contract = useContract<ClaimRealmAction>(ActionType.CLAIM_REALM)
-
-        contract.exec(action, block, world)
+        execContract(action, block, world)
 
         assertContains(world.realms, realm.ix to realm.iy)
         assertEquals(realm.owner, world.realms[realm.ix to realm.iy]?.owner)

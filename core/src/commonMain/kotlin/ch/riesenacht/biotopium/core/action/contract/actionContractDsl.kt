@@ -27,7 +27,7 @@ import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
  * Creates an action contract for the given [type] of action.
  * The [rules] and the [execution][exec] are added to the contract.
  */
-fun <T : Action> actionContract(type: ActionType, rules: ActionRuleSet<T>, exec: ActionExec<T>): ActionContractHolder.() -> Unit = {
+fun <T : Action> actionContract(type: ActionType, rules: ActionRuleSet<T>, exec: ActionExec<T>): ActionContractManager.() -> Unit = {
     val contract = ActionContract(rules, exec)
     add(type, contract)
 }

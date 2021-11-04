@@ -20,17 +20,16 @@ package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.action.model.ActionType
+import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
+import ch.riesenacht.biotopium.core.world.MutableWorld
 
 /**
- * Holder of all action contracts.
+ * Manager of all action contracts.
  *
  * @author Manuel Riesen
  */
-object ActionContractHolder {
+object ActionContractManager {
 
-    /**
-     * Mutable variant of the contract map.
-     */
     private val mutableContracts: MutableMap<ActionType, ActionContract<out Action>> = mutableMapOf()
 
     /**
@@ -48,7 +47,7 @@ object ActionContractHolder {
             harvestContract,
             introductionContract,
             seedContract
-        ).forEach { it.invoke(ActionContractHolder) }
+        ).forEach { it.invoke(ActionContractManager) }
     }
 
     /**
@@ -56,5 +55,13 @@ object ActionContractHolder {
      */
     fun <T : Action> add(type: ActionType, contract: ActionContract<T>) {
         mutableContracts[type] = contract
+    }
+
+    fun <T : Action> executeContract(action: T, blockOrigin: BlockOrigin, world: MutableWorld) {
+        //TODO technical debt here
+        //unchecked cast in order to retrieve the contract type
+        @Suppress("UNCHECKED_CAST")
+        val contract: ActionContract<T> = contracts[action.type] as ActionContract<T>
+        contract.exec(action, blockOrigin, world)
     }
 }

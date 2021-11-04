@@ -18,9 +18,9 @@
 
 package ch.riesenacht.biotopium.core.blockchain
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
 import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 
 /**
  * State manager of the blockchain.

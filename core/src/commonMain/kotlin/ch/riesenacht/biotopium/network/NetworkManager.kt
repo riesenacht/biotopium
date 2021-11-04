@@ -45,22 +45,22 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
 
     init {
         p2pNode.registerMessageHandler(PeerAddressInfoMessage::class) {
-            val message = it.message as PeerAddressInfoMessage
+            val message = it.message
             peerAddressBook.add(message.peerId, message.address)
             logger.debug { "added peer address book entry: ${message.peerId} <=> ${message.address}" }
         }
         p2pNode.registerMessageHandler(BlockAddMessage::class) {
-            val message = it.message as BlockAddMessage
+            val message = it.message
             blockchainManager.add(message.block)
             logger.debug { "added block: ${message.block}" }
         }
         p2pNode.registerMessageHandler(ChainFwdMessage::class) {
-            val message = it.message as ChainFwdMessage
+            val message = it.message
             blockchainManager.addAll(message.blocks)
             logger.debug { "added missing chain parts: ${message.blocks}" }
         }
         p2pNode.registerMessageHandler(ChainReqMessage::class) { wrapper ->
-            val reqMessage = wrapper.message as ChainReqMessage
+            val reqMessage = wrapper.message
             val height = reqMessage.height
             logger.debug { "received chain request for height: $height" }
             if(height <= blockchainManager.maxHeight) {
