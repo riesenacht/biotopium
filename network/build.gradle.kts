@@ -5,7 +5,6 @@ plugins {
 
 val jvmTargetVersion: String by project
 val kotlinxSerializationJsonVersion: String by project
-val reaktiveVersion: String by project
 val biotopiumSubmoduleGroupId: String by project
 val biotopiumLoggingArtifactId: String by project
 val biotopiumNetworkArtifactId: String by project
@@ -41,7 +40,6 @@ kotlin {
             dependencies {
                 implementation(project(":$biotopiumLoggingArtifactId"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationJsonVersion")
-                implementation("com.badoo.reaktive:reaktive:$reaktiveVersion")
             }
         }
         val commonTest by getting {

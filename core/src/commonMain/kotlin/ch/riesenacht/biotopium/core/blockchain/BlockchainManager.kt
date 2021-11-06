@@ -18,9 +18,15 @@
 
 package ch.riesenacht.biotopium.core.blockchain
 
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.action.model.ActionWrapper
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
 import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.bus.ActionBus
+import ch.riesenacht.biotopium.bus.BlockCandidateBus
+import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.subscribe
 
 /**
  * State manager of the blockchain.
@@ -52,13 +58,28 @@ object BlockchainManager {
     val blockchain: Blockchain
         get() = mutableBlockchain
 
+    init {
+        BlockCandidateBus.subscribe {
+            // add all incoming blocks
+            add(it.candidate)
+        }
+    }
+
     /**
      * Adds a [block] to the blockchain.
      * @return block is valid and was added
      */
     fun add(block: Block): Boolean {
         if(validator.validateNew(block, blockchain)) {
-            return mutableBlockchain.add(block)
+            if(mutableBlockchain.add(block)) {
+
+                if(block.data is Action) {
+                    // publish the action
+                    ActionBus.onNext(ActionWrapper(block.data, block))
+                }
+
+                return true
+            }
         }
         return false
     }

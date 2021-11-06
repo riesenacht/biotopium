@@ -18,11 +18,14 @@
 
 package ch.riesenacht.biotopium.core.world
 
+import ch.riesenacht.biotopium.core.action.contract.ActionContractManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.bus.ActionBus
 import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
+import com.badoo.reaktive.observable.subscribe
 
 /**
  * State manager of the world.
@@ -67,4 +70,22 @@ object WorldStateManager: World {
     override val players: Map<Address, Player>
     get() = mutablePlayers
 
+    /**
+     * Represents the world in its mutable state.
+     */
+    private val mutableWorld = object : MutableWorld {
+        override val tiles: MutableMap<Pair<Coordinate, Coordinate>, Tile>
+            get() = mutableTiles
+        override val realms: MutableMap<Pair<RealmIndex, RealmIndex>, Realm>
+            get() = mutableRealms
+        override val players: MutableMap<Address, Player>
+            get() = mutablePlayers
+    }
+
+    init {
+        ActionBus.subscribe {
+            //execute incoming contracts
+            ActionContractManager.executeContract(it.action, it.block, mutableWorld)
+        }
+    }
 }

@@ -20,6 +20,8 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.blockchain.model.BlockCandidate
+import ch.riesenacht.biotopium.bus.BlockCandidateBus
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.Message
@@ -50,14 +52,12 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
             logger.debug { "added peer address book entry: ${message.peerId} <=> ${message.address}" }
         }
         p2pNode.registerMessageHandler(BlockAddMessage::class) {
-            val message = it.message
-            blockchainManager.add(message.block)
-            logger.debug { "added block: ${message.block}" }
+            BlockCandidateBus.onNext(BlockCandidate(it.message.block))
+            logger.debug { "added block: ${it.message.block}" }
         }
         p2pNode.registerMessageHandler(ChainFwdMessage::class) {
-            val message = it.message
-            blockchainManager.addAll(message.blocks)
-            logger.debug { "added missing chain parts: ${message.blocks}" }
+            BlockCandidateBus.allOnNext(it.message.blocks.map { block -> BlockCandidate(block) })
+            logger.debug { "added missing chain parts: ${it.message.blocks}" }
         }
         p2pNode.registerMessageHandler(ChainReqMessage::class) { wrapper ->
             val reqMessage = wrapper.message
