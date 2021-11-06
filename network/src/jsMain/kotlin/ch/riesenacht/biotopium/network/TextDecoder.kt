@@ -22,7 +22,7 @@ import org.khronos.webgl.Uint8Array
 
 /**
  * Text decoder from JavaScript.
- * The [encoding] can be set.
+ * @param encoding encoding to use
  */
 internal external class TextDecoder(encoding: String) {
 

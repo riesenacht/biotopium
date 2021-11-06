@@ -18,13 +18,12 @@
 
 package ch.riesenacht.biotopium.network.go2p;
 
-import jnr.ffi.*;
+import jnr.ffi.LibraryLoader;
+import jnr.ffi.Pointer;
 import jnr.ffi.Runtime;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * Wrapper for the gop2p library.
