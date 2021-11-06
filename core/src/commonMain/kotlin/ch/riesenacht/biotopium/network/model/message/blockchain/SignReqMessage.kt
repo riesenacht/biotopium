@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.network.model.message.blockchain
 
 import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
-import ch.riesenacht.biotopium.network.model.PeerId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

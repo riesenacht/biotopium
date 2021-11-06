@@ -68,13 +68,6 @@ abstract class ContractTest {
     protected val currentTimestamp: Timestamp
     get() = DateUtils.currentTimestamp()
 
-    protected fun createTestWorldWithPlayer(address: Address): TestWorld {
-        val world = TestWorld()
-        val player = Player("name", address)
-        world.players[address] = player
-        return world
-    }
-
     protected fun createMutableTestWorldWithPlayer(address: Address): MutableWorld {
         val world = TestMutableWorld()
         val player = Player("name", address)

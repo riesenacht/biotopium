@@ -32,7 +32,7 @@ import kotlinx.serialization.Serializable
  * A block contains the [timestamp] of its creation time.
  * The [previous hash][prevHash] connects the block to the previous block on the chain.
  * A block holds information about its [author].
- * The [author] creates a [signature][sign] on the block's   [hash].
+ * The [author] creates a [signature][sign] on the block's [hash].
  * Each block acts as a storage for [data].
  * The block's validity is confirmed by the [validator].
  * A [validator] creates a [validation signature][validSign] on the block's [hash].

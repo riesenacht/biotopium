@@ -18,15 +18,15 @@
 
 package ch.riesenacht.biotopium.network
 
+import ch.riesenacht.biotopium.bus.BlockCandidateBus
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.BlockCandidate
-import ch.riesenacht.biotopium.bus.BlockCandidateBus
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.Message
-import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
 import ch.riesenacht.biotopium.network.model.message.blockchain.ChainFwdMessage
 import ch.riesenacht.biotopium.network.model.message.blockchain.ChainReqMessage
 
