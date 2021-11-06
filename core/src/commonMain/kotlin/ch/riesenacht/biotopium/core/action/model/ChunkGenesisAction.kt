@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.map.Tile
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -32,7 +34,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("ChunkGenesisAction")
 data class ChunkGenesisAction(
-    override val produce: List<Tile>
+    override val timestamp: Timestamp,
+    override val author: Address,
+    override val produce: List<Tile>,
 ) : Action, Producible<List<Tile>> {
     override val type = ActionType.CHUNK_GENESIS
 }

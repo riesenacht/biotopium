@@ -31,27 +31,27 @@ val createPlotContract = actionContract<CreatePlotAction>(
     ActionType.CREATE_PLOT,
 
     rules {
-        // the plot to create is placed on a realm owned by the author of the block
-        rule { action, block, world ->
+        // the plot to create is placed on a realm owned by the author of the action
+        rule { action, world ->
             val plot = action.produce
-            tileOwned(plot.x, plot.y, world, block.author)
+            tileOwned(plot.x, plot.y, world, action.author)
         }
 
-        // the author of the block equals the owner of the hoe,
+        // the author of the action equals the owner of the hoe,
         // the player owns the hoe
-        rule { action, block, world ->
+        rule { action, world ->
             val hoe = action.consume
-            hoe.owner == block.author
+            hoe.owner == action.author
                     && world.players[hoe.owner]?.items?.contains(hoe) ?: false
         }
 
         // the plot's tile is currently of type default
-        rule { action, _, world ->
+        rule { action, world ->
             val plot = action.produce
             world.tiles[plot.x to plot.y]?.type == TileType.DEFAULT
         }
     },
-    exec { action, _, world ->
+    exec { action, world ->
 
         val plot = action.produce
         val hoe = action.consume

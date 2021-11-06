@@ -19,7 +19,6 @@
 package ch.riesenacht.biotopium.bus
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionWrapper
 
 /**
  * Represents the event bus for incoming actions.
@@ -27,4 +26,4 @@ import ch.riesenacht.biotopium.core.action.model.ActionWrapper
  *
  * @author Manuel Riesen
  */
-object ActionBus : EventBus<ActionWrapper<out Action>>()
+object ActionBus : EventBus<Action>()

@@ -20,9 +20,7 @@ package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.core.time.model.Timestamp
@@ -30,6 +28,7 @@ import ch.riesenacht.biotopium.core.world.MutableWorld
 import ch.riesenacht.biotopium.core.world.Player
 import ch.riesenacht.biotopium.core.world.World
 import ch.riesenacht.biotopium.core.world.model.Coordinate
+import ch.riesenacht.biotopium.core.world.model.Owner
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
@@ -63,13 +62,11 @@ abstract class ContractTest {
 
     }
 
-    protected data class TestBlockOrigin(override val timestamp: Timestamp, override val author: Address) : BlockOrigin
+    protected val defaultOwner: Owner
+    get() = Owner.fromBase64("me")
 
-    protected fun createDefaultOwner() = Address.fromBase64("me")
-
-    protected fun createOtherOwner(base64: String = "none") = Address.fromBase64(base64)
-
-    protected fun createDefaultBlockOrigin(address: Address, timestamp: Timestamp = DateUtils.currentTimestamp()) = TestBlockOrigin(timestamp, address)
+    protected val currentTimestamp: Timestamp
+    get() = DateUtils.currentTimestamp()
 
     protected fun createTestWorldWithPlayer(address: Address): TestWorld {
         val world = TestWorld()
@@ -89,7 +86,7 @@ abstract class ContractTest {
         return TestMutableWorld()
     }
 
-    protected fun <T : Action> execContract(action: T, block: BlockOrigin, world: MutableWorld) {
-        ActionContractManager.executeContract(action, block, world)
+    protected fun <T : Action> execContract(action: T, world: MutableWorld) {
+        ActionContractManager.executeContract(action, world)
     }
 }

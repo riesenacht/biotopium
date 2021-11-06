@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -33,6 +35,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("GrowAction")
 data class GrowAction(
+    override val timestamp: Timestamp,
+    override val author: Address,
     override val produce: Plot
 ) : Action, Producible<Plot> {
     override val type = ActionType.GROW

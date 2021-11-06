@@ -19,14 +19,11 @@
 package ch.riesenacht.biotopium.core.blockchain
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionWrapper
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
 import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.bus.ActionBus
 import ch.riesenacht.biotopium.bus.BlockCandidateBus
-import com.badoo.reaktive.base.Consumer
-import com.badoo.reaktive.observable.subscribe
 
 /**
  * State manager of the blockchain.
@@ -75,7 +72,7 @@ object BlockchainManager {
 
                 if(block.data is Action) {
                     // publish the action
-                    ActionBus.onNext(ActionWrapper(block.data, block))
+                    ActionBus.onNext(block.data)
                 }
 
                 return true

@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.CreatePlotAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.Hoe
@@ -40,11 +39,9 @@ class CreatePlotContractTest : ContractTest() {
 
     @Test
     fun testCreatePlotContractExec_positive() {
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
 
         val world = createMutableTestWorldWithPlayer(owner)
-
-        val block = createDefaultBlockOrigin(owner)
 
         val plot = Plot(0.coord, 0.coord)
 
@@ -57,9 +54,9 @@ class CreatePlotContractTest : ContractTest() {
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(plot, hoe)
+        val action = CreatePlotAction(currentTimestamp, owner, plot, hoe)
 
-        execContract(action, block, world)
+        execContract(action, world)
 
         assertFalse(world.players[owner]!!.items.contains(hoe))
         assertEquals(TileType.PLOT, world.tiles[plot.x to plot.y]!!.type)

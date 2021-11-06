@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.ClaimRealmAction
 import ch.riesenacht.biotopium.core.world.Player
 import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
@@ -38,9 +37,7 @@ class ClaimRealmContractTest : ContractTest() {
 
     @Test
     fun testClaimRealmActionExec_positive() {
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createMutableTestWorldWithPlayer(owner)
 
@@ -51,9 +48,9 @@ class ClaimRealmContractTest : ContractTest() {
 
         world.players[owner]?.addItem(realmClaimPaper)
 
-        val action = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ClaimRealmAction(currentTimestamp, owner, realm, realmClaimPaper)
 
-        execContract(action, block, world)
+        execContract(action, world)
 
         assertContains(world.realms, realm.ix to realm.iy)
         assertEquals(realm.owner, world.realms[realm.ix to realm.iy]?.owner)

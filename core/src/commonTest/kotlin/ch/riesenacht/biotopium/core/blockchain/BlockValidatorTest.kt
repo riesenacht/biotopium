@@ -22,13 +22,13 @@ import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
 import ch.riesenacht.biotopium.core.blockchain.model.EmptyBlockData
-import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.Sha3
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.effect.applyEffect
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -44,16 +44,25 @@ class BlockValidatorTest {
     private val authorKeyPair = Ed25519.generateKeyPair()
     private val validatorKeyPair = Ed25519.generateKeyPair()
 
+    private val author: Address
+    get() = Address(authorKeyPair.publicKey)
+
+    private val validator: Address
+    get() = Address(validatorKeyPair.publicKey)
+
+    private val zeroTimestamp: Timestamp
+    get() = Timestamp(0)
+
     /**
      * Generates a genesis block.
      */
     private fun generateGenesisBlock(): Block {
         val raw = RawBlock(
             height = 0u,
-            timestamp = Timestamp(0),
-            author = Address(authorKeyPair.publicKey),
-            validator = Address(validatorKeyPair.publicKey),
-            data = EmptyBlockData(),
+            timestamp = zeroTimestamp,
+            author = author,
+            validator = validator,
+            data = EmptyBlockData(zeroTimestamp, author),
             prevHash = Hash("")
         )
         val hash = BlockUtils.hash(raw)
@@ -65,12 +74,13 @@ class BlockValidatorTest {
     }
 
     private fun generateNextBlock(prev: Block): Block {
+        val timestamp = Timestamp(prev.timestamp.epochMillis + 1)
         val raw = RawBlock(
             height = prev.height + 1u,
-            timestamp = Timestamp(prev.timestamp.epochMillis + 1),
-            author = Address(authorKeyPair.publicKey),
-            validator = Address(validatorKeyPair.publicKey),
-            data = EmptyBlockData(),
+            timestamp = timestamp,
+            author = author,
+            validator = validator,
+            data = EmptyBlockData(timestamp, author),
             prevHash = prev.hash
         )
         val hashed = raw.toHashedBlock(BlockUtils.hash(raw))
@@ -295,6 +305,22 @@ class BlockValidatorTest {
 
         val blockchain = listOf(genesisBlock, invalidValidSignedBlock)
         assertFalse(BlockValidator.validateChain(blockchain))
+    }
+
+    // TODO remove after standalone integrity verification of block data
+    @Test
+    fun testValidateChain_negative_genesisBlock_differentBlockDataAuthor() {
+        val genesisBlock = generateGenesisBlock()
+        val invalidGenesisBlock = genesisBlock.copy(data = EmptyBlockData(genesisBlock.data.timestamp, Address.fromBase64("invalid")))
+        assertFalse(BlockValidator.validateNew(invalidGenesisBlock, emptyList()))
+    }
+
+    // TODO remove after standalone integrity verification of block data
+    @Test
+    fun testValidateChain_negative_genesisBlock_differentBlockDataTimestamp() {
+        val genesisBlock = generateGenesisBlock()
+        val invalidGenesisBlock = genesisBlock.copy(data = EmptyBlockData(Timestamp(1), genesisBlock.data.author))
+        assertFalse(BlockValidator.validateNew(invalidGenesisBlock, emptyList()))
     }
 
 }

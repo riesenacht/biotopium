@@ -18,11 +18,12 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.block
 
-import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 
 /**
  * Represents information about a block's origin.
+ * TODO consider to remove this abstraction level
  *
  * @author Manuel Riesen
  */

@@ -21,7 +21,6 @@ package ch.riesenacht.biotopium.core.action
 import ch.riesenacht.biotopium.core.action.contract.ActionContractManager
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
 import ch.riesenacht.biotopium.core.world.World
 
 /**
@@ -32,12 +31,12 @@ import ch.riesenacht.biotopium.core.world.World
 object ActionValidator {
 
     /**
-     * Validates the execution of an [action] leveraging the [block]'s origin information and the [world].
+     * Validates the execution of an [action] leveraging the [world].
      */
-    fun <T : Action> validate(action: T, block: BlockOrigin, world: World): Boolean {
+    fun <T : Action> validate(action: T, world: World): Boolean {
         //TODO technical debt here
         // unchecked cast in order to retrieve the rule set of the specific type T
         @Suppress("UNCHECKED_CAST")
-        return (ActionContractManager.contracts[action.type]?.rules as ActionRuleSet<T>?)?.invoke(action, block, world) ?: false
+        return (ActionContractManager.contracts[action.type]?.rules as ActionRuleSet<T>?)?.invoke(action, world) ?: false
     }
 }

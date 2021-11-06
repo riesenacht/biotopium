@@ -19,7 +19,6 @@
 package ch.riesenacht.biotopium.core.action.rule
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
 import ch.riesenacht.biotopium.core.world.World
 import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.Owner
@@ -30,7 +29,7 @@ import ch.riesenacht.biotopium.core.world.model.Owner
  * @author Manuel Riesen
  */
 class ActionRuleSetBuilder<T : Action> {
-    private val predicates: MutableList<(T, BlockOrigin, World) -> Boolean> = mutableListOf()
+    private val predicates: MutableList<(T, World) -> Boolean> = mutableListOf()
 
     /**
      * Checks if a tile (identified by [x] and [y]) is owned by a given [owner].
@@ -41,20 +40,20 @@ class ActionRuleSetBuilder<T : Action> {
      * A rule which always results in `true`.
      */
     fun alwaysValid() {
-        this.predicates.add { _, _, _ -> true }
+        this.predicates.add { _, _ -> true }
     }
 
     /**
      * A rule which always results in `false`.
      */
     private fun alwaysInvalid() {
-        this.predicates.add { _, _, _ -> false }
+        this.predicates.add { _, _ -> false }
     }
 
     /**
      * Adds a [predicate] to the current action ruleset.
      */
-    fun rule(predicate: (T, BlockOrigin, World) -> Boolean) {
+    fun rule(predicate: (T, World) -> Boolean) {
         this.predicates.add(predicate)
     }
 

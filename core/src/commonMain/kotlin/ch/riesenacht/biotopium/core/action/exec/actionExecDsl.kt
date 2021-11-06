@@ -19,13 +19,12 @@
 package ch.riesenacht.biotopium.core.action.exec
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
 import ch.riesenacht.biotopium.core.world.MutableWorld
 
 
 /**
  * Creates an action execution from the given [execution function][execFn].
  */
-fun <T : Action> exec(execFn: (T, BlockOrigin, MutableWorld) -> Unit): ActionExec<T> {
+fun <T : Action> exec(execFn: (T, MutableWorld) -> Unit): ActionExec<T> {
     return ActionExec(execFn)
 }

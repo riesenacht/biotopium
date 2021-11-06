@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.HarvestAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.Harvest
@@ -44,9 +43,7 @@ class HarvestContractTest : ContractTest() {
     @Test
     fun testHarvestContractExec_positive() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createMutableTestWorldWithPlayer(owner)
 
@@ -61,9 +58,9 @@ class HarvestContractTest : ContractTest() {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        execContract(action, block, world)
+        execContract(action, world)
 
         assertTrue(world.players[owner]!!.items.contains(harvest.plant))
         assertTrue(harvest.seeds.all { world.players[owner]!!.items.contains(it) })

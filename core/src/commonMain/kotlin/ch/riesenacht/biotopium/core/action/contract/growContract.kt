@@ -34,27 +34,27 @@ val growContract = actionContract<GrowAction>(
 
     rules {
 
-        // the plot's tile is owned by the block author
-        rule { action, block, world ->
+        // the plot's tile is owned by the action author
+        rule { action, world ->
             val plot = action.produce
-            tileOwned(plot.x, plot.y, world, block.author)
+            tileOwned(plot.x, plot.y, world, action.author)
         }
 
-        // the owner of the growing plant equals the block author
-        rule { action, block, _ ->
+        // the owner of the growing plant equals the action author
+        rule { action, _ ->
             val plot = action.produce
-            plot.plant?.owner == block.author
+            plot.plant?.owner == action.author
         }
 
         // the plot's plant is not yet fully grown
-        rule { action, _, world ->
+        rule { action, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y] as Plot
             localPlot.plant?.growth != PlantGrowth.GROWN
         }
 
         // the new plant's growth is equal to the current plant's growth plus 1
-        rule { action, _, world ->
+        rule { action, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y] as Plot
             plot.plant?.growth?.ordinal == localPlot.plant?.growth?.ordinal?.plus(1)
@@ -62,19 +62,19 @@ val growContract = actionContract<GrowAction>(
 
 
         // the growth rate is taken into account
-        rule { action, block, world ->
+        rule { action, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y] as Plot
-            localPlot.plant?.lastGrowth?.let {block.timestamp <= it + growthRate } ?: false
+            localPlot.plant?.lastGrowth?.let { action.timestamp <= it + growthRate } ?: false
         }
 
     },
-    exec { action, block, world ->
+    exec { action, world ->
 
         val plot = action.produce
 
         // update last growth time
-        plot.plant?.lastGrowth = block.timestamp
+        plot.plant?.lastGrowth = action.timestamp
 
         // set the new plot tile
         world.tiles[plot.x to plot.y] = plot

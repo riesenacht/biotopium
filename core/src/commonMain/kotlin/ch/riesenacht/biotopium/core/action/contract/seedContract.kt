@@ -34,22 +34,22 @@ val seedContract = actionContract<SeedAction>(
 
     rules {
 
-        // the plot's tile is owned by the block author
-        rule { action, block, world ->
+        // the plot's tile is owned by the action author
+        rule { action, world ->
             val plot = action.produce
 
-            tileOwned(plot.x, plot.y, world, block.author)
+            tileOwned(plot.x, plot.y, world, action.author)
         }
 
         // the plot contains a plant in seed state
-        rule { action, _, _ ->
+        rule { action,_ ->
             val plot = action.produce
 
             plot.plant?.growth == PlantGrowth.SEED
         }
 
         // the plant type equals the seed type
-        rule { action, _, _ ->
+        rule { action, _ ->
             val plot = action.produce
             val seed = action.consume
 
@@ -57,31 +57,31 @@ val seedContract = actionContract<SeedAction>(
         }
 
         // the plot's tile is currently of type plot
-        rule { action, _, world ->
+        rule { action, world ->
             val plot = action.produce
 
             world.tiles[plot.x to plot.y]?.type == TileType.PLOT
         }
 
         // the plot does not contain a plant
-        rule { action, _, world ->
+        rule { action, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y]
 
             (localPlot is Plot) && (localPlot.plant == null)
         }
 
-        // the owner of the seed equals the author of the block,
+        // the owner of the seed equals the author of the action,
         // the player owns the seed
-        rule { action, block, world ->
+        rule { action, world ->
             val seed = action.consume
 
-            seed.owner == block.author
+            seed.owner == action.author
                     && world.players[seed.owner]?.items?.contains(seed) ?: false
         }
 
     },
-    exec { action, _, world ->
+    exec { action, world ->
 
         val plot = action.produce
         val seed = action.consume

@@ -21,15 +21,12 @@ package ch.riesenacht.biotopium.core.action
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.Player
 import ch.riesenacht.biotopium.core.world.World
-import ch.riesenacht.biotopium.core.world.model.Coordinate
-import ch.riesenacht.biotopium.core.world.model.RealmIndex
-import ch.riesenacht.biotopium.core.world.model.coord
+import ch.riesenacht.biotopium.core.world.model.*
 import ch.riesenacht.biotopium.core.world.model.item.*
 import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
 import ch.riesenacht.biotopium.core.world.model.map.Plot
@@ -39,7 +36,6 @@ import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
 import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 import ch.riesenacht.biotopium.core.world.model.plant.growthRate
-import ch.riesenacht.biotopium.core.world.model.realmIndex
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -52,11 +48,16 @@ import kotlin.test.assertTrue
  */
 class ActionValidatorTest {
 
-    private fun createDefaultOwner() = Address.fromBase64("me")
+    private val zeroTimestamp: Timestamp
+    get() = Timestamp(0)
+    
+    private val currentTimestamp
+    get() = DateUtils.currentTimestamp()
+
+    private val defaultOwner: Owner
+    get() = Owner.fromBase64("me")
 
     private fun createOtherOwner(base64: String = "none") = Address.fromBase64(base64)
-
-    private fun createDefaultBlockOrigin(address: Address, timestamp: Timestamp = DateUtils.currentTimestamp()) = TestBlockOrigin(timestamp, address)
 
     private fun createTestWorldWithPlayer(address: Address): TestWorld {
         val world = TestWorld()
@@ -75,8 +76,6 @@ class ActionValidatorTest {
 
     }
 
-    private data class TestBlockOrigin(override val timestamp: Timestamp, override val author: Address) : BlockOrigin
-
     @BeforeTest
     fun init() {
         applyEffect(CoreModuleEffect)
@@ -89,15 +88,13 @@ class ActionValidatorTest {
     @Test
     fun testValidateChunkGenesisAction_positive() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
 
         val world = TestWorld()
 
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val action = ChunkGenesisAction(zeroTimestamp, owner, listOf(DefaultTile(1.coord, 1.coord)))
 
-        val action = ChunkGenesisAction(listOf(DefaultTile(1.coord, 1.coord)))
-
-        assertTrue(ActionValidator.validate(action, block, world))
+        assertTrue(ActionValidator.validate(action, world))
     }
 
     /*
@@ -107,9 +104,7 @@ class ActionValidatorTest {
     @Test
     fun testValidateClaimRealmAction_positive() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -120,17 +115,15 @@ class ActionValidatorTest {
 
         world.players[owner]?.addItem(realmClaimPaper)
 
-        val action = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
 
-        assertTrue(ActionValidator.validate(action, block, world))
+        assertTrue(ActionValidator.validate(action, world))
     }
 
     @Test
     fun testValidateClaimAction_negative_realmExists() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val owner = defaultOwner
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
         val realmClaimPaper = RealmClaimPaper(owner)
@@ -140,19 +133,17 @@ class ActionValidatorTest {
 
         world.realms[realm.ix to realm.iy] = realm
 
-        val action = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
     }
 
 
     @Test
     fun testValidateClaimAction_negative_invalidClaimOwner_differentOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -160,27 +151,25 @@ class ActionValidatorTest {
         val realmClaimPaper = RealmClaimPaper(differentOwner)
         world.players[owner]?.addItem(realmClaimPaper)
 
-        val action = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
     }
 
 
     @Test
     fun testValidateClaimAction_negative_invalidClaimOwner_emptyInventory() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
         val realmClaimPaper = RealmClaimPaper(owner)
 
-        val action = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
     }
 
     /*
@@ -190,9 +179,7 @@ class ActionValidatorTest {
     @Test
     fun testValidateCreatePlotAction_positive() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -207,18 +194,16 @@ class ActionValidatorTest {
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(plot, hoe)
+        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
 
-        assertTrue(ActionValidator.validate(action, block, world))
+        assertTrue(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateCreatePlotAction_negative_tileNotOwned() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -230,19 +215,17 @@ class ActionValidatorTest {
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(plot, hoe)
+        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateCreatePlotAction_negative_invalidHoeOwner_differentOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -254,18 +237,16 @@ class ActionValidatorTest {
         val hoe = Hoe(differentOwner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(plot, hoe)
+        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateCreatePlotAction_negative_invalidHoeOwner_emptyInventory() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -276,18 +257,16 @@ class ActionValidatorTest {
 
         val hoe = Hoe(owner)
 
-        val action = CreatePlotAction(plot, hoe)
+        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateCreatePlotAction_negative_plotExists() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, Timestamp(0) + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -296,9 +275,9 @@ class ActionValidatorTest {
 
         val hoe = Hoe(owner)
 
-        val action = CreatePlotAction(plot, hoe)
+        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
@@ -309,11 +288,9 @@ class ActionValidatorTest {
     @Test
     fun testValidateGrowAction_positive_growSeed() {
 
-        val timestamp = DateUtils.currentTimestamp()
+        val timestamp = currentTimestamp
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, timestamp + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -325,20 +302,18 @@ class ActionValidatorTest {
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
         world.realms[realm.ix to realm.iy] = realm
 
-        val action = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.HALF_GROWN)))
+        val action = GrowAction(timestamp + growthRate, owner, plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.HALF_GROWN)))
 
-        assertTrue(ActionValidator.validate(action, block, world))
+        assertTrue(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateGrowAction_negative_tileNotOwned() {
 
-        val timestamp = DateUtils.currentTimestamp()
+        val timestamp = currentTimestamp
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, timestamp + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -347,20 +322,18 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord, plant)
         world.tiles[plot.x to plot.y] = plot
 
-        val action = GrowAction(plot)
+        val action = GrowAction(timestamp + growthRate, owner, plot)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateGrowAction_negative_plantGrown() {
 
-        val timestamp = DateUtils.currentTimestamp()
+        val timestamp = currentTimestamp
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, timestamp + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -370,20 +343,18 @@ class ActionValidatorTest {
         world.tiles[plot.x to plot.y] = plot
 
 
-        val action = GrowAction(plot)
+        val action = GrowAction(timestamp + growthRate, owner, plot)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateGrowAction_negative_violatedPlantGrowthSteps() {
 
-        val timestamp = DateUtils.currentTimestamp()
+        val timestamp = currentTimestamp
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, timestamp + growthRate)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -393,9 +364,9 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord, plant)
         world.tiles[plot.x to plot.y] = plot
 
-        val action = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
+        val action = GrowAction(timestamp + growthRate, owner, plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
@@ -403,11 +374,9 @@ class ActionValidatorTest {
     @Test
     fun testValidateGrowAction_negative_violatedGrowthRate() {
 
-        val timestamp = DateUtils.currentTimestamp()
+        val timestamp = currentTimestamp
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, timestamp)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -416,9 +385,9 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord, plant)
         world.tiles[plot.x to plot.y] = plot
 
-        val action = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
+        val action = GrowAction(timestamp, owner, plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
@@ -433,9 +402,7 @@ class ActionValidatorTest {
     @Test
     fun testValidateHarvestAction_positive() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -450,18 +417,16 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        assertTrue(ActionValidator.validate(action, block, world))
+        assertTrue(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateHarvestAction_negative_tileNotOwned() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -473,9 +438,9 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
@@ -483,9 +448,7 @@ class ActionValidatorTest {
     @Test
     fun testValidateHarvestAction_negative_plantNotFullyGrown() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -500,19 +463,17 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateHarvestAction_negative_invalidHarvestedPlantOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner)
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -527,19 +488,17 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(differentOwner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateHarvestAction_negative_invalidHarvestedSeedOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner)
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -554,18 +513,16 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(differentOwner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateHarvestAction_negative_invalidHarvestedPlantType() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -580,18 +537,16 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.WHEAT)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateHarvestAction_negative_invalidHarvestedSeedType() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -606,18 +561,16 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.WHEAT)))
 
-        val action = HarvestAction(harvest, plot.copy(plant = null))
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateHarvestAction_negative_updatedPlotNotEmpty() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -632,9 +585,9 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(harvest, plot)
+        val action = HarvestAction(currentTimestamp, owner, harvest, plot)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
@@ -645,9 +598,7 @@ class ActionValidatorTest {
     @Test
     fun testValidateIntroductionAction_positive() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = TestWorld()
 
@@ -657,18 +608,16 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(gift)
+        val action = IntroductionAction(currentTimestamp, owner, gift)
 
-        assertTrue(ActionValidator.validate(action, block, world))
+        assertTrue(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateIntroductionAction_negative_playerPresent() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -678,19 +627,17 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(gift)
+        val action = IntroductionAction(currentTimestamp, owner, gift)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
     }
 
     @Test
     fun testValidateIntroductionAction_negative_invalidClaimPaperOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
 
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner)
 
         val world = TestWorld()
 
@@ -700,19 +647,17 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(gift)
+        val action = IntroductionAction(currentTimestamp, owner, gift)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
     }
 
     @Test
     fun testValidateIntroductionAction_negative_invalidHoeOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
 
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner)
 
         val world = TestWorld()
 
@@ -722,19 +667,17 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(gift)
+        val action = IntroductionAction(currentTimestamp, owner, gift)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
     }
 
     @Test
     fun testValidateIntroductionAction_negative_invalidSeedOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
 
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner)
 
         val world = TestWorld()
 
@@ -744,9 +687,9 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(differentOwner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(gift)
+        val action = IntroductionAction(currentTimestamp, owner, gift)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
     }
 
     /*
@@ -756,9 +699,7 @@ class ActionValidatorTest {
     @Test
     fun testValidateSeedAction_positive() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -773,18 +714,16 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
-        assertTrue(ActionValidator.validate(action, block, world))
+        assertTrue(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_tileNotOwned() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -796,18 +735,16 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_plantNotPresent() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -820,18 +757,16 @@ class ActionValidatorTest {
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
 
-        val action = SeedAction(plot, seed)
+        val action = SeedAction(currentTimestamp, owner, plot, seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_plantNotSeed() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -846,18 +781,16 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.HALF_GROWN)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_wrongPlantType() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -872,18 +805,16 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, PlantType.WHEAT, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_tileIsOfTypeDefault() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -899,20 +830,18 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_seedNotOwned_differentOwner() {
 
-        val owner = createDefaultOwner()
+        val owner = defaultOwner
         val differentOwner = createOtherOwner()
-
-        val block = createDefaultBlockOrigin(owner)
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -927,18 +856,16 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_plotGivenContainsPlant() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -954,9 +881,9 @@ class ActionValidatorTest {
 
         val newPlant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = newPlant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = newPlant), seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
@@ -964,9 +891,7 @@ class ActionValidatorTest {
     @Test
     fun testValidateSeedAction_negative_plotOnMapContainsPlant() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -984,18 +909,16 @@ class ActionValidatorTest {
 
         val newPlant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = newPlant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = newPlant), seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 
     @Test
     fun testValidateSeedAction_negative_seedNotOwned_emptyInventory() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
 
@@ -1009,9 +932,9 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
-        assertFalse(ActionValidator.validate(action, block, world))
+        assertFalse(ActionValidator.validate(action, world))
 
     }
 

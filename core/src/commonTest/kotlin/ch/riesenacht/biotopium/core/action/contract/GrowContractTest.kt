@@ -18,9 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.GrowAction
-import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.Realm
@@ -40,11 +38,9 @@ class GrowContractTest : ContractTest() {
 
     @Test
     fun testGrowContractExec_positive() {
-        val timestamp = DateUtils.currentTimestamp()
+        val timestamp = currentTimestamp
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner, timestamp)
+        val owner = defaultOwner
 
         val world = createMutableTestWorldWithPlayer(owner)
 
@@ -56,9 +52,9 @@ class GrowContractTest : ContractTest() {
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
         world.realms[realm.ix to realm.iy] = realm
 
-        val action = GrowAction(plot.copy(plant = plant.copy(growth = PlantGrowth.HALF_GROWN)))
+        val action = GrowAction(timestamp, owner, plot.copy(plant = plant.copy(growth = PlantGrowth.HALF_GROWN)))
 
-        execContract(action, block, world)
+        execContract(action, world)
 
         assertEquals(PlantGrowth.HALF_GROWN, (world.tiles[plot.x to plot.y] as Plot).plant!!.growth)
         assertEquals(timestamp, (world.tiles[plot.x to plot.y] as Plot).plant!!.lastGrowth)

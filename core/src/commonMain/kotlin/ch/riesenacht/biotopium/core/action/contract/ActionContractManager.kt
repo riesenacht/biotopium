@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.action.model.ActionType
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockOrigin
 import ch.riesenacht.biotopium.core.world.MutableWorld
 
 /**
@@ -57,11 +56,14 @@ object ActionContractManager {
         mutableContracts[type] = contract
     }
 
-    fun <T : Action> executeContract(action: T, blockOrigin: BlockOrigin, world: MutableWorld) {
+    /**
+     * Executes the contract of a given [action] to the [world].
+     */
+    fun <T : Action> executeContract(action: T, world: MutableWorld) {
         //TODO technical debt here
         //unchecked cast in order to retrieve the contract type
         @Suppress("UNCHECKED_CAST")
         val contract: ActionContract<T> = contracts[action.type] as ActionContract<T>
-        contract.exec(action, blockOrigin, world)
+        contract.exec(action, world)
     }
 }

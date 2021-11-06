@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
@@ -37,15 +36,13 @@ class ChunkGenesisContractTest : ContractTest() {
 
         val world = createMutableWorld()
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val tile11 = DefaultTile(1.coord, 1.coord)
 
-        val action = ChunkGenesisAction(listOf(tile11))
+        val action = ChunkGenesisAction(currentTimestamp, owner, listOf(tile11))
 
-        execContract(action, block, world)
+        execContract(action, world)
 
         assertContains(world.tiles, tile11.x to tile11.y)
     }

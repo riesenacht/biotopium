@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model
 
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 import kotlinx.serialization.Serializable
 
 /**
@@ -27,4 +28,7 @@ import kotlinx.serialization.Serializable
  * @author Manuel Riesen
  */
 @Serializable
-class EmptyBlockData : BlockData
+class EmptyBlockData(
+    override val timestamp: Timestamp,
+    override val author: Address
+) : BlockData

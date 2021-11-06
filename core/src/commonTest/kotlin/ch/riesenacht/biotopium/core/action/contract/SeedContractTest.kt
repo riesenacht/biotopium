@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.SeedAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.Seed
@@ -42,9 +41,7 @@ class SeedContractTest : ContractTest() {
     @Test
     fun testSeedContractExec_positive() {
 
-        val owner = createDefaultOwner()
-
-        val block = createDefaultBlockOrigin(owner)
+        val owner = defaultOwner
 
         val world = createMutableTestWorldWithPlayer(owner)
 
@@ -59,9 +56,9 @@ class SeedContractTest : ContractTest() {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(plot.copy(plant = plant), seed)
+        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
 
-        execContract(action, block, world)
+        execContract(action, world)
 
         assertNotNull((world.tiles[plot.x to plot.y] as Plot).plant)
         assertEquals(plant.type, (world.tiles[plot.x to plot.y] as Plot).plant!!.type)
