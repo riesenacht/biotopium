@@ -29,7 +29,7 @@ import com.badoo.reaktive.subject.publish.PublishSubject
  *
  * @author Manuel Riesen
  */
-sealed class EventBus<T> {
+abstract class EventBus<T> {
 
     /**
      * The underlying subject.
