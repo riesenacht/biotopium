@@ -88,11 +88,9 @@ actual class P2pNode actual constructor(
             val serializedMessage: SerializedMessage = decoder.decode(data)
             receive(serializedMessage)
         }
-
-        libp2p.start().await()
-
-        //TODO fix non-blocking call
-        libp2p.pubsub.subscribe(p2pConfig.topic)
+        libp2p.start().then {
+            libp2p.pubsub.subscribe(p2pConfig.topic)
+        }.await()
 
         libp2p.handle(p2pConfig.protocolName) {
             val stream = it.stream

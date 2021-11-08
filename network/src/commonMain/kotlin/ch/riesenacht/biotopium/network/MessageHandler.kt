@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.MessageWrapper
-import kotlin.reflect.KClass
 
 /**
  * Represents a message handler.
