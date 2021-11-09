@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.action.exec
 
 import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
 import ch.riesenacht.biotopium.core.world.MutableWorld
 
 /**
@@ -28,13 +29,14 @@ import ch.riesenacht.biotopium.core.world.MutableWorld
  * @author Manuel Riesen
  */
 class ActionExec<T : Action>(
-    private val execFun: (T, MutableWorld) -> Unit
+    private val execFun: (T, OriginInfo, MutableWorld) -> Unit
 ) {
 
     /**
-     * Invokes the execution function of the [action] and applies the action on the [world].
+     * Invokes the execution function of the [action] with its [origin] information
+     * and applies the action on the [world].
      */
-    operator fun invoke(action: T, world: MutableWorld) {
-        execFun(action, world)
+    operator fun invoke(action: T, origin: OriginInfo, world: MutableWorld) {
+        execFun(action, origin, world)
     }
 }

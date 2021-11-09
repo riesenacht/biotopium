@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.world.MutableWorld
 
@@ -59,11 +60,11 @@ object ActionContractManager {
     /**
      * Executes the contract of a given [action] to the [world].
      */
-    fun <T : Action> executeContract(action: T, world: MutableWorld) {
+    fun <T : Action> executeContract(action: ActionEnvelope<T>, world: MutableWorld) {
         //TODO technical debt here
         //unchecked cast in order to retrieve the contract type
         @Suppress("UNCHECKED_CAST")
-        val contract: ActionContract<T> = contracts[action.type] as ActionContract<T>
-        contract.exec(action, world)
+        val contract: ActionContract<T> = contracts[action.content.type] as ActionContract<T>
+        contract.exec(action.content, action, world)
     }
 }

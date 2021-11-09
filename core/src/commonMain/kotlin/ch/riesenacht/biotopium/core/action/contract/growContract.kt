@@ -35,26 +35,26 @@ val growContract = actionContract<GrowAction>(
     rules {
 
         // the plot's tile is owned by the action author
-        rule { action, world ->
+        rule { action, origin, world ->
             val plot = action.produce
-            tileOwned(plot.x, plot.y, world, action.author)
+            tileOwned(plot.x, plot.y, world, origin.author)
         }
 
         // the owner of the growing plant equals the action author
-        rule { action, _ ->
+        rule { action, origin, _ ->
             val plot = action.produce
-            plot.plant?.owner == action.author
+            plot.plant?.owner == origin.author
         }
 
         // the plot's plant is not yet fully grown
-        rule { action, world ->
+        rule { action, _, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y] as Plot
             localPlot.plant?.growth != PlantGrowth.GROWN
         }
 
         // the new plant's growth is equal to the current plant's growth plus 1
-        rule { action, world ->
+        rule { action, _, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y] as Plot
             plot.plant?.growth?.ordinal == localPlot.plant?.growth?.ordinal?.plus(1)
@@ -62,19 +62,19 @@ val growContract = actionContract<GrowAction>(
 
 
         // the growth rate is taken into account
-        rule { action, world ->
+        rule { action, origin, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y] as Plot
-            localPlot.plant?.lastGrowth?.let { action.timestamp <= it + growthRate } ?: false
+            localPlot.plant?.lastGrowth?.let { origin.timestamp <= it + growthRate } ?: false
         }
 
     },
-    exec { action, world ->
+    exec { action, origin, world ->
 
         val plot = action.produce
 
         // update last growth time
-        plot.plant?.lastGrowth = action.timestamp
+        plot.plant?.lastGrowth = origin.timestamp
 
         // set the new plot tile
         world.tiles[plot.x to plot.y] = plot

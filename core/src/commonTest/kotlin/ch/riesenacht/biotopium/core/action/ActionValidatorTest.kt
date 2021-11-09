@@ -92,7 +92,8 @@ class ActionValidatorTest {
 
         val world = TestWorld()
 
-        val action = ChunkGenesisAction(zeroTimestamp, owner, listOf(DefaultTile(1.coord, 1.coord)))
+        val content = ChunkGenesisAction(listOf(DefaultTile(1.coord, 1.coord)))
+        val action = ActionEnvelope(zeroTimestamp, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
     }
@@ -115,7 +116,8 @@ class ActionValidatorTest {
 
         world.players[owner]?.addItem(realmClaimPaper)
 
-        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
+        val content = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ActionEnvelope(zeroTimestamp, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
     }
@@ -133,7 +135,8 @@ class ActionValidatorTest {
 
         world.realms[realm.ix to realm.iy] = realm
 
-        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
+        val content = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ActionEnvelope(zeroTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
     }
@@ -151,7 +154,8 @@ class ActionValidatorTest {
         val realmClaimPaper = RealmClaimPaper(differentOwner)
         world.players[owner]?.addItem(realmClaimPaper)
 
-        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
+        val content = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ActionEnvelope(zeroTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
     }
@@ -167,7 +171,8 @@ class ActionValidatorTest {
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
         val realmClaimPaper = RealmClaimPaper(owner)
 
-        val action = ClaimRealmAction(zeroTimestamp, owner, realm, realmClaimPaper)
+        val content = ClaimRealmAction(realm, realmClaimPaper)
+        val action = ActionEnvelope(zeroTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
     }
@@ -194,7 +199,8 @@ class ActionValidatorTest {
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
+        val content = CreatePlotAction(plot, hoe)
+        val action = ActionEnvelope(zeroTimestamp + growthRate, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
 
@@ -215,7 +221,8 @@ class ActionValidatorTest {
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
+        val content = CreatePlotAction(plot, hoe)
+        val action = ActionEnvelope(zeroTimestamp + growthRate, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -237,7 +244,8 @@ class ActionValidatorTest {
         val hoe = Hoe(differentOwner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
+        val content = CreatePlotAction(plot, hoe)
+        val action = ActionEnvelope(zeroTimestamp + growthRate, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -257,7 +265,8 @@ class ActionValidatorTest {
 
         val hoe = Hoe(owner)
 
-        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
+        val content = CreatePlotAction(plot, hoe)
+        val action = ActionEnvelope(zeroTimestamp + growthRate, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -275,7 +284,8 @@ class ActionValidatorTest {
 
         val hoe = Hoe(owner)
 
-        val action = CreatePlotAction(zeroTimestamp + growthRate, owner, plot, hoe)
+        val content = CreatePlotAction(plot, hoe)
+        val action = ActionEnvelope(zeroTimestamp + growthRate, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -302,7 +312,8 @@ class ActionValidatorTest {
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
         world.realms[realm.ix to realm.iy] = realm
 
-        val action = GrowAction(timestamp + growthRate, owner, plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.HALF_GROWN)))
+        val content = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.HALF_GROWN)))
+        val action = ActionEnvelope(timestamp + growthRate, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
 
@@ -322,7 +333,8 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord, plant)
         world.tiles[plot.x to plot.y] = plot
 
-        val action = GrowAction(timestamp + growthRate, owner, plot)
+        val content = GrowAction(plot)
+        val action = ActionEnvelope(timestamp + growthRate, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -342,8 +354,8 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord, plant.copy(growth = PlantGrowth.HALF_GROWN))
         world.tiles[plot.x to plot.y] = plot
 
-
-        val action = GrowAction(timestamp + growthRate, owner, plot)
+        val content = GrowAction(plot)
+        val action = ActionEnvelope(timestamp + growthRate, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -364,7 +376,8 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord, plant)
         world.tiles[plot.x to plot.y] = plot
 
-        val action = GrowAction(timestamp + growthRate, owner, plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
+        val content = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
+        val action = ActionEnvelope(timestamp + growthRate, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -385,7 +398,8 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord, plant)
         world.tiles[plot.x to plot.y] = plot
 
-        val action = GrowAction(timestamp, owner, plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
+        val content = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
+        val action = ActionEnvelope(timestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -417,7 +431,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
 
@@ -438,7 +453,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -463,7 +479,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -488,7 +505,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(differentOwner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -513,7 +531,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(differentOwner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -537,7 +556,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.WHEAT)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -561,7 +581,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.WHEAT)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -585,7 +606,8 @@ class ActionValidatorTest {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot)
+        val content = HarvestAction(harvest, plot)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -608,7 +630,8 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(currentTimestamp, owner, gift)
+        val content = IntroductionAction(gift)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
 
@@ -627,7 +650,8 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(currentTimestamp, owner, gift)
+        val content = IntroductionAction(gift)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
     }
@@ -647,7 +671,8 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(currentTimestamp, owner, gift)
+        val content = IntroductionAction(gift)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
     }
@@ -667,7 +692,8 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(currentTimestamp, owner, gift)
+        val content = IntroductionAction(gift)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
     }
@@ -687,7 +713,8 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(differentOwner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(currentTimestamp, owner, gift)
+        val content = IntroductionAction(gift)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
     }
@@ -714,7 +741,8 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
+        val content = SeedAction(plot.copy(plant = plant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
 
@@ -735,7 +763,8 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
+        val content = SeedAction(plot.copy(plant = plant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -757,7 +786,8 @@ class ActionValidatorTest {
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
 
-        val action = SeedAction(currentTimestamp, owner, plot, seed)
+        val content = SeedAction(plot, seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -781,7 +811,8 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.HALF_GROWN)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
+        val content = SeedAction(plot.copy(plant = plant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -805,7 +836,8 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, PlantType.WHEAT, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
+        val content = SeedAction(plot.copy(plant = plant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -830,7 +862,8 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
+        val content = SeedAction(plot.copy(plant = plant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
 
         assertFalse(ActionValidator.validate(action, world))
@@ -856,7 +889,8 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
+        val content = SeedAction(plot.copy(plant = plant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -881,7 +915,8 @@ class ActionValidatorTest {
 
         val newPlant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = newPlant), seed)
+        val content = SeedAction(plot.copy(plant = newPlant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -909,7 +944,8 @@ class ActionValidatorTest {
 
         val newPlant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = newPlant), seed)
+        val content = SeedAction(plot.copy(plant = newPlant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 
@@ -932,7 +968,8 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
-        val action = SeedAction(currentTimestamp, owner, plot.copy(plant = plant), seed)
+        val content = SeedAction(plot.copy(plant = plant), seed)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
 

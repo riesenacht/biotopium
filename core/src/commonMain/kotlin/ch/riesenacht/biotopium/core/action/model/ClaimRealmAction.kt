@@ -18,8 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
-import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import kotlinx.serialization.SerialName
@@ -36,8 +34,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("ClaimRealmAction")
 data class ClaimRealmAction(
-    override val timestamp: Timestamp,
-    override val author: Address,
     override val produce: Realm,
     override val consume: RealmClaimPaper
 ) : Action, Producible<Realm>, Consumable<RealmClaimPaper> {

@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
+import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
 import ch.riesenacht.biotopium.core.action.model.CreatePlotAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.Hoe
@@ -54,7 +55,8 @@ class CreatePlotContractTest : ContractTest() {
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
 
-        val action = CreatePlotAction(currentTimestamp, owner, plot, hoe)
+        val content = CreatePlotAction(plot, hoe)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         execContract(action, world)
 

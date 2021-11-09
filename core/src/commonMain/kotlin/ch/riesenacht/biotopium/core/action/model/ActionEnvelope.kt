@@ -16,26 +16,25 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.block
+package ch.riesenacht.biotopium.core.action.model
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.blockchain.model.BlockData
 import ch.riesenacht.biotopium.core.time.model.Timestamp
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Represents information about a block's origin.
- * TODO consider to remove this abstraction level
+ * Represents an envelope containing an action as [content].
  *
  * @author Manuel Riesen
  */
-interface BlockOrigin {
-
-    /**
-     * The timestamp of the block's creation.
-     */
-    val timestamp: Timestamp
-
-    /**
-     * The author of the block.
-     */
-    val author: Address
-}
+@SerialName("ActionEnvelope")
+@Serializable
+data class ActionEnvelope<T : Action>(
+    override val timestamp: Timestamp,
+    override val author: Address,
+    @Polymorphic
+    val content: T
+) : BlockData

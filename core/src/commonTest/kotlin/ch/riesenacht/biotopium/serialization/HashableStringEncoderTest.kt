@@ -36,10 +36,10 @@ class HashableStringEncoderTest : EncoderTest() {
             DefaultTile(6.coord, 7.coord),
             DefaultTile(8.coord, 9.coord),
         )
-        val action = ChunkGenesisAction(zeroTimestamp, defaultOwner, tiles)
+        val action = ChunkGenesisAction(tiles)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ChunkGenesisAction;0;me;DefaultTile;1;1;0;DefaultTile;2;3;0;DefaultTile;4;5;0;DefaultTile;6;7;0;DefaultTile;8;9;0;0"
+        val expected = "1;1;prevHash;test;blocklord;ActionEnvelope;0;me;ChunkGenesisAction;DefaultTile;1;1;0;DefaultTile;2;3;0;DefaultTile;4;5;0;DefaultTile;6;7;0;DefaultTile;8;9;0;0"
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -51,10 +51,10 @@ class HashableStringEncoderTest : EncoderTest() {
         val owner = Owner.fromBase64("me")
         val realm = Realm(owner, 1.realmIndex, 0.realmIndex)
         val realmClaimPaper = RealmClaimPaper(owner)
-        val action = ClaimRealmAction(Timestamp(0), owner, realm, realmClaimPaper)
+        val action = ClaimRealmAction(realm, realmClaimPaper)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ClaimRealmAction;0;me;me;1;0;me;2;2"
+        val expected = "1;1;prevHash;test;blocklord;ActionEnvelope;0;me;ClaimRealmAction;me;1;0;me;2;2"
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -65,10 +65,10 @@ class HashableStringEncoderTest : EncoderTest() {
     fun testEncodeCreatePlotAction() {
         val plot = Plot(1.coord, 0.coord)
         val hoe = Hoe(Owner.fromBase64("me"))
-        val action = CreatePlotAction(zeroTimestamp, defaultOwner, plot, hoe)
+        val action = CreatePlotAction(plot, hoe)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;CreatePlotAction;0;me;1;0;1;me;0;3"
+        val expected = "1;1;prevHash;test;blocklord;ActionEnvelope;0;me;CreatePlotAction;1;0;1;me;0;3"
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -78,10 +78,10 @@ class HashableStringEncoderTest : EncoderTest() {
     @Test
     fun testEncodeGrowAction() {
         val plot = Plot(1.coord, 0.coord)
-        val action = GrowAction(zeroTimestamp, defaultOwner, plot)
+        val action = GrowAction(plot)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;GrowAction;0;me;1;0;1;5"
+        val expected = "1;1;prevHash;test;blocklord;ActionEnvelope;0;me;GrowAction;1;0;1;5"
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -108,10 +108,10 @@ class HashableStringEncoderTest : EncoderTest() {
                 )
             )
         )
-        val action = HarvestAction(zeroTimestamp, defaultOwner, harvest, plot)
+        val action = HarvestAction(harvest, plot)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;HarvestAction;0;me;me;0;3;me;0;1;me;0;1;1;0;1;6"
+        val expected = "1;1;prevHash;test;blocklord;ActionEnvelope;0;me;HarvestAction;me;0;3;me;0;1;me;0;1;1;0;1;6"
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -135,10 +135,10 @@ class HashableStringEncoderTest : EncoderTest() {
                 )
             )
         )
-        val action = IntroductionAction(zeroTimestamp, defaultOwner, introductionGift)
+        val action = IntroductionAction(introductionGift)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;IntroductionAction;0;me;me;2;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;1;1;me;0;1;1"
+        val expected = "1;1;prevHash;test;blocklord;ActionEnvelope;0;me;IntroductionAction;me;2;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;1;1;me;0;1;1"
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -153,10 +153,10 @@ class HashableStringEncoderTest : EncoderTest() {
             owner,
             PlantType.CORN
         )
-        val action = SeedAction(zeroTimestamp, defaultOwner, plot, seed)
+        val action = SeedAction(plot, seed)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;SeedAction;0;me;1;0;1;me;1;1;4"
+        val expected = "1;1;prevHash;test;blocklord;ActionEnvelope;0;me;SeedAction;1;0;1;me;1;1;4"
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 

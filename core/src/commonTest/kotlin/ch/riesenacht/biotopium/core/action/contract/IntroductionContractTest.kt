@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
+import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
 import ch.riesenacht.biotopium.core.action.model.IntroductionAction
 import ch.riesenacht.biotopium.core.world.model.item.Hoe
 import ch.riesenacht.biotopium.core.world.model.item.IntroductionGift
@@ -49,7 +50,8 @@ class IntroductionContractTest : ContractTest() {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val action = IntroductionAction(currentTimestamp, owner, gift)
+        val content = IntroductionAction(gift)
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         execContract(action, world)
 

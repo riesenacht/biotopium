@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 
 
@@ -31,7 +32,7 @@ import ch.riesenacht.biotopium.core.crypto.model.Hash
  *
  * @author Manuel Riesen
 */
-sealed interface AbstractBlock : BlockOrigin {
+sealed interface AbstractBlock : OriginInfo {
 
     /**
      * The position on the blockchain.

@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
+import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
 import ch.riesenacht.biotopium.core.action.model.HarvestAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.Harvest
@@ -58,7 +59,8 @@ class HarvestContractTest : ContractTest() {
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
-        val action = HarvestAction(currentTimestamp, owner, harvest, plot.copy(plant = null))
+        val content = HarvestAction(harvest, plot.copy(plant = null))
+        val action = ActionEnvelope(currentTimestamp, owner, content)
 
         execContract(action, world)
 

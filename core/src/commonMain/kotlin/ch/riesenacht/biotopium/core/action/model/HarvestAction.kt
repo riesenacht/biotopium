@@ -18,8 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
-import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.item.Harvest
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import kotlinx.serialization.SerialName
@@ -36,8 +34,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("HarvestAction")
 data class HarvestAction(
-    override val timestamp: Timestamp,
-    override val author: Address,
     override val produce: Harvest,
     override val consume: Plot
 ) : Action, Producible<Harvest>, Consumable<Plot> {

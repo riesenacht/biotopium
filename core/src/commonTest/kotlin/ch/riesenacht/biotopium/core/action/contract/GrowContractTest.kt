@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
+import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
 import ch.riesenacht.biotopium.core.action.model.GrowAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.map.Plot
@@ -52,7 +53,8 @@ class GrowContractTest : ContractTest() {
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
         world.realms[realm.ix to realm.iy] = realm
 
-        val action = GrowAction(timestamp, owner, plot.copy(plant = plant.copy(growth = PlantGrowth.HALF_GROWN)))
+        val content = GrowAction(plot.copy(plant = plant.copy(growth = PlantGrowth.HALF_GROWN)))
+        val action = ActionEnvelope(timestamp, owner, content)
 
         execContract(action, world)
 

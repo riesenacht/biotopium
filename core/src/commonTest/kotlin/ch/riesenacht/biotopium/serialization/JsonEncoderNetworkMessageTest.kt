@@ -118,7 +118,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
             BlockAddMessage(block)
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\",\"sign\":\"D9KPN2yij7mWZVgEq3dv5Nl3yP/Az1ZA3uGGwPPsdRXoQeUEwl+v/MtKH9YaXNBJLoOarJmgpyNC94vJbGRhDQ==\",\"validSign\":\"sULtFr74J2QaviMNr/EJQM+9Xg0S0rNyOY4pXelW1W3HQw1wXKyDwQnCJl+R4BFHtxYr3XQBmoO2iGWJJMk9DA==\"}}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\",\"sign\":\"imDE7V8SppTf3QIB/649jSYbYBfJdc/uKJ8jm4t+CqfJ36A4teWzfz6mPgyaDJwGJf8Ey/I5lba03sPT20vJDw==\",\"validSign\":\"KrLmhzzplx/kX8WHOltxHd5M+AzaWmJMP8zWgjLxXV5cL7bOHI60OFsy8clfRrCJBDh7/IrqQT2wiBc3eVhoCA==\"}}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -128,7 +128,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeBlockAddMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\",\"sign\":\"D9KPN2yij7mWZVgEq3dv5Nl3yP/Az1ZA3uGGwPPsdRXoQeUEwl+v/MtKH9YaXNBJLoOarJmgpyNC94vJbGRhDQ==\",\"validSign\":\"sULtFr74J2QaviMNr/EJQM+9Xg0S0rNyOY4pXelW1W3HQw1wXKyDwQnCJl+R4BFHtxYr3XQBmoO2iGWJJMk9DA==\"}}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\",\"sign\":\"imDE7V8SppTf3QIB/649jSYbYBfJdc/uKJ8jm4t+CqfJ36A4teWzfz6mPgyaDJwGJf8Ey/I5lba03sPT20vJDw==\",\"validSign\":\"KrLmhzzplx/kX8WHOltxHd5M+AzaWmJMP8zWgjLxXV5cL7bOHI60OFsy8clfRrCJBDh7/IrqQT2wiBc3eVhoCA==\"}}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
@@ -183,7 +183,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
             ChainFwdMessage(listOf(block))
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\",\"sign\":\"D9KPN2yij7mWZVgEq3dv5Nl3yP/Az1ZA3uGGwPPsdRXoQeUEwl+v/MtKH9YaXNBJLoOarJmgpyNC94vJbGRhDQ==\",\"validSign\":\"sULtFr74J2QaviMNr/EJQM+9Xg0S0rNyOY4pXelW1W3HQw1wXKyDwQnCJl+R4BFHtxYr3XQBmoO2iGWJJMk9DA==\"}]}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\",\"sign\":\"imDE7V8SppTf3QIB/649jSYbYBfJdc/uKJ8jm4t+CqfJ36A4teWzfz6mPgyaDJwGJf8Ey/I5lba03sPT20vJDw==\",\"validSign\":\"KrLmhzzplx/kX8WHOltxHd5M+AzaWmJMP8zWgjLxXV5cL7bOHI60OFsy8clfRrCJBDh7/IrqQT2wiBc3eVhoCA==\"}]}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -193,7 +193,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeChainFwdMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\",\"sign\":\"D9KPN2yij7mWZVgEq3dv5Nl3yP/Az1ZA3uGGwPPsdRXoQeUEwl+v/MtKH9YaXNBJLoOarJmgpyNC94vJbGRhDQ==\",\"validSign\":\"sULtFr74J2QaviMNr/EJQM+9Xg0S0rNyOY4pXelW1W3HQw1wXKyDwQnCJl+R4BFHtxYr3XQBmoO2iGWJJMk9DA==\"}]}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\",\"sign\":\"imDE7V8SppTf3QIB/649jSYbYBfJdc/uKJ8jm4t+CqfJ36A4teWzfz6mPgyaDJwGJf8Ey/I5lba03sPT20vJDw==\",\"validSign\":\"KrLmhzzplx/kX8WHOltxHd5M+AzaWmJMP8zWgjLxXV5cL7bOHI60OFsy8clfRrCJBDh7/IrqQT2wiBc3eVhoCA==\"}]}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
@@ -216,7 +216,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
             SignReqMessage(block)
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignRequestMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\"}}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignRequestMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\"}}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -226,7 +226,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeSignReqMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignRequestMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\"}}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignRequestMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\"}}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultHashedBlock()
@@ -249,7 +249,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
             SignAckMessage(block)
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignAckMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\",\"sign\":\"D9KPN2yij7mWZVgEq3dv5Nl3yP/Az1ZA3uGGwPPsdRXoQeUEwl+v/MtKH9YaXNBJLoOarJmgpyNC94vJbGRhDQ==\",\"validSign\":\"sULtFr74J2QaviMNr/EJQM+9Xg0S0rNyOY4pXelW1W3HQw1wXKyDwQnCJl+R4BFHtxYr3XQBmoO2iGWJJMk9DA==\"}}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignAckMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\",\"sign\":\"imDE7V8SppTf3QIB/649jSYbYBfJdc/uKJ8jm4t+CqfJ36A4teWzfz6mPgyaDJwGJf8Ey/I5lba03sPT20vJDw==\",\"validSign\":\"KrLmhzzplx/kX8WHOltxHd5M+AzaWmJMP8zWgjLxXV5cL7bOHI60OFsy8clfRrCJBDh7/IrqQT2wiBc3eVhoCA==\"}}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -259,7 +259,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeSignAckMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignAckMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ChunkGenesisAction\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"produce\":[]},\"hash\":\"c96bb08de634afc71f687275be1eb5b71552f746e5fa31382d5f48e2da140098\",\"sign\":\"D9KPN2yij7mWZVgEq3dv5Nl3yP/Az1ZA3uGGwPPsdRXoQeUEwl+v/MtKH9YaXNBJLoOarJmgpyNC94vJbGRhDQ==\",\"validSign\":\"sULtFr74J2QaviMNr/EJQM+9Xg0S0rNyOY4pXelW1W3HQw1wXKyDwQnCJl+R4BFHtxYr3XQBmoO2iGWJJMk9DA==\"}}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"SignAckMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"validator\":\"blocklord\",\"data\":{\"class\":\"ActionEnvelope\",\"timestamp\":0,\"author\":\"me\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]}},\"hash\":\"6141f5079924719cd70c69afe6b1ab5b48556533eda594e6d128064307b8105f\",\"sign\":\"imDE7V8SppTf3QIB/649jSYbYBfJdc/uKJ8jm4t+CqfJ36A4teWzfz6mPgyaDJwGJf8Ey/I5lba03sPT20vJDw==\",\"validSign\":\"KrLmhzzplx/kX8WHOltxHd5M+AzaWmJMP8zWgjLxXV5cL7bOHI60OFsy8clfRrCJBDh7/IrqQT2wiBc3eVhoCA==\"}}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()

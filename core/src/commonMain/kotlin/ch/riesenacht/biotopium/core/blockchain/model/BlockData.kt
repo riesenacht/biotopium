@@ -18,23 +18,9 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model
 
-import ch.riesenacht.biotopium.core.time.model.Timestamp
-
 /**
  * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
  *
  * @author Manuel Riesen
  */
-interface BlockData {
-
-    /**
-     * The timestamp of the action's creation.
-     */
-    val timestamp: Timestamp
-
-    /**
-     * The author of the action.
-     */
-    val author: Address
-
-}
+interface BlockData : OriginInfo

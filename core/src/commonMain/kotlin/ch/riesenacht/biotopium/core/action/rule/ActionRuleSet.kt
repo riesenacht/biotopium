@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.action.rule
 
 import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
 import ch.riesenacht.biotopium.core.world.World
 
 /**
@@ -27,10 +28,11 @@ import ch.riesenacht.biotopium.core.world.World
  *
  * @author Manuel Riesen
  */
-class ActionRuleSet<T : Action>(private val predicates: List<(T, World) -> Boolean>) {
+class ActionRuleSet<T : Action>(private val predicates: List<(T, OriginInfo, World) -> Boolean>) {
 
     /**
-     * Invokes the predicate to validate the new [action] using the action itself and the [world].
+     * Invokes the predicate to validate the new [action] using the action itself,
+     * information about its [origin] and the [world].
      */
-    operator fun invoke(action: T, world: World) = predicates.all { it.invoke(action, world) }
+    operator fun invoke(action: T, origin: OriginInfo, world: World) = predicates.all { it.invoke(action, origin, world) }
 }

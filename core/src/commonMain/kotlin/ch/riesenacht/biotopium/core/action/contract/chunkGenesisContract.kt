@@ -32,7 +32,7 @@ val chunkGenesisContract = actionContract<ChunkGenesisAction>(
     rules {
         alwaysValid()
     },
-    exec { action, world ->
+    exec { action, _, world ->
         world.tiles.putAll( action.produce.map { (it.x to it.y) to it } )
     }
 )

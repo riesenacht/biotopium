@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.serialization
 
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.Address
@@ -64,30 +66,30 @@ abstract class EncoderTest {
     /**
      * Generates a default test action.
      */
-    private fun generateDefaultTestAction() = ChunkGenesisAction(zeroTimestamp, Address(authorKeyPair.publicKey), emptyList())
+    private fun generateDefaultTestAction() = ChunkGenesisAction(emptyList())
 
     /**
-     * Generates a default hashed block data object with a given block [data].
-     * If no block [data] is given, the default test action is used.
+     * Generates a default hashed block data object with a given [action].
+     * If no [action] is given, the default test action is used.
      */
-    protected fun generateDefaultHashedBlock(data: BlockData = generateDefaultTestAction()): HashedBlock {
+    protected fun generateDefaultHashedBlock(action: Action = generateDefaultTestAction()): HashedBlock {
         val raw = RawBlock(
             1u,
             Timestamp(1),
             Hash("prevHash"),
             Address.fromBase64("test"),
             Address.fromBase64("blocklord"),
-            data
+            ActionEnvelope(zeroTimestamp, defaultOwner, action)
         )
         return raw.toHashedBlock(BlockUtils.hash(raw.toHashable()))
     }
 
     /**
-     * Generates a default block data object with a given block [data].
-     * If no block [data] is given, the default test action is used.
+     * Generates a default block data object with a given [action].
+     * If [action] is given, the default test action is used.
      */
-    protected fun generateDefaultBlock(data: BlockData = generateDefaultTestAction()): Block {
-        val hashed = generateDefaultHashedBlock(data)
+    protected fun generateDefaultBlock(action: Action = generateDefaultTestAction()): Block {
+        val hashed = generateDefaultHashedBlock(action)
         return hashed.toSignedBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
             .toBlock(BlockUtils.sign(hashed, validatorKeyPair.privateKey))
     }

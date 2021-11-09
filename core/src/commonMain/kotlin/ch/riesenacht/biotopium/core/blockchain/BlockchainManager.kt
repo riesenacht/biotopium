@@ -24,6 +24,7 @@ import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.bus.ActionBus
 import ch.riesenacht.biotopium.bus.BlockCandidateBus
+import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
 
 /**
  * State manager of the blockchain.
@@ -70,7 +71,7 @@ object BlockchainManager {
         if(validator.validateNew(block, blockchain)) {
             if(mutableBlockchain.add(block)) {
 
-                if(block.data is Action) {
+                if(block.data is ActionEnvelope<out Action>) {
                     // publish the action
                     ActionBus.onNext(block.data)
                 }

@@ -33,20 +33,20 @@ val introductionContract = actionContract<IntroductionAction>(
     rules {
 
         // the player does not yet exist
-        rule { action, world ->
-            world.players[action.author] == null
+        rule { action, origin, world ->
+            world.players[origin.author] == null
         }
 
         // all introduction items are owned by the action author
-        rule { action, _ ->
+        rule { action, origin, _ ->
             val gift = action.produce
-            gift.seeds.all { it.owner == action.author }
-                    && gift.hoes.all { it.owner == action.author }
-                    && gift.realmClaimPaper.owner == action.author
+            gift.seeds.all { it.owner == origin.author }
+                    && gift.hoes.all { it.owner == origin.author }
+                    && gift.realmClaimPaper.owner == origin.author
         }
 
     },
-    exec { action, world ->
+    exec { action, _, world ->
 
         val gift = action.produce
         val owner = gift.realmClaimPaper.owner

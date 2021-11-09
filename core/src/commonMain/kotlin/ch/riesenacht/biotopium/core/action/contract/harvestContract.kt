@@ -34,13 +34,13 @@ val harvestContract = actionContract<HarvestAction>(
     rules {
 
         // the plot's tile is owned by the action author
-        rule { action, world ->
+        rule { action, origin, world ->
             val plot = action.consume
-            tileOwned(plot.x, plot.y, world, action.author)
+            tileOwned(plot.x, plot.y, world, origin.author)
         }
 
         // the plant is fully grown
-        rule { action, world ->
+        rule { action, _, world ->
             val plot = action.consume
             val localPlot = world.tiles[plot.x to plot.y] as Plot
 
@@ -48,14 +48,14 @@ val harvestContract = actionContract<HarvestAction>(
         }
 
         // all items of the harvest are owned by the action author
-        rule { action, _ ->
+        rule { action, origin, _ ->
             val harvest = action.produce
-            harvest.plant.owner == action.author
-                    && harvest.seeds.all { it.owner == action.author }
+            harvest.plant.owner == origin.author
+                    && harvest.seeds.all { it.owner == origin.author }
         }
 
         // harvested plant and seeds must be of same plant type
-        rule { action, world ->
+        rule { action, _, world ->
             val harvest = action.produce
             val plot = action.consume
             val localPlot = world.tiles[plot.x to plot.y] as Plot
@@ -64,13 +64,13 @@ val harvestContract = actionContract<HarvestAction>(
         }
 
         // updated plot must not contain a plant
-        rule { action, _ ->
+        rule { action, _, _ ->
             val plot = action.consume
             plot.plant == null
         }
 
     },
-    exec { action, world ->
+    exec { action, _, world ->
 
         val harvest = action.produce
         val plot = action.consume

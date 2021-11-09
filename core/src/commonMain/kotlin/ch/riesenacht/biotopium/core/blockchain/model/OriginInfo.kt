@@ -16,16 +16,24 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.exec
+package ch.riesenacht.biotopium.core.blockchain.model
 
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
-import ch.riesenacht.biotopium.core.world.MutableWorld
-
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 
 /**
- * Creates an action execution from the given [execution function][execFn].
+ * Represents information about the origin of a data structure.
+ *
+ * @author Manuel Riesen
  */
-fun <T : Action> exec(execFn: (T, OriginInfo, MutableWorld) -> Unit): ActionExec<T> {
-    return ActionExec(execFn)
+interface OriginInfo {
+
+    /**
+     * The timestamp of the data's creation.
+     */
+    val timestamp: Timestamp
+
+    /**
+     * The author of the data.
+     */
+    val author: Address
 }

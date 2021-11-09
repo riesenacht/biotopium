@@ -35,21 +35,21 @@ val seedContract = actionContract<SeedAction>(
     rules {
 
         // the plot's tile is owned by the action author
-        rule { action, world ->
+        rule { action, origin, world ->
             val plot = action.produce
 
-            tileOwned(plot.x, plot.y, world, action.author)
+            tileOwned(plot.x, plot.y, world, origin.author)
         }
 
         // the plot contains a plant in seed state
-        rule { action,_ ->
+        rule { action, _, _ ->
             val plot = action.produce
 
             plot.plant?.growth == PlantGrowth.SEED
         }
 
         // the plant type equals the seed type
-        rule { action, _ ->
+        rule { action, _, _ ->
             val plot = action.produce
             val seed = action.consume
 
@@ -57,14 +57,14 @@ val seedContract = actionContract<SeedAction>(
         }
 
         // the plot's tile is currently of type plot
-        rule { action, world ->
+        rule { action, _, world ->
             val plot = action.produce
 
             world.tiles[plot.x to plot.y]?.type == TileType.PLOT
         }
 
         // the plot does not contain a plant
-        rule { action, world ->
+        rule { action, _, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x to plot.y]
 
@@ -73,15 +73,15 @@ val seedContract = actionContract<SeedAction>(
 
         // the owner of the seed equals the author of the action,
         // the player owns the seed
-        rule { action, world ->
+        rule { action, origin, world ->
             val seed = action.consume
 
-            seed.owner == action.author
+            seed.owner == origin.author
                     && world.players[seed.owner]?.items?.contains(seed) ?: false
         }
 
     },
-    exec { action, world ->
+    exec { action, _, world ->
 
         val plot = action.produce
         val seed = action.consume
