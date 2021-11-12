@@ -20,7 +20,7 @@ package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
+import ch.riesenacht.biotopium.core.action.model.ActionFrame
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.time.DateUtils
@@ -80,7 +80,7 @@ abstract class ContractTest {
         return TestMutableWorld()
     }
 
-    protected fun <T : Action> execContract(action: ActionEnvelope<T>, world: MutableWorld) {
+    protected fun <T : Action> execContract(action: ActionFrame<T>, world: MutableWorld) {
         ActionContractManager.executeContract(action, world)
     }
 }

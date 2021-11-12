@@ -24,7 +24,7 @@ import ch.riesenacht.biotopium.serialization.JsonEncoder
 import kotlin.reflect.KClass
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.PeerId
-import ch.riesenacht.biotopium.network.model.message.MessageWrapper
+import ch.riesenacht.biotopium.network.model.message.MessageEnvelope
 
 
 /**
@@ -75,8 +75,8 @@ abstract class NetworkNode {
     /**
      * Wraps a [message] in a message wrapper.
      */
-    fun <T : Message> wrapMessage(message: T): MessageWrapper<T> {
-        return MessageWrapper(peerId, message)
+    fun <T : Message> wrapMessage(message: T): MessageEnvelope<T> {
+        return MessageEnvelope(peerId, message)
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class NetworkNode {
     inline fun <reified T : Message> send(peerId: PeerId, message: T) {
         logger.debug { "sending message $message to $peerId" }
 
-        val wrapper: MessageWrapper<T> = wrapMessage(message)
+        val wrapper: MessageEnvelope<T> = wrapMessage(message)
 
         val serialized = JsonEncoder.encode(wrapper)
         sendSerialized(peerId, serialized)
@@ -94,7 +94,7 @@ abstract class NetworkNode {
     /**
      * Registers a [handler] for a message [type].
      */
-    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: (MessageWrapper<T>) -> Unit) {
+    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: (MessageEnvelope<T>) -> Unit) {
         if(!handlerMap.containsKey(type)) {
             handlerMap[type] = mutableListOf()
         }
@@ -106,7 +106,7 @@ abstract class NetworkNode {
      * The corresponding message handlers are called.
      */
     fun receive(serialized: SerializedMessage) {
-        val message: MessageWrapper<out Message> = JsonEncoder.decode(serialized)
+        val message: MessageEnvelope<out Message> = JsonEncoder.decode(serialized)
 
         logger.debug { "received message: $message" }
 
@@ -116,7 +116,7 @@ abstract class NetworkNode {
     /**
      * Dispatches the [message] to the correct handler.
      */
-    private fun <T : Message> dispatchToHandler(message: MessageWrapper<T>) {
+    private fun <T : Message> dispatchToHandler(message: MessageEnvelope<T>) {
         //TODO technical debt here
         //unchecked cast in order to retrieve the type of the message handler
         @Suppress("UNCHECKED_CAST")

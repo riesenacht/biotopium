@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.model.message.Message
-import ch.riesenacht.biotopium.network.model.message.MessageWrapper
+import ch.riesenacht.biotopium.network.model.message.MessageEnvelope
 
 /**
  * Represents a message handler.
@@ -27,13 +27,13 @@ import ch.riesenacht.biotopium.network.model.message.MessageWrapper
  * @author Manuel Riesen
  */
 class MessageHandler<T : Message>(
-    private val handlerFun: (MessageWrapper<T>) -> Unit
+    private val handlerFun: (MessageEnvelope<T>) -> Unit
 ) {
 
     /**
      * Invokes the handler function of the message handler using the given [message].
      */
-    operator fun invoke(message: MessageWrapper<T>) {
+    operator fun invoke(message: MessageEnvelope<T>) {
         handlerFun.invoke(message)
     }
 }

@@ -24,15 +24,16 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Polymorphic
 
 /**
- * The wrapper of a message.
+ * The envelope of a message.
+ * Contains information about its sender.
  *
  * @property peerId the ID of the sender
  *
  * @author Manuel Riesen
  */
 @Serializable
-@SerialName("MessageWrapper")
-data class MessageWrapper<T : Message> (
+@SerialName("MessageEnvelope")
+data class MessageEnvelope<T : Message> (
     val peerId: PeerId,
     @Polymorphic
     val message: T

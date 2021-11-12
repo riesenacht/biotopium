@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
+import ch.riesenacht.biotopium.core.action.model.ActionFrame
 import ch.riesenacht.biotopium.core.action.model.IntroductionAction
 import ch.riesenacht.biotopium.core.world.model.item.Hoe
 import ch.riesenacht.biotopium.core.world.model.item.IntroductionGift
@@ -51,7 +51,7 @@ class IntroductionContractTest : ContractTest() {
         )
 
         val content = IntroductionAction(gift)
-        val action = ActionEnvelope(currentTimestamp, owner, content)
+        val action = ActionFrame(currentTimestamp, owner, content)
 
         execContract(action, world)
 

@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
+import ch.riesenacht.biotopium.core.action.model.ActionFrame
 import ch.riesenacht.biotopium.core.action.model.ClaimRealmAction
 import ch.riesenacht.biotopium.core.world.Player
 import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
@@ -50,7 +50,7 @@ class ClaimRealmContractTest : ContractTest() {
         world.players[owner]?.addItem(realmClaimPaper)
 
         val content = ClaimRealmAction(realm, realmClaimPaper)
-        val action = ActionEnvelope(currentTimestamp, owner, content)
+        val action = ActionFrame(currentTimestamp, owner, content)
 
         execContract(action, world)
 

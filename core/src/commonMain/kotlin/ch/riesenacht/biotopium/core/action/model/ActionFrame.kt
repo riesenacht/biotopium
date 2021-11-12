@@ -26,13 +26,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents an envelope containing an action as [content].
+ * Represents an action frame containing an action as [content].
  *
  * @author Manuel Riesen
  */
-@SerialName("ActionEnvelope")
+@SerialName("ActionFrame")
 @Serializable
-data class ActionEnvelope<T : Action>(
+data class ActionFrame<T : Action>(
     override val timestamp: Timestamp,
     override val author: Address,
     @Polymorphic

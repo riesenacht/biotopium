@@ -19,11 +19,10 @@
 package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionEnvelope
+import ch.riesenacht.biotopium.core.action.model.ActionFrame
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
@@ -79,7 +78,7 @@ abstract class EncoderTest {
             Hash("prevHash"),
             Address.fromBase64("test"),
             Address.fromBase64("blocklord"),
-            ActionEnvelope(zeroTimestamp, defaultOwner, action)
+            ActionFrame(zeroTimestamp, defaultOwner, action)
         )
         return raw.toHashedBlock(BlockUtils.hash(raw.toHashable()))
     }
