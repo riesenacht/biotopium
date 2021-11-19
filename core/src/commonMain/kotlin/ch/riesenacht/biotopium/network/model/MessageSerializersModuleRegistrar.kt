@@ -42,8 +42,8 @@ object MessageSerializersModuleRegistrar : SerializersModuleRegistrar(Serializer
         subclass(BlockAddMessage::class)
         subclass(ChainFwdMessage::class)
         subclass(ChainReqMessage::class)
-        subclass(SignAckMessage::class)
-        subclass(SignReqMessage::class)
+        subclass(ActionAckMessage::class)
+        subclass(ActionReqMessage::class)
     }
 
 })

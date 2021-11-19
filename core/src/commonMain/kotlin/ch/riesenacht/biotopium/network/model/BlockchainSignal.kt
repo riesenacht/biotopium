@@ -41,12 +41,12 @@ enum class BlockchainSignal {
     CHAIN_FWD,
 
     /**
-     * The signing of a block is requested (request for [SIGN_ACK]).
+     * The signing of a block is requested (request for [ACTION_ACK]).
      */
-    SIGN_REQ,
+    ACTION_REQ,
 
     /**
-     * The signing of a block is acknowledged (response to [SIGN_REQ]).
+     * The signing of a block is acknowledged (response to [ACTION_REQ]).
      */
-    SIGN_ACK
+    ACTION_ACK
 }

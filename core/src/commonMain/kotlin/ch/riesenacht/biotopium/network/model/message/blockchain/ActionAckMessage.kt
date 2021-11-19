@@ -18,22 +18,22 @@
 
 package ch.riesenacht.biotopium.network.model.message.blockchain
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the message sent for requesting a signature for a block.
- * The message contains the unsigned [block] to sign.
+ * Represents the message sent if a [ActionReqMessage] is accepted
+ * and the [block] is signed.
  *
  * @author Manuel Riesen
  */
 @Serializable
-@SerialName("SignRequestMessage")
-data class SignReqMessage(
-    val block: HashedBlock
+@SerialName("ActionAckMessage")
+data class ActionAckMessage(
+    val block: Block
 ) : BlockchainMessage() {
 
-    override val signal = BlockchainSignal.SIGN_REQ
+    override val signal = BlockchainSignal.ACTION_ACK
 }
