@@ -18,8 +18,7 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.block
 
-import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.blockchain.model.HashableProducible
 import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 
@@ -32,7 +31,7 @@ import ch.riesenacht.biotopium.core.crypto.model.Hash
  *
  * @author Manuel Riesen
 */
-sealed interface AbstractBlock : OriginInfo {
+sealed interface AbstractBlock : OriginInfo, HashableProducible {
 
     /**
      * The position on the blockchain.
@@ -43,11 +42,6 @@ sealed interface AbstractBlock : OriginInfo {
      * The hash of the previous block.
      */
     val prevHash: Hash
-
-    /**
-     * The validator of the block.
-     */
-    val validator: Address
 
     /**
      * The data stored in the block.
@@ -61,12 +55,11 @@ sealed interface AbstractBlock : OriginInfo {
      * Additional values such as present hashes and signatures are omitted.
      * Internally, a [RawBlock] is used to achieve this.
      */
-    fun toHashable(): RawBlock = RawBlock(
+    override fun toHashable() = RawBlock(
         height = height,
         timestamp = timestamp,
         prevHash = prevHash,
         author = author,
-        validator = validator,
         data = data
     )
 }

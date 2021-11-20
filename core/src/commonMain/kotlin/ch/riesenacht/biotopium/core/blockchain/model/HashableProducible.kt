@@ -16,25 +16,20 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message.blockchain
-
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
-import ch.riesenacht.biotopium.network.model.BlockchainSignal
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+package ch.riesenacht.biotopium.core.blockchain.model
 
 /**
- * Represents the message sent if a [ActionReqMessage] is accepted
- * and the [action] is acknowledged.
+ * Represents a data structure of which a [Hashable] can be created.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@SerialName("ActionAckMessage")
-data class ActionAckMessage<T : Action>(
-    val action: ActionFrame<T>
-) : BlockchainMessage() {
+interface HashableProducible {
 
-    override val signal = BlockchainSignal.ACTION_ACK
+    /**
+     * Creates a [Hashable] out of the current instance.
+     * A [Hashable] consists of (only) the relevant properties
+     * for creating a hash.
+     * Additional values such as present hashes and signatures are omitted.
+     */
+    fun toHashable(): Hashable
 }

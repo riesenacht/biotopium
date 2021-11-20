@@ -20,8 +20,14 @@ package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.frame.toActionFrame
+import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
+import ch.riesenacht.biotopium.core.crypto.model.KeyPair
+import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
+import ch.riesenacht.biotopium.core.crypto.model.PublicKey
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.core.time.model.Timestamp
@@ -63,11 +69,23 @@ abstract class ContractTest {
 
     }
 
+    val authorKeyPair = KeyPair(
+        privateKey = PrivateKey("iv1qW7KDjJyBkKiLUaH9cr0cgVhhWDS7f5sBd8Lyt9UYIsd9QI7eQH/CcISqjNLeZjgpekdcPVnJlzJkySQ4dw=="),
+        publicKey = PublicKey("GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=")
+    )
+
     protected val defaultOwner: Owner
-    get() = Owner.fromBase64("me")
+    get() = Owner(authorKeyPair.publicKey)
+
 
     protected val currentTimestamp: Timestamp
     get() = DateUtils.currentTimestamp()
+
+    protected inline fun <reified T : Action> createActionFrame(timestamp: Timestamp, author: Address, action: T, privateKey: PrivateKey = authorKeyPair.privateKey): ActionFrame<T> {
+        val raw = RawBlockRecord(timestamp, author, action)
+        val hashed = raw.toHashedRecord(BlockUtils.hash(raw))
+        return hashed.toActionFrame(BlockUtils.sign(hashed, privateKey))
+    }
 
     protected fun createMutableTestWorldWithPlayer(address: Address): MutableWorld {
         val world = TestMutableWorld()

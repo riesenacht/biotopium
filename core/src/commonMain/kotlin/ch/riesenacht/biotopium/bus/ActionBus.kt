@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.bus
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
 
 /**
  * Represents the event bus for incoming actions.

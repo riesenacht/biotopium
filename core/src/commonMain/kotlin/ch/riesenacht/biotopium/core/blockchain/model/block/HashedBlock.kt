@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.blockchain.model.Hashed
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.time.model.Timestamp
@@ -42,21 +42,19 @@ data class HashedBlock(
     override val timestamp: Timestamp,
     override val prevHash: Hash,
     override val author: Address,
-    override val validator: Address,
     override val data: BlockData,
     override val hash: Hash,
 ) : AbstractBlock, Hashed {
 
     /**
-     * Creates a [signed block][SignedBlock] out of the current block.
+     * Creates a [block][Block] out of the current hashed block.
      * Extends the block with the [author's signature][sign].
      */
-    fun toSignedBlock(sign: Signature) = SignedBlock(
+    fun toBlock(sign: Signature) = Block(
         height = height,
         timestamp = timestamp,
         prevHash = prevHash,
         author = author,
-        validator = validator,
         data = data,
         hash = hash,
         sign = sign

@@ -20,7 +20,7 @@ package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.action.contract.ActionContractManager
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
 import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
 import ch.riesenacht.biotopium.core.world.World
 

@@ -19,7 +19,12 @@
 package ch.riesenacht.biotopium.core.blockchain.model
 
 import ch.riesenacht.biotopium.core.blockchain.model.block.*
+import ch.riesenacht.biotopium.core.blockchain.model.block.EmptyBlockData
+import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecordContent
+import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
 import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
@@ -36,25 +41,17 @@ object BlockchainSerializersModuleRegistrar : SerializersModuleRegistrar(Seriali
     polymorphic(AbstractBlock::class) {
         subclass(RawBlock::class)
         subclass(HashedBlock::class)
-        subclass(SignedBlock::class)
         subclass(Block::class)
     }
 
     // Block class hierarchy from Hashed perspective
     polymorphic(Hashed::class) {
         subclass(HashedBlock::class)
-        subclass(SignedBlock::class)
         subclass(Block::class)
     }
 
     // Block class hierarchy from Signed perspective
     polymorphic(Signed::class) {
-        subclass(SignedBlock::class)
-        subclass(Block::class)
-    }
-
-    // Block class hierarchy from Validated perspective
-    polymorphic(Validated::class) {
         subclass(Block::class)
     }
 
@@ -62,4 +59,16 @@ object BlockchainSerializersModuleRegistrar : SerializersModuleRegistrar(Seriali
     polymorphic(BlockData::class) {
         subclass(EmptyBlockData::class)
     }
+
+    // Hashable type hierarchy
+    polymorphic(Hashable::class) {
+        subclass(RawBlock::class)
+        subclass(EmptyBlockData.RawEmptyBlockData::class)
+
+        //TODO replace workaround for supporting serialization of a type with generics
+        // see: https://github.com/Kotlin/kotlinx.serialization/issues/944
+        @Suppress("UNCHECKED_CAST")
+        subclass(RawBlockRecord::class, RawBlockRecord.serializer( PolymorphicSerializer(BlockRecordContent::class)) as KSerializer<RawBlockRecord<*>>)
+    }
+
 })

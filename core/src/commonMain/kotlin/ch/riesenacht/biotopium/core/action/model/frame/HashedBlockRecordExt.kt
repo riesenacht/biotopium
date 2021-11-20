@@ -16,19 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.block
+package ch.riesenacht.biotopium.core.action.model.frame
 
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.blockchain.model.record.HashedBlockRecord
 import ch.riesenacht.biotopium.core.crypto.model.Signature
 
-/**
- * Represents a block which contains the author's signature [signature][sign].
- *
- * @author Manuel Riesen
- */
-sealed interface Signed {
-
-    /**
-     * The author's signature for ensuring integrity.
-     */
-    val sign: Signature
-}
+fun <T : Action> HashedBlockRecord<T>.toActionFrame(sign: Signature) = ActionFrame(
+    timestamp = timestamp,
+    author = author,
+    content = content,
+    hash = hash,
+    sign = sign
+)

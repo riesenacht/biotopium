@@ -16,52 +16,39 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.block
+package ch.riesenacht.biotopium.core.action.model.frame
 
+import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.blockchain.model.block.BlockData
+import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecord
+import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.time.model.Timestamp
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a signed block.
- *
- * @see AbstractBlock
- * @see Hashed
- * @see Signed
- * @see Block
+ * Represents an action frame containing an action as [content].
  *
  * @author Manuel Riesen
  */
+@SerialName("ActionFrame")
 @Serializable
-@SerialName("SignedBlock")
-data class SignedBlock(
-    override val height: ULong,
+data class ActionFrame<T : Action>(
     override val timestamp: Timestamp,
-    override val prevHash: Hash,
     override val author: Address,
-    override val validator: Address,
-    override val data: BlockData,
+    @Polymorphic
+    override val content: T,
     override val hash: Hash,
-    override val sign: Signature
-) : AbstractBlock, Hashed, Signed {
+    override val sign: Signature,
+) : BlockRecord<T>, BlockData {
 
-    /**
-     * Creates a [block][Block] out of the current signed block.
-     * Extends the block with the [validation signature][validSign].
-     */
-    fun toBlock(validSign: Signature) = Block(
-        height = height,
-        timestamp = timestamp,
-        prevHash = prevHash,
-        author = author,
-        validator = validator,
-        data = data,
-        hash = hash,
-        sign = sign,
-        validSign = validSign
+    override fun toHashable() = RawBlockRecord(
+        timestamp,
+        author,
+        content
     )
 }

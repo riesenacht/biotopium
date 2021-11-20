@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecordContent
+
 /**
  * Represents an action performed by a player or the game itself.
  * An action can be seen as an event in an event-sourced system.
@@ -25,7 +27,7 @@ package ch.riesenacht.biotopium.core.action.model
  *
  * @author Manuel Riesen
 */
-sealed interface Action {
+sealed interface Action : BlockRecordContent {
 
     /**
      * The type of action

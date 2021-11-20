@@ -32,21 +32,15 @@ val genesisRules = blockRuleset {
     // The block's hash is valid
     rule { block: Block, _: Block -> block.hash == BlockUtils.hash(block) }
 
-    // The author's signature is valid
+    // The signature of the block author is valid
     rule { block: Block, _: Block -> Ed25519.verify(block.sign, block.hash.hex, block.author.publicKey) }
 
-    // The validator's signature is valid
-    rule { block: Block, _: Block -> Ed25519.verify(block.validSign, block.hash.hex, block.validator.publicKey) }
+    // The hash of the block's data is valid
+    rule { block: Block, _: Block -> block.data.hash == BlockUtils.hash(block.data) }
 
-    // TODO remove after standalone integrity verification of block data
-    // The author of the block equals the author of the block data
-    // This rule is required until the integrity of a block data can be ensured on its own
-    rule { block: Block, _: Block -> block.author == block.data.author }
+    // The signature of the block data author is valid
+    rule { block: Block, _: Block -> Ed25519.verify(block.data.sign, block.data.hash.hex, block.data.author.publicKey) }
 
-    // TODO remove after standalone integrity verification of block data
-    // The timestamp of the block equals the timestamp of the block data
-    // This rule is required until the integrity of a block data can be ensured on its own
-    rule { block, _ -> block.timestamp == block.data.timestamp }
 }
 
 /**

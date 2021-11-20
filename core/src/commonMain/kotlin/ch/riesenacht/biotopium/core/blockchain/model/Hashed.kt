@@ -16,16 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.block
+package ch.riesenacht.biotopium.core.blockchain.model
 
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 
 /**
- * Represents a block which contains a [hash] of its relevant property values.
+ * Represents a data structure which contains a [hash] of its relevant property values.
  *
  * @author Manuel Riesen
  */
-sealed interface Hashed {
+interface Hashed {
 
     /**
      * The hash of the relevant property values.

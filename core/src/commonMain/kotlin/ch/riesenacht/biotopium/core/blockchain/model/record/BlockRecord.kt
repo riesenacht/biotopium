@@ -16,19 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.model.record
 
-import ch.riesenacht.biotopium.core.time.model.Timestamp
-import kotlinx.serialization.Serializable
+import ch.riesenacht.biotopium.core.blockchain.model.Hashed
+import ch.riesenacht.biotopium.core.blockchain.model.Signed
 
 /**
- * Represents empty block data.
- * This kind of block data should only occur on the genesis block.
+ * Represents a block record contained in a block on the blockchain.
+ * Block records can hold content of a given [type][T].
+ * The abstract block record contains all common properties.
  *
  * @author Manuel Riesen
  */
-@Serializable
-class EmptyBlockData(
-    override val timestamp: Timestamp,
-    override val author: Address
-) : BlockData
+interface BlockRecord<T : BlockRecordContent> : AbstractBlockRecord<T>, Hashed, Signed

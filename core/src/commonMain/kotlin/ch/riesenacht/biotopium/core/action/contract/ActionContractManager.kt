@@ -19,8 +19,8 @@
 package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionFrame
 import ch.riesenacht.biotopium.core.action.model.ActionType
+import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
 import ch.riesenacht.biotopium.core.world.MutableWorld
 
 /**

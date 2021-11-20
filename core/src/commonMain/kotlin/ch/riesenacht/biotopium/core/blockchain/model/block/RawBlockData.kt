@@ -16,11 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.model.block
+
+import ch.riesenacht.biotopium.core.blockchain.model.Hashable
+import ch.riesenacht.biotopium.core.blockchain.model.HashableProducible
+import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
 
 /**
- * Represents data stored in a [block][ch.riesenacht.biotopium.core.blockchain.model.block.Block].
+ * Represents raw data of a block.
+ * Raw block data is missing information for ensuring integrity.
+ *
+ * @see BlockData
  *
  * @author Manuel Riesen
  */
-interface BlockData : OriginInfo
+sealed interface RawBlockData : OriginInfo, Hashable, HashableProducible

@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.network.model.message.blockchain
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

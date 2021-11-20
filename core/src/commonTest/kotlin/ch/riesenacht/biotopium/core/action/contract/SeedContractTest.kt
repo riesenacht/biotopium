@@ -18,7 +18,6 @@
 
 package ch.riesenacht.biotopium.core.action.contract
 
-import ch.riesenacht.biotopium.core.action.model.ActionFrame
 import ch.riesenacht.biotopium.core.action.model.SeedAction
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.Seed
@@ -58,7 +57,7 @@ class SeedContractTest : ContractTest() {
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
         val content = SeedAction(plot.copy(plant = plant), seed)
-        val action = ActionFrame(currentTimestamp, owner, content)
+        val action = createActionFrame(currentTimestamp, owner, content)
 
         execContract(action, world)
 

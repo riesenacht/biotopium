@@ -2,7 +2,6 @@ package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.effect.applyEffect
-import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.Owner
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.*
@@ -39,7 +38,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = ChunkGenesisAction(tiles)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ActionFrame;0;me;ChunkGenesisAction;DefaultTile;1;1;0;DefaultTile;2;3;0;DefaultTile;4;5;0;DefaultTile;6;7;0;DefaultTile;8;9;0;0"
+        val expected = "1;1;prevHash;test;ActionFrame;0;GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=;ChunkGenesisAction;DefaultTile;1;1;0;DefaultTile;2;3;0;DefaultTile;4;5;0;DefaultTile;6;7;0;DefaultTile;8;9;0;0;b73a3ed5a5f9fd2c6ee09c074cc01fc625a3c190e1b53d52cd695aac52e46561;tFJ6SNhjy6Z2DRj7wKhIXcyHHMxRZ8V3qJV+Ncgdg26J5wydG5/Lw8eFOi1WLd9KzXp+T2LDGJNTq2G7JMI3DQ=="
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -54,7 +53,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = ClaimRealmAction(realm, realmClaimPaper)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ActionFrame;0;me;ClaimRealmAction;me;1;0;me;2;2"
+        val expected = "1;1;prevHash;test;ActionFrame;0;GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=;ClaimRealmAction;me;1;0;me;2;2;73325f604d6081a5c1334b498c9b7f2b6a6c638feb5f8e61536fe34b2e5709f9;EDxlB3wSpjKyGaxEf7/MOd+pW67QOlDm0v+zy++EWxvIsfGqa1EhcDgbrbuEFiOEOdCkexwhcWtFC1uYsQEqCw=="
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -68,7 +67,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = CreatePlotAction(plot, hoe)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ActionFrame;0;me;CreatePlotAction;1;0;1;me;0;3"
+        val expected = "1;1;prevHash;test;ActionFrame;0;GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=;CreatePlotAction;1;0;1;me;0;3;9d6eeaa39b95af5cf23c4e96fc438946136f7ff57f27e7026fbefe803649a269;9xvM/Z/8mPDMMDm75E0+Ns8SzPxQGcoBaBotjyzlRKo5KLQem4zskTYGfHBEDspeAQZZpgCY8D3z+UJNVkRDBw=="
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -81,7 +80,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = GrowAction(plot)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ActionFrame;0;me;GrowAction;1;0;1;5"
+        val expected = "1;1;prevHash;test;ActionFrame;0;GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=;GrowAction;1;0;1;5;d4adeca141e6ec98c7978dec07df8ed05d84a83c764ca38cf38d792c0a28baca;6F/NXx9CuV4sF4bg1lcdNynoxSC9eG/Fw4G1L4Hm3kaFxDomXHYUIApGoRf53tLCJ9GnjgyBQvxslfRVUtL7CQ=="
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -111,7 +110,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = HarvestAction(harvest, plot)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ActionFrame;0;me;HarvestAction;me;0;3;me;0;1;me;0;1;1;0;1;6"
+        val expected = "1;1;prevHash;test;ActionFrame;0;GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=;HarvestAction;me;0;3;me;0;1;me;0;1;1;0;1;6;8b1b9f7a4c20652bb53500828f63ad3edc44bfd1807de43f74d6aeada74727f4;sLNo4LqiJAJhuZieZu+lOSX20uZ+slK/n2QTwDkU0QQTpQwqHR1NlFtnloDWfRDCxve1S075OFHI6rxYJapSAA=="
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -138,7 +137,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = IntroductionAction(introductionGift)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ActionFrame;0;me;IntroductionAction;me;2;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;1;1;me;0;1;1"
+        val expected = "1;1;prevHash;test;ActionFrame;0;GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=;IntroductionAction;me;2;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;0;me;1;1;me;0;1;1;5a6abc042232f2e8490125dc01ea0d3ce134cf3f41a4e3b324acb7afe2e887c1;zn2wayUKyNdNSwTQ3B/YAD5avv0M3XhtyOSm6q5J2YDQd31cwaOod974jpXvn30JMd5Kae2WMQo2sm40lUmcDA=="
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 
@@ -156,7 +155,7 @@ class HashableStringEncoderTest : EncoderTest() {
         val action = SeedAction(plot, seed)
         val block = generateDefaultBlock(action)
 
-        val expected = "1;1;prevHash;test;blocklord;ActionFrame;0;me;SeedAction;1;0;1;me;1;1;4"
+        val expected = "1;1;prevHash;test;ActionFrame;0;GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=;SeedAction;1;0;1;me;1;1;4;b8b3df977dd0977d6683f67dedf046812698dd1004c5d00a73778daab1677bd5;Edim7MhoKW4ETeRSDCB9coQW2DQkj58VYBRHwvtJRlS2w6AIHgY7lk5PcC3iwvsDf81CXgqvKWMA2Cza4ewaDQ=="
 
         val encoded = HashableStringEncoder.encode(block.toHashable())
 

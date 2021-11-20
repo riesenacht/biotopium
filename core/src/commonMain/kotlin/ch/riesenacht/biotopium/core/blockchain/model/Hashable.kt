@@ -16,25 +16,14 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message.blockchain
-
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
-import ch.riesenacht.biotopium.network.model.BlockchainSignal
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+package ch.riesenacht.biotopium.core.blockchain.model
 
 /**
- * Represents the message sent if a [ActionReqMessage] is accepted
- * and the [action] is acknowledged.
+ * Represents a type of which a hash can be generated.
+ * Often, not all fields of a type should be used to create a hash from.
+ * Therefore, the type is converted into a [Hashable] first.
+ * Usually, the implementation of the [Hashable] interface does not contain hashes of itself or signatures.
  *
  * @author Manuel Riesen
  */
-@Serializable
-@SerialName("ActionAckMessage")
-data class ActionAckMessage<T : Action>(
-    val action: ActionFrame<T>
-) : BlockchainMessage() {
-
-    override val signal = BlockchainSignal.ACTION_ACK
-}
+interface Hashable

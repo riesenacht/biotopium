@@ -16,43 +16,48 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.block
+package ch.riesenacht.biotopium.core.blockchain.model.record
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Hashable
+import ch.riesenacht.biotopium.core.blockchain.model.HashableProducible
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.time.model.Timestamp
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a raw, unfinished block.
- * Raw blocks are used in the block creation process.
- *
- * @see Block
+ * Represents a raw block record.
+ * The raw block record is missing information for ensuring integrity
+ * and is used in the creation process.
  *
  * @author Manuel Riesen
  */
 @Serializable
-@SerialName("RawBlock")
-data class RawBlock(
-    override val height: ULong,
+@SerialName("RawBlockRecord")
+data class RawBlockRecord<T : BlockRecordContent>(
     override val timestamp: Timestamp,
-    override val prevHash: Hash,
     override val author: Address,
-    override val data: BlockData
-) : AbstractBlock, Hashable {
+    @Polymorphic
+    override val content: T
+) : AbstractBlockRecord<T>, Hashable, HashableProducible {
 
     /**
-     * Creates a [hashed block][HashedBlock] out of the current raw block.
-     * The block is extended with its [hash].
+     * Creates a [hashed record][HashedBlockRecord] out of the current raw record.
+     * The record is extended with its [hash].
      */
-    fun toHashedBlock(hash: Hash) = HashedBlock(
-        height = height,
+    fun toHashedRecord(hash: Hash) = HashedBlockRecord(
         timestamp = timestamp,
-        prevHash = prevHash,
         author = author,
-        data = data,
+        content = content,
         hash = hash
     )
+
+    /**
+     * Returns a hashable instance.
+     * Since the raw block record holds only the required fields for hashing,
+     * the instance itself is returned.
+     */
+    override fun toHashable() = this
 }

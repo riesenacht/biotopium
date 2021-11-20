@@ -19,7 +19,8 @@
 package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
+import ch.riesenacht.biotopium.core.blockchain.model.Hashed
+import ch.riesenacht.biotopium.core.blockchain.model.Signed
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.time.model.Timestamp
@@ -34,14 +35,11 @@ import kotlinx.serialization.Serializable
  * A block holds information about its [author].
  * The [author] creates a [signature][sign] on the block's [hash].
  * Each block acts as a storage for [data].
- * The block's validity is confirmed by the [validator].
- * A [validator] creates a [validation signature][validSign] on the block's [hash].
  * The block's [hash] is used for chaining blocks together, as well as ensure immutability of the block.
  *
  * @see AbstractBlock
  * @see Hashed
  * @see Signed
- * @see Validated
  *
  * @author Manuel Riesen
  */
@@ -52,9 +50,7 @@ data class Block(
     override val timestamp: Timestamp,
     override val prevHash: Hash,
     override val author: Address,
-    override val validator: Address,
     override val data: BlockData,
     override val hash: Hash,
     override val sign: Signature,
-    override val validSign: Signature
-) : AbstractBlock, Hashed, Signed, Validated
+) : AbstractBlock, Hashed, Signed

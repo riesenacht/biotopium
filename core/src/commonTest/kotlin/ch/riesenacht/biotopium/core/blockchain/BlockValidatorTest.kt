@@ -21,8 +21,8 @@ package ch.riesenacht.biotopium.core.blockchain
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
-import ch.riesenacht.biotopium.core.blockchain.model.EmptyBlockData
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.blockchain.model.block.EmptyBlockData
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.Sha3
@@ -42,13 +42,9 @@ import kotlin.test.assertTrue
 class BlockValidatorTest {
 
     private val authorKeyPair = Ed25519.generateKeyPair()
-    private val validatorKeyPair = Ed25519.generateKeyPair()
 
     private val author: Address
     get() = Address(authorKeyPair.publicKey)
-
-    private val validator: Address
-    get() = Address(validatorKeyPair.publicKey)
 
     private val zeroTimestamp: Timestamp
     get() = Timestamp(0)
@@ -61,16 +57,13 @@ class BlockValidatorTest {
             height = 0u,
             timestamp = zeroTimestamp,
             author = author,
-            validator = validator,
-            data = EmptyBlockData(zeroTimestamp, author),
+            data = EmptyBlockData.of(zeroTimestamp, author, authorKeyPair.privateKey),
             prevHash = Hash("")
         )
         val hash = BlockUtils.hash(raw)
 
         val hashed = raw.toHashedBlock(hash)
-        return hashed
-            .toSignedBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
-            .toBlock(BlockUtils.sign(hashed, validatorKeyPair.privateKey))
+        return hashed.toBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
     }
 
     private fun generateNextBlock(prev: Block): Block {
@@ -79,14 +72,11 @@ class BlockValidatorTest {
             height = prev.height + 1u,
             timestamp = timestamp,
             author = author,
-            validator = validator,
-            data = EmptyBlockData(timestamp, author),
+            data = EmptyBlockData.of(timestamp, author, authorKeyPair.privateKey),
             prevHash = prev.hash
         )
         val hashed = raw.toHashedBlock(BlockUtils.hash(raw))
-        return hashed
-            .toSignedBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
-            .toBlock(BlockUtils.sign(hashed, validatorKeyPair.privateKey))
+        return hashed.toBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
     }
 
     private fun generateBlockchain(size: Int): Blockchain {
@@ -125,14 +115,6 @@ class BlockValidatorTest {
         val genesisBlock = generateGenesisBlock()
         val newKeyPair = Ed25519.generateKeyPair()
         val invalidGenesisBlock = genesisBlock.copy(sign = BlockUtils.sign(genesisBlock, newKeyPair.privateKey))
-        assertFalse(BlockValidator.validateNew(invalidGenesisBlock, emptyList()))
-    }
-
-    @Test
-    fun testValidateNew_negative_genesisBlock_invalidValidSign() {
-        val genesisBlock = generateGenesisBlock()
-        val newKeyPair = Ed25519.generateKeyPair()
-        val invalidGenesisBlock = genesisBlock.copy(validSign = BlockUtils.sign(genesisBlock, newKeyPair.privateKey))
         assertFalse(BlockValidator.validateNew(invalidGenesisBlock, emptyList()))
     }
 
@@ -194,17 +176,6 @@ class BlockValidatorTest {
     }
 
     @Test
-    fun testValidateNew_negative_firstBlockAfterGenesis_invalidValidSign() {
-        val genesisBlock = generateGenesisBlock()
-        val invalidKeyPair = Ed25519.generateKeyPair()
-        val block = generateNextBlock(genesisBlock)
-        val invalidValidSignedBlock = block.copy(validSign = Ed25519.sign(block.hash.hex, invalidKeyPair.privateKey))
-
-        val blockchain = listOf(genesisBlock)
-        assertFalse(BlockValidator.validateNew(invalidValidSignedBlock, blockchain))
-    }
-
-    @Test
     fun testValidateChain_positive_genesisBlock() {
         val genesisBlock = generateGenesisBlock()
         val blockchain = listOf(genesisBlock)
@@ -226,15 +197,6 @@ class BlockValidatorTest {
         val genesisBlock = generateGenesisBlock()
         val newKeyPair = Ed25519.generateKeyPair()
         val invalidGenesisBlock = genesisBlock.copy(sign = BlockUtils.sign(genesisBlock, newKeyPair.privateKey))
-        val blockchain = listOf(invalidGenesisBlock)
-        assertFalse(BlockValidator.validateChain(blockchain))
-    }
-
-    @Test
-    fun testValidateChain_negative_genesisBlock_invalidValidSign() {
-        val genesisBlock = generateGenesisBlock()
-        val newKeyPair = Ed25519.generateKeyPair()
-        val invalidGenesisBlock = genesisBlock.copy(validSign = BlockUtils.sign(genesisBlock, newKeyPair.privateKey))
         val blockchain = listOf(invalidGenesisBlock)
         assertFalse(BlockValidator.validateChain(blockchain))
     }
@@ -297,30 +259,39 @@ class BlockValidatorTest {
     }
 
     @Test
-    fun testValidateChain_negative_firstBlockAfterGenesis_invalidValidSign() {
+    fun testValidateChain_negative_genesisBlock_invalidDataHash() {
         val genesisBlock = generateGenesisBlock()
-        val invalidKeyPair = Ed25519.generateKeyPair()
-        val block = generateNextBlock(genesisBlock)
-        val invalidValidSignedBlock = block.copy(validSign = Ed25519.sign(block.hash.hex, invalidKeyPair.privateKey))
+        val invalidGenesisBlock = genesisBlock.copy(data = (genesisBlock.data as EmptyBlockData).copy(hash = Sha3.sha256("")))
+        assertFalse(BlockValidator.validateNew(invalidGenesisBlock, emptyList()))
+    }
 
-        val blockchain = listOf(genesisBlock, invalidValidSignedBlock)
+    @Test
+    fun testValidateChain_negative_firstBlockAfterGenesis_invalidDataHash() {
+        val genesisBlock = generateGenesisBlock()
+        val block = generateNextBlock(genesisBlock)
+        val invalidBlock = block.copy(data = (block.data as EmptyBlockData).copy(hash = Sha3.sha256("")))
+
+        val blockchain = listOf(genesisBlock, invalidBlock)
         assertFalse(BlockValidator.validateChain(blockchain))
     }
 
-    // TODO remove after standalone integrity verification of block data
     @Test
-    fun testValidateChain_negative_genesisBlock_differentBlockDataAuthor() {
+    fun testValidateChain_negative_genesisBlock_invalidDataSignature() {
         val genesisBlock = generateGenesisBlock()
-        val invalidGenesisBlock = genesisBlock.copy(data = EmptyBlockData(genesisBlock.data.timestamp, Address.fromBase64("invalid")))
+        val newKeyPair = Ed25519.generateKeyPair()
+        val invalidGenesisBlock = genesisBlock.copy(data = (genesisBlock.data as EmptyBlockData).copy(sign = BlockUtils.sign(genesisBlock.data, newKeyPair.privateKey)))
         assertFalse(BlockValidator.validateNew(invalidGenesisBlock, emptyList()))
+
     }
 
-    // TODO remove after standalone integrity verification of block data
     @Test
-    fun testValidateChain_negative_genesisBlock_differentBlockDataTimestamp() {
+    fun testValidateChain_negative_firstBlockAfterGenesis_invalidDataSignature() {
         val genesisBlock = generateGenesisBlock()
-        val invalidGenesisBlock = genesisBlock.copy(data = EmptyBlockData(Timestamp(1), genesisBlock.data.author))
-        assertFalse(BlockValidator.validateNew(invalidGenesisBlock, emptyList()))
-    }
+        val newKeyPair = Ed25519.generateKeyPair()
+        val block = generateNextBlock(genesisBlock)
+        val invalidBlock = block.copy(data = (block.data as EmptyBlockData).copy(sign = BlockUtils.sign(genesisBlock.data, newKeyPair.privateKey)))
 
+        val blockchain = listOf(genesisBlock, invalidBlock)
+        assertFalse(BlockValidator.validateChain(blockchain))
+    }
 }

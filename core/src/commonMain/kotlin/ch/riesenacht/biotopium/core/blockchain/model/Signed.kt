@@ -16,25 +16,19 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.model
+package ch.riesenacht.biotopium.core.blockchain.model
 
-import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.BlockData
-import ch.riesenacht.biotopium.core.time.model.Timestamp
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import ch.riesenacht.biotopium.core.crypto.model.Signature
 
 /**
- * Represents an action frame containing an action as [content].
+ * Represents a data structure which contains the author's signature [signature][sign].
  *
  * @author Manuel Riesen
  */
-@SerialName("ActionFrame")
-@Serializable
-data class ActionFrame<T : Action>(
-    override val timestamp: Timestamp,
-    override val author: Address,
-    @Polymorphic
-    val content: T
-) : BlockData
+interface Signed {
+
+    /**
+     * The author's signature for ensuring integrity.
+     */
+    val sign: Signature
+}

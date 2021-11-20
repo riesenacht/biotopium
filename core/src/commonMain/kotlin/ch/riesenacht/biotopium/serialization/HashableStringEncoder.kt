@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.serialization
 
+import ch.riesenacht.biotopium.core.blockchain.model.Hashable
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.serializer
@@ -57,19 +58,17 @@ object HashableStringEncoder {
         override fun encodeValue(value: Any) {
             list.add(value)
         }
-
         /**
          * Ignores null values.
          */
         override fun encodeNull() {}
-
 
     }
 
     /**
      * Encodes the given [value] to a hashable string.
      */
-    inline fun <reified T> encode(value: T): String {
+    inline fun <reified T : Hashable> encode(value: T): String {
         encoder.encodeSerializableValue(serializer(), value)
         val encoded = encoder.list.joinToString(separator) { it.toString() }
         encoder.list.clear()

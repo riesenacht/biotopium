@@ -16,19 +16,27 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.block
+package ch.riesenacht.biotopium.core.blockchain.model.record
 
-import ch.riesenacht.biotopium.core.crypto.model.Signature
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.blockchain.model.Hashed
+import ch.riesenacht.biotopium.core.crypto.model.Hash
+import ch.riesenacht.biotopium.core.time.model.Timestamp
 
 /**
- * Represents a block which contains a [validation signature][validSign].
+ * Represents a hashed block record.
+ *
+ * @see AbstractBlockRecord
+ * @see HashedBlockRecord
+ * @see BlockRecord
  *
  * @author Manuel Riesen
  */
-sealed interface Validated {
+data class HashedBlockRecord<T : BlockRecordContent>(
+    override val timestamp: Timestamp,
+    override val author: Address,
+    override val content: T,
+    override val hash: Hash
+) : AbstractBlockRecord<T>, Hashed {
 
-    /**
-     * Validation signature of the block.
-     */
-    val validSign: Signature
 }

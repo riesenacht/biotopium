@@ -16,25 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.network.model.message.blockchain
+package ch.riesenacht.biotopium.core.blockchain.model.block
 
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
-import ch.riesenacht.biotopium.network.model.BlockchainSignal
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import ch.riesenacht.biotopium.core.blockchain.model.HashableProducible
+import ch.riesenacht.biotopium.core.blockchain.model.Hashed
+import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
+import ch.riesenacht.biotopium.core.blockchain.model.Signed
 
 /**
- * Represents the message sent if a [ActionReqMessage] is accepted
- * and the [action] is acknowledged.
+ * Represents data stored in a [block][Block].
  *
  * @author Manuel Riesen
  */
-@Serializable
-@SerialName("ActionAckMessage")
-data class ActionAckMessage<T : Action>(
-    val action: ActionFrame<T>
-) : BlockchainMessage() {
-
-    override val signal = BlockchainSignal.ACTION_ACK
-}
+interface BlockData : OriginInfo, Hashed, Signed, HashableProducible

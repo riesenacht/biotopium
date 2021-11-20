@@ -18,11 +18,14 @@
 
 package ch.riesenacht.biotopium.network.model
 
+import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.network.model.message.DebugMessage
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
 import ch.riesenacht.biotopium.network.model.message.blockchain.*
 import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
@@ -42,8 +45,13 @@ object MessageSerializersModuleRegistrar : SerializersModuleRegistrar(Serializer
         subclass(BlockAddMessage::class)
         subclass(ChainFwdMessage::class)
         subclass(ChainReqMessage::class)
-        subclass(ActionAckMessage::class)
-        subclass(ActionReqMessage::class)
+
+        //TODO replace workaround for supporting serialization of a type with generics
+        // see: https://github.com/Kotlin/kotlinx.serialization/issues/944
+        @Suppress("UNCHECKED_CAST")
+        subclass(ActionAckMessage::class, ActionAckMessage.serializer( PolymorphicSerializer(Action::class)) as KSerializer<ActionAckMessage<*>>)
+        @Suppress("UNCHECKED_CAST")
+        subclass(ActionReqMessage::class, ActionReqMessage.serializer( PolymorphicSerializer(Action::class)) as KSerializer<ActionReqMessage<*>>)
     }
 
 })
