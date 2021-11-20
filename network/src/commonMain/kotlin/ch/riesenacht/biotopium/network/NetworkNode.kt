@@ -117,8 +117,7 @@ abstract class NetworkNode {
      * Dispatches the [message] to the correct handler.
      */
     private fun <T : Message> dispatchToHandler(message: MessageEnvelope<T>) {
-        //TODO technical debt here
-        //unchecked cast in order to retrieve the type of the message handler
+        //UNCHECKED cast in order to retrieve the type of the message handler
         @Suppress("UNCHECKED_CAST")
         val handlerList = handlerMap[message.message::class] as List<MessageHandler<T>>
         handlerList.forEach { it.invoke(message) }

@@ -35,8 +35,7 @@ object ActionValidator {
      * Validates the execution of an [action] leveraging the [world].
      */
     fun <T : Action> validate(action: ActionFrame<T>, world: World): Boolean {
-        //TODO technical debt here
-        // unchecked cast in order to retrieve the ruleset of the specific type T
+        //UNCHECKED cast in order to retrieve the ruleset of the specific type T
         @Suppress("UNCHECKED_CAST")
         return (ActionContractManager.contracts[action.content.type]?.rules as ActionRuleSet<T>?)?.invoke(action.content, action, world) ?: false
     }

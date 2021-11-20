@@ -61,8 +61,7 @@ object ActionContractManager {
      * Executes the contract of a given [action] to the [world].
      */
     fun <T : Action> executeContract(action: ActionFrame<T>, world: MutableWorld) {
-        //TODO technical debt here
-        //unchecked cast in order to retrieve the contract type
+        //UNCHECKED cast in order to retrieve the contract type
         @Suppress("UNCHECKED_CAST")
         val contract: ActionContract<T> = contracts[action.content.type] as ActionContract<T>
         contract.exec(action.content, action, world)
