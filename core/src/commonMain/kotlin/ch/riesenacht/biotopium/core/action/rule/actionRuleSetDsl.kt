@@ -30,7 +30,7 @@ import ch.riesenacht.biotopium.core.world.model.Owner
  * @author Manuel Riesen
  */
 class ActionRuleSetBuilder<T : Action> {
-    private val predicates: MutableList<(T, OriginInfo, World) -> Boolean> = mutableListOf()
+    private val predicates: MutableList<ActionRule<T>> = mutableListOf()
 
     /**
      * Checks if a tile (identified by [x] and [y]) is owned by a given [owner].
@@ -54,13 +54,13 @@ class ActionRuleSetBuilder<T : Action> {
     /**
      * Adds a [predicate] to the current action ruleset.
      */
-    fun rule(predicate: (T, OriginInfo, World) -> Boolean) {
+    fun rule(predicate: ActionRule<T>) {
         this.predicates.add(predicate)
     }
 
     /**
-     * Builds the action rule set.
-     * If the rule set is empty, an always-invalid rule will be added.
+     * Builds the action ruleset.
+     * If the ruleset is empty, an always-invalid rule will be added.
      */
     fun build(): ActionRuleSet<T> {
 
@@ -73,7 +73,7 @@ class ActionRuleSetBuilder<T : Action> {
 }
 
 /**
- * Creates an action rule set and applies the [init] function.
+ * Creates an action ruleset and applies the [init] function.
  */
 fun <T : Action> rules(init: ActionRuleSetBuilder<T>.() -> Unit): ActionRuleSet<T> {
     val ruleSetBuilder = ActionRuleSetBuilder<T>()

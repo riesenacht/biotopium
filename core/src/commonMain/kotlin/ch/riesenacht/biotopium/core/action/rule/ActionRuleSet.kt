@@ -23,16 +23,18 @@ import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
 import ch.riesenacht.biotopium.core.world.World
 
 /**
- * Represents a rule set for validating an action.
- * An action rule set consists of a list of [predicates].
+ * Represents a ruleset for validating an action.
+ * An action ruleset is an [ActionRule] itself,
+ * which consists of multiple action rules (referred to as predicates).
+ * The action rules are represented as a list of [predicates].
  *
  * @author Manuel Riesen
  */
-class ActionRuleSet<T : Action>(private val predicates: List<(T, OriginInfo, World) -> Boolean>) {
+class ActionRuleSet<T : Action>(private val predicates: List<ActionRule<T>>): ActionRule<T> {
 
     /**
-     * Invokes the predicate to validate the new [action] using the action itself,
+     * Invokes all the predicates to validate the new [action] using the action itself,
      * information about its [origin] and the [world].
      */
-    operator fun invoke(action: T, origin: OriginInfo, world: World) = predicates.all { it.invoke(action, origin, world) }
+    override operator fun invoke(action: T, origin: OriginInfo, world: World) = predicates.all { it.invoke(action, origin, world) }
 }

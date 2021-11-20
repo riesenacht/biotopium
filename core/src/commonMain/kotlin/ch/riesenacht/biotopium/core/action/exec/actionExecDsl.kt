@@ -19,13 +19,9 @@
 package ch.riesenacht.biotopium.core.action.exec
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
-import ch.riesenacht.biotopium.core.world.MutableWorld
 
 
 /**
- * Creates an action execution from the given [execution function][execFn].
+ * Creates an action execution from the given [execution function][actionExec].
  */
-fun <T : Action> exec(execFn: (T, OriginInfo, MutableWorld) -> Unit): ActionExec<T> {
-    return ActionExec(execFn)
-}
+fun <T : Action> exec(actionExec: ActionExec<T>) = actionExec

@@ -24,8 +24,8 @@ import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
 
 /**
  * Represents the contract of an [Action].
- * An action contract describes both the rules for applying an action
- * and the behavior of an action.
+ * An action contract describes both the [rules] for applying an action
+ * and the [behavior of an action][exec].
  *
  * @author Manuel Riesen
  */

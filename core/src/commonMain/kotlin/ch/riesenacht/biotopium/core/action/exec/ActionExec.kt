@@ -24,19 +24,14 @@ import ch.riesenacht.biotopium.core.world.MutableWorld
 
 /**
  * Represents the execution behavior of an [Action].
- * The [execution function][execFun] is applied to the world.
  *
  * @author Manuel Riesen
  */
-class ActionExec<T : Action>(
-    private val execFun: (T, OriginInfo, MutableWorld) -> Unit
-) {
+fun interface ActionExec<T : Action> {
 
     /**
-     * Invokes the execution function of the [action] with its [origin] information
+     * Executes the execution function of the [action] with its [origin] information
      * and applies the action on the [world].
      */
-    operator fun invoke(action: T, origin: OriginInfo, world: MutableWorld) {
-        execFun(action, origin, world)
-    }
+    operator fun invoke(action: T, origin: OriginInfo, world: MutableWorld)
 }

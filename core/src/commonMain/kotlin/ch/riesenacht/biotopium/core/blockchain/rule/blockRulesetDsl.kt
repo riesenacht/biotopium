@@ -25,14 +25,17 @@ package ch.riesenacht.biotopium.core.blockchain.rule
  */
 class BlockRuleSetBuilder {
 
+    /**
+     * All block rules.
+     */
     val rules: MutableList<BlockRule> = mutableListOf()
 
     /**
      * Creates a block rule with the given [predicate]
      * and adds it to the current ruleset on construction.
      */
-    fun rule(predicate: BlockPredicate) {
-        rules.add(BlockRule(predicate))
+    fun rule(predicate: BlockRule) {
+        rules.add(predicate)
     }
 
     /**

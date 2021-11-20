@@ -21,18 +21,20 @@ package ch.riesenacht.biotopium.core.blockchain.rule
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 
 /**
- * Represents a rule for validating a block.
- * A block rule consists of a [predicate].
+ * Represents a rule for validating a [Block].
+ * To a block rule can also be referred to as predicate.
  *
  * @author Manuel Riesen
  */
-class BlockRule(private val predicate: BlockPredicate) {
+fun interface BlockRule {
 
     /**
-     * Invokes the predicate to validate the new [block] with the new block's
+     * Tests the new [block] against the block rule using its data
      * and the [previous][prev] block's data.
+     *
+     * @return whether the block is valid according to this rule
      */
-    operator fun invoke(block: Block, prev: Block) = predicate.invoke(block, prev)
+    operator fun invoke(block: Block, prev: Block): Boolean
 }
 
 
