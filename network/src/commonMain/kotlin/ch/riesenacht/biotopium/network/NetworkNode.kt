@@ -94,11 +94,11 @@ abstract class NetworkNode {
     /**
      * Registers a [handler] for a message [type].
      */
-    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: (MessageEnvelope<T>) -> Unit) {
+    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: MessageHandler<T>) {
         if(!handlerMap.containsKey(type)) {
             handlerMap[type] = mutableListOf()
         }
-        handlerMap[type]!!.add(MessageHandler(handler))
+        handlerMap[type]!!.add(handler)
     }
 
     /**

@@ -26,14 +26,10 @@ import ch.riesenacht.biotopium.network.model.message.MessageEnvelope
  *
  * @author Manuel Riesen
  */
-class MessageHandler<T : Message>(
-    private val handlerFun: (MessageEnvelope<T>) -> Unit
-) {
+fun interface MessageHandler<T : Message> {
 
     /**
-     * Invokes the handler function of the message handler using the given [message].
+     * Executes the logic of the message handler using the given [message].
      */
-    operator fun invoke(message: MessageEnvelope<T>) {
-        handlerFun.invoke(message)
-    }
+    operator fun invoke(message: MessageEnvelope<T>)
 }
