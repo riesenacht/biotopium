@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.core.world
 
-import ch.riesenacht.biotopium.bus.ActionBus
+import ch.riesenacht.biotopium.bus.IncomingActionBus
 import ch.riesenacht.biotopium.core.action.contract.ActionContractManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.world.model.Coordinate
@@ -82,7 +82,7 @@ object WorldStateManager: World {
     }
 
     init {
-        ActionBus.subscribe {
+        IncomingActionBus.subscribe {
             //execute incoming contracts
             ActionContractManager.executeContract(it, mutableWorld)
         }

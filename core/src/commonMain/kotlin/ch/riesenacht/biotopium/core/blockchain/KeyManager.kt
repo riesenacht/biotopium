@@ -16,15 +16,27 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.bus
+package ch.riesenacht.biotopium.core.blockchain
 
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.crypto.Ed25519
+import ch.riesenacht.biotopium.core.crypto.model.KeyPair
 
 /**
- * Represents the event bus for incoming actions.
- * Incoming means, the actions are new and not yet applied to the world.
+ * The manager for cryptographical keys.
  *
  * @author Manuel Riesen
  */
-object ActionBus : EventBus<ActionFrame<out Action>>()
+object KeyManager {
+
+    /**
+     * The key pair of the client.
+     */
+    //TODO change key source, should be configurable
+    val keyPair: KeyPair = Ed25519.generateKeyPair()
+
+    /**
+     * The address of the client.
+     */
+    val address: Address by lazy { Address(keyPair.publicKey) }
+}
