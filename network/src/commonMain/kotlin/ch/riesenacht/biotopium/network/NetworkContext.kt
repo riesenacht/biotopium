@@ -18,11 +18,28 @@
 
 package ch.riesenacht.biotopium.network
 
-import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
+import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.message.Message
 
 /**
- * Represents a peer-to-peer node.
+ * Represents the network context used whilst handling incoming messages.
  *
  * @author Manuel Riesen
  */
-expect class P2pNode(p2pConfig: P2pConfiguration) : NetworkNode
+interface NetworkContext {
+
+    /**
+     * The current peer ID.
+     */
+    val peerId: PeerId
+
+    /**
+     * Sends an unboxed [message] to all connected peers.
+     */
+    fun sendBroadcast(message: Message)
+
+    /**
+     * Sends a [message] to a peer with the given [peer ID][peerId].
+     */
+    fun send(peerId: PeerId, message: Message)
+}

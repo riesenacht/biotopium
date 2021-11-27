@@ -30,6 +30,7 @@ fun interface MessageHandler<T : Message> {
 
     /**
      * Executes the logic of the message handler using the given [message].
+     * The [network] context is available.
      */
-    operator fun invoke(message: MessageEnvelope<T>)
+    operator fun invoke(message: MessageEnvelope<T>, network: NetworkContext)
 }
