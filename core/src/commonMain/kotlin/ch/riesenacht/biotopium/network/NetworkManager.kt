@@ -18,18 +18,13 @@
 
 package ch.riesenacht.biotopium.network
 
-import ch.riesenacht.biotopium.bus.BlockCandidateBus
-import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.BlockCandidate
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.PeerId
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
-import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
-import ch.riesenacht.biotopium.network.model.message.blockchain.ChainFwdMessage
-import ch.riesenacht.biotopium.network.model.message.blockchain.ChainReqMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.ActionReqMessage
 import kotlin.reflect.KClass
 
 /**
@@ -39,47 +34,18 @@ import kotlin.reflect.KClass
  */
 class NetworkManager(p2pConfig: P2pConfiguration) {
 
-    private val blockchainManager = BlockchainManager
-
     val peerAddressBook: PeerAddressBook = PeerAddressBook()
-
-    private val logger = Logging.logger { }
 
     private val p2pNode: P2pNode = P2pNode(p2pConfig)
 
+    private val logger = Logging.logger { }
+
     init {
-        p2pNode.registerMessageHandler(PeerAddressInfoMessage::class) { wrapper, _ ->
+       registerMessageHandler(PeerAddressInfoMessage::class) { wrapper, _ ->
             val message = wrapper.message
             peerAddressBook.add(message.peerId, message.address)
             logger.debug { "added peer address book entry: ${message.peerId} <=> ${message.address}" }
         }
-        p2pNode.registerMessageHandler(BlockAddMessage::class) { wrapper, _ ->
-            val message = wrapper.message
-            BlockCandidateBus.onNext(BlockCandidate(message.block))
-            logger.debug { "added block: ${message.block}" }
-        }
-        p2pNode.registerMessageHandler(ChainFwdMessage::class) { wrapper, _ ->
-            BlockCandidateBus.allOnNext(wrapper.message.blocks.map { block -> BlockCandidate(block) })
-            logger.debug { "added missing chain parts: ${wrapper.message.blocks}" }
-        }
-        p2pNode.registerMessageHandler(ChainReqMessage::class) { wrapper, network ->
-            val reqMessage = wrapper.message
-            val height = reqMessage.height
-            logger.debug { "received chain request for height: $height" }
-            if(height <= blockchainManager.maxHeight) {
-                val startIndex = blockchainManager.blockchain.indexOfFirst { it.height == height }
-                val blockchain = blockchainManager.blockchain.drop(startIndex)
-
-                val fwdMessage = ChainFwdMessage(blockchain)
-
-                network.send(wrapper.peerId, fwdMessage)
-
-                logger.debug { "answered chain request with $fwdMessage" }
-            } else {
-                logger.debug { "could not answer chain request, height too high" }
-            }
-        }
-
     }
 
     /**
@@ -134,6 +100,6 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
      * Registers a new message [handler] for a [type] of [Message] on the [p2pNode].
      * Delegates to the [p2pNode].
      */
-    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: MessageHandler<T>) = p2pNode.registerMessageHandler(type, handler)
+     fun <T : Message> registerMessageHandler(type: KClass<T>, handler: MessageHandler<T>) = p2pNode.registerMessageHandler(type, handler)
 
 }

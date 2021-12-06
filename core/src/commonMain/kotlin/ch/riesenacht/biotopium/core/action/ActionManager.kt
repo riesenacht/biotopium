@@ -41,7 +41,7 @@ object ActionManager {
      * Envelopes an [action].
      * @return the action envelope
      */
-    private fun <T : Action> envelope(action: T): ActionFrame<T> {
+    fun <T : Action> envelope(action: T): ActionFrame<T> {
         val timestamp = DateUtils.currentTimestamp()
         val author = keyManager.address
         val raw = RawBlockRecord(
@@ -56,7 +56,7 @@ object ActionManager {
     /**
      * Checks whether a given [action] is valid.
      */
-    private fun <T : Action> isValid(action: ActionFrame<T>): Boolean {
+    fun <T : Action> isValid(action: ActionFrame<T>): Boolean {
         val world = WorldStateManager
         return ActionValidator.validate(action, world)
     }
@@ -67,7 +67,7 @@ object ActionManager {
      */
     fun <T : Action> createAction(action: T): Boolean {
         val envelope = envelope(action)
-        
+
         // check the action's validity
         if(isValid(envelope)) {
             OutgoingActionBus.onNext(envelope)
