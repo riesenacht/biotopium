@@ -241,36 +241,4 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
         assertEquals(message, decoded)
     }
 
-    @Test
-    fun testEncodeActionAckMessage() {
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
-        val action = createActionFrame(zeroTimestamp, defaultOwner, generateDefaultTestAction())
-        val message = MessageEnvelope(
-            peerId,
-            ActionAckMessage(action)
-        )
-
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ActionAckMessage\",\"action\":{\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}}}"
-
-        val encoded = JsonEncoder.encode(message)
-
-        assertEquals(expected, encoded)
-    }
-
-    @Test
-    fun testDecodeActionAckMessage() {
-
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ActionAckMessage\",\"action\":{\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}}}"
-
-        val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
-        val action = createActionFrame(zeroTimestamp, defaultOwner, generateDefaultTestAction())
-        val message = MessageEnvelope(
-            peerId,
-            ActionAckMessage(action)
-        )
-
-        val decoded: MessageEnvelope<ActionAckMessage<ChunkGenesisAction>> = JsonEncoder.decode(encoded)
-
-        assertEquals(message, decoded)
-    }
 }

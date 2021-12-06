@@ -49,8 +49,6 @@ object MessageSerializersModuleRegistrar : SerializersModuleRegistrar(Serializer
         //TODO replace workaround for supporting serialization of a type with generics
         // see: https://github.com/Kotlin/kotlinx.serialization/issues/944
         @Suppress("UNCHECKED_CAST")
-        subclass(ActionAckMessage::class, ActionAckMessage.serializer( PolymorphicSerializer(Action::class)) as KSerializer<ActionAckMessage<*>>)
-        @Suppress("UNCHECKED_CAST")
         subclass(ActionReqMessage::class, ActionReqMessage.serializer( PolymorphicSerializer(Action::class)) as KSerializer<ActionReqMessage<*>>)
     }
 
