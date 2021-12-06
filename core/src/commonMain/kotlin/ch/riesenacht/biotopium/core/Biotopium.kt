@@ -33,10 +33,15 @@ import ch.riesenacht.biotopium.network.model.message.blockchain.ChainReqMessage
 
 /**
  * Represents the root of a biotopium instance.
+ * @param p2pConfig the peer-to-peer configuration of the instance
+ * @property blocklordPeerIds the peer IDs of the blocklords to use
  *
  * @author Manuel Riesen
  */
-abstract class Biotopium(p2pConfig: P2pConfiguration) {
+abstract class Biotopium(
+    p2pConfig: P2pConfiguration,
+    val blocklordPeerIds: List<PeerId>
+) {
 
     /**
      * The network manager of the current biotopium instance.
@@ -46,6 +51,9 @@ abstract class Biotopium(p2pConfig: P2pConfiguration) {
     private val blockchainManager = BlockchainManager
 
     protected val logger = Logging.logger { }
+
+    private val randomBlocklordPeer: PeerId
+    get() = blocklordPeerIds.random()
 
     init {
         networkManager.registerMessageHandler(BlockAddMessage::class) { wrapper, _ ->
@@ -75,11 +83,7 @@ abstract class Biotopium(p2pConfig: P2pConfiguration) {
             }
         }
         OutgoingActionBus.subscribe { action ->
-            //TODO use blocklord peer ID here
-            val base58 = p2pConfig.bootstrapPeers.first().split("/").last()
-            println(base58)
-            val peerId = PeerId(base58)
-            networkManager.send(peerId, ActionReqMessage(action))
+            networkManager.send(randomBlocklordPeer, ActionReqMessage(action))
         }
     }
 }

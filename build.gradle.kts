@@ -9,6 +9,7 @@ val biotopiumGroupId: String by project
 val biotopiumArtifactId: String by project
 val biotopiumVersion: String by project
 val biotopiumLoggingArtifactId: String by project
+val biotopiumNetworkArtifactId: String by project
 val biotopiumCoreArtifactId: String by project
 val jvmTargetVersion: String by project
 
@@ -50,6 +51,7 @@ kotlin {
             dependencies {
                 implementation(project(":$biotopiumLoggingArtifactId"))
                 implementation(project(":$biotopiumCoreArtifactId"))
+                implementation(project(":$biotopiumNetworkArtifactId"))
             }
         }
         val commonTest by getting {

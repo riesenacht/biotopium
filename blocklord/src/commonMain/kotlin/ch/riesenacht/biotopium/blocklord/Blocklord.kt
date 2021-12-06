@@ -36,7 +36,7 @@ import kotlinx.coroutines.awaitCancellation
  *
  * @author Manuel Riesen
  */
-object Blocklord : Biotopium(blocklordP2pConfig) {
+object Blocklord : Biotopium(blocklordP2pConfig, emptyList()) {
 
     init {
         networkManager.registerMessageHandler(ActionReqMessage::class) { wrapper, _ ->
