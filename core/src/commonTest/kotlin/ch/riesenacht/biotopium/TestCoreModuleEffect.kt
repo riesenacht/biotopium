@@ -16,15 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.record
+package ch.riesenacht.biotopium
 
-import ch.riesenacht.biotopium.core.blockchain.model.Hashed
-import ch.riesenacht.biotopium.core.blockchain.model.Signed
+import ch.riesenacht.biotopium.core.CoreModuleEffect
+import ch.riesenacht.biotopium.core.blockchain.BlockchainTestSerializersModuleEffect
+import ch.riesenacht.biotopium.core.effect.ModuleEffect
 
 /**
- * Represents a block record contained in a block on the blockchain.
- * Block records can hold content of a given [type][T].
+ * The core module effect extended with effects required for testing.
  *
  * @author Manuel Riesen
  */
-interface BlockRecord<T : BlockRecordContent> : AbstractBlockRecord<T>, Hashed, Signed
+object TestCoreModuleEffect : ModuleEffect(nested = arrayOf(
+    CoreModuleEffect,
+    BlockchainTestSerializersModuleEffect
+))

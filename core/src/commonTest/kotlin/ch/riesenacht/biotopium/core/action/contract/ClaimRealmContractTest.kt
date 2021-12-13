@@ -49,7 +49,7 @@ class ClaimRealmContractTest : ContractTest() {
         world.players[owner]?.addItem(realmClaimPaper)
 
         val content = ClaimRealmAction(realm, realmClaimPaper)
-        val action = createActionFrame(currentTimestamp, owner, content)
+        val action = createActionRecord(currentTimestamp, owner, content)
 
         execContract(action, world)
 

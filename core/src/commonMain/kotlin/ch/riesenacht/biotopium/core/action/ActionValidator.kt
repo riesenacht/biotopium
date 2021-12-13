@@ -20,7 +20,7 @@ package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.core.action.contract.ActionContractManager
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.action.rule.ActionRuleSet
 import ch.riesenacht.biotopium.core.world.World
 
@@ -34,7 +34,7 @@ object ActionValidator {
     /**
      * Validates the execution of an [action] leveraging the [world].
      */
-    fun <T : Action> validate(action: ActionFrame<T>, world: World): Boolean {
+    fun <T : Action> validate(action: ActionRecord<T>, world: World): Boolean {
         //UNCHECKED cast in order to retrieve the ruleset of the specific type T
         @Suppress("UNCHECKED_CAST")
         return (ActionContractManager.contracts[action.content.type]?.rules as ActionRuleSet<T>?)?.invoke(action.content, action, world) ?: false

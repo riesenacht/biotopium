@@ -16,7 +16,7 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.model.frame
+package ch.riesenacht.biotopium.core.action.model.record
 
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.blockchain.model.Address
@@ -31,13 +31,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents an action frame containing an action as [content].
+ * Represents a record containing an action as [content].
  *
  * @author Manuel Riesen
  */
-@SerialName("ActionFrame")
+@SerialName("ActionRecord")
 @Serializable
-data class ActionFrame<T : Action>(
+data class ActionRecord<T : Action>(
     override val timestamp: Timestamp,
     override val author: Address,
     @Polymorphic

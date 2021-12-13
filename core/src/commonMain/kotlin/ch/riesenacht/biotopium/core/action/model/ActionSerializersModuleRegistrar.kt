@@ -18,8 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockData
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
+import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecord
 import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecordContent
 import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
 import kotlinx.serialization.KSerializer
@@ -53,10 +53,10 @@ object ActionSerializersModuleRegistrar : SerializersModuleRegistrar(Serializers
     polymorphic(Action::class) { registerProjectSubclasses() }
 
 
-    polymorphic(BlockData::class) {
+    polymorphic(BlockRecord::class) {
         //TODO replace workaround for supporting serialization of a type with generics
         // see: https://github.com/Kotlin/kotlinx.serialization/issues/944
         @Suppress("UNCHECKED_CAST")
-        subclass(ActionFrame::class, ActionFrame.serializer( PolymorphicSerializer(Action::class)) as KSerializer<ActionFrame<*>>)
+        subclass(ActionRecord::class, ActionRecord.serializer( PolymorphicSerializer(Action::class)) as KSerializer<ActionRecord<*>>)
     }
 })

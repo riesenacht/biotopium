@@ -16,16 +16,29 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action.model.frame
+package ch.riesenacht.biotopium.core.blockchain.model.record
 
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.blockchain.model.record.HashedBlockRecord
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.crypto.model.Signature
+import ch.riesenacht.biotopium.core.time.model.Timestamp
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-fun <T : Action> HashedBlockRecord<T>.toActionFrame(sign: Signature) = ActionFrame(
-    timestamp = timestamp,
-    author = author,
-    content = content,
-    hash = hash,
-    sign = sign
-)
+/**
+ * Represents a record containing a string.
+ * This is only used for testing purposes.
+ *
+ * @see BlockRecord
+ *
+ * @author Manuel Riesen
+ */
+@Serializable
+@SerialName("StringRecord")
+data class StringRecord(
+    override val hash: Hash,
+    override val timestamp: Timestamp,
+    override val author: Address,
+    override val content: StringRecordContent,
+    override val sign: Signature
+) : BlockRecord<StringRecordContent>

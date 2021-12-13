@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.core.blockchain.model.block
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Hashed
 import ch.riesenacht.biotopium.core.blockchain.model.Signed
+import ch.riesenacht.biotopium.core.blockchain.model.record.RecordBook
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.crypto.model.Signature
 import ch.riesenacht.biotopium.core.time.model.Timestamp
@@ -50,7 +51,7 @@ data class Block(
     override val timestamp: Timestamp,
     override val prevHash: Hash,
     override val author: Address,
-    override val data: BlockData,
+    override val data: RecordBook,
     override val hash: Hash,
     override val sign: Signature,
 ) : AbstractBlock, Hashed, Signed

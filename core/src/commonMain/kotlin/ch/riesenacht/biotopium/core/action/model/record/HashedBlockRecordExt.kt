@@ -16,18 +16,20 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.block
+package ch.riesenacht.biotopium.core.action.model.record
 
-import ch.riesenacht.biotopium.core.blockchain.model.Hashable
-import ch.riesenacht.biotopium.core.blockchain.model.HashableProducible
-import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
+import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.blockchain.model.record.HashedBlockRecord
+import ch.riesenacht.biotopium.core.crypto.model.Signature
 
 /**
- * Represents raw data of a block.
- * Raw block data is missing information for ensuring integrity.
- *
- * @see BlockData
- *
- * @author Manuel Riesen
+ * Creates a [action record][ActionRecord] out of the current hashed record.
+ * Extends the record with the [author's signature][sign].
  */
-sealed interface RawBlockData : OriginInfo, Hashable, HashableProducible
+fun <T : Action> HashedBlockRecord<T>.toActionRecord(sign: Signature) = ActionRecord(
+    timestamp = timestamp,
+    author = author,
+    content = content,
+    hash = hash,
+    sign = sign
+)

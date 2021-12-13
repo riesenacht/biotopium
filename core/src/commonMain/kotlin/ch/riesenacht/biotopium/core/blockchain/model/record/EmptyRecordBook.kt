@@ -18,13 +18,9 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.record
 
-import ch.riesenacht.biotopium.core.blockchain.model.Hashed
-import ch.riesenacht.biotopium.core.blockchain.model.Signed
-
 /**
- * Represents a block record contained in a block on the blockchain.
- * Block records can hold content of a given [type][T].
+ * Represents an empty [RecordBook].
  *
  * @author Manuel Riesen
  */
-interface BlockRecord<T : BlockRecordContent> : AbstractBlockRecord<T>, Hashed, Signed
+val EmptyRecordBook: RecordBook = emptyList()

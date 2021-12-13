@@ -18,9 +18,9 @@
 
 package ch.riesenacht.biotopium.serialization
 
-import ch.riesenacht.biotopium.core.effect.ModuleEffect
 import ch.riesenacht.biotopium.core.action.model.ActionSerializersModuleRegistrar
 import ch.riesenacht.biotopium.core.blockchain.model.BlockchainSerializersModuleRegistrar
+import ch.riesenacht.biotopium.core.effect.ModuleEffect
 import ch.riesenacht.biotopium.core.world.model.WorldSerializersModuleRegistrar
 import ch.riesenacht.biotopium.network.model.MessageSerializersModuleRegistrar
 

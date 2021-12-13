@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.HashableProducible
 import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
+import ch.riesenacht.biotopium.core.blockchain.model.record.RecordBook
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 
 
@@ -46,7 +47,7 @@ sealed interface AbstractBlock : OriginInfo, HashableProducible {
     /**
      * The data stored in the block.
      */
-    val data: BlockData
+    val data: RecordBook
 
     /**
      * Creates a hashable block out of the current block.

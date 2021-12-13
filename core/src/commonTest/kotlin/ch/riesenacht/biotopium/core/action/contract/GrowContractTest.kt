@@ -53,7 +53,7 @@ class GrowContractTest : ContractTest() {
         world.realms[realm.ix to realm.iy] = realm
 
         val content = GrowAction(plot.copy(plant = plant.copy(growth = PlantGrowth.HALF_GROWN)))
-        val action = createActionFrame(timestamp, owner, content)
+        val action = createActionRecord(timestamp, owner, content)
 
         execContract(action, world)
 

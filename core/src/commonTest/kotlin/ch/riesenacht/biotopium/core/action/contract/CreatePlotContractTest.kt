@@ -55,7 +55,7 @@ class CreatePlotContractTest : ContractTest() {
         world.players[owner]!!.addItem(hoe)
 
         val content = CreatePlotAction(plot, hoe)
-        val action = createActionFrame(currentTimestamp, owner, content)
+        val action = createActionRecord(currentTimestamp, owner, content)
 
         execContract(action, world)
 

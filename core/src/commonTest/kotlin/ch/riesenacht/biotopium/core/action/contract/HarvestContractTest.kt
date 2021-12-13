@@ -59,7 +59,7 @@ class HarvestContractTest : ContractTest() {
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
 
         val content = HarvestAction(harvest, plot.copy(plant = null))
-        val action = createActionFrame(currentTimestamp, owner, content)
+        val action = createActionRecord(currentTimestamp, owner, content)
 
         execContract(action, world)
 

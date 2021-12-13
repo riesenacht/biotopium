@@ -23,11 +23,9 @@ import ch.riesenacht.biotopium.core.blockchain.rule.blockRuleset
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 
 /**
- * The block rules for the genesis block validation.
- * Since the genesis block is a unique and special block, not
- * all block rules can be applied to it.
+ * The general block rules which apply to all type of blocks.
  */
-val genesisRules = blockRuleset {
+val generalBlockRules = blockRuleset {
 
     // The block's hash is valid
     rule { block: Block, _: Block -> block.hash == BlockUtils.hash(block) }
@@ -36,16 +34,38 @@ val genesisRules = blockRuleset {
     rule { block: Block, _: Block -> Ed25519.verify(block.sign, block.hash.hex, block.author.publicKey) }
 
     // The hash of the block's data is valid
-    rule { block: Block, _: Block -> block.data.hash == BlockUtils.hash(block.data) }
+    rule { block: Block, _: Block ->
+        block.data.all { data ->
+            data.hash == BlockUtils.hash(data)
+        }
+    }
 
     // The signature of the block data author is valid
-    rule { block: Block, _: Block -> Ed25519.verify(block.data.sign, block.data.hash.hex, block.data.author.publicKey) }
+    rule { block: Block, _: Block ->
+        block.data.all { data ->
+            Ed25519.verify(data.sign, data.hash.hex, data.author.publicKey)
+        }
+    }
+}
 
+/**
+ * The block rules for the genesis block validation.
+ * Since the genesis block is a unique and special block, not
+ * all block rules can be applied to it.
+ * Contains all [general block rules][generalBlockRules].
+ */
+val genesisRules = blockRuleset {
+
+    // The content of the genesis block must be empty
+    rule { block: Block, _: Block -> block.data.isEmpty() }
+
+    // All general block rules apply to the genesis block as well
+    include(generalBlockRules)
 }
 
 /**
  * The block rules for block validation.
- * Contains all [genesis block rules][genesisRules].
+ * Contains all [general block rules][generalBlockRules].
  */
 val blockRules = blockRuleset {
 
@@ -58,6 +78,6 @@ val blockRules = blockRuleset {
     // The block's timestamp is later in time than the previous block's timestamp
     rule { block: Block, prev: Block -> block.timestamp > prev.timestamp }
 
-    // All genesis rules apply to all other blocks too
-    include(genesisRules)
+    // All general block rules apply to all blocks
+    include(generalBlockRules)
 }

@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Hashable
+import ch.riesenacht.biotopium.core.blockchain.model.record.RecordBook
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.time.model.Timestamp
 import kotlinx.serialization.SerialName
@@ -40,7 +41,7 @@ data class RawBlock(
     override val timestamp: Timestamp,
     override val prevHash: Hash,
     override val author: Address,
-    override val data: BlockData
+    override val data: RecordBook
 ) : AbstractBlock, Hashable {
 
     /**

@@ -50,7 +50,7 @@ class IntroductionContractTest : ContractTest() {
         )
 
         val content = IntroductionAction(gift)
-        val action = createActionFrame(currentTimestamp, owner, content)
+        val action = createActionRecord(currentTimestamp, owner, content)
 
         execContract(action, world)
 

@@ -18,8 +18,10 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.*
-import ch.riesenacht.biotopium.core.blockchain.model.block.EmptyBlockData
+import ch.riesenacht.biotopium.core.blockchain.model.block.AbstractBlock
+import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
+import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
 import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecordContent
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
 import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
@@ -55,15 +57,9 @@ object BlockchainSerializersModuleRegistrar : SerializersModuleRegistrar(Seriali
         subclass(Block::class)
     }
 
-    // Block data class hierarchy
-    polymorphic(BlockData::class) {
-        subclass(EmptyBlockData::class)
-    }
-
     // Hashable type hierarchy
     polymorphic(Hashable::class) {
         subclass(RawBlock::class)
-        subclass(EmptyBlockData.RawEmptyBlockData::class)
 
         //TODO replace workaround for supporting serialization of a type with generics
         // see: https://github.com/Kotlin/kotlinx.serialization/issues/944

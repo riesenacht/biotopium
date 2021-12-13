@@ -19,12 +19,12 @@
 package ch.riesenacht.biotopium.core.blockchain
 
 import ch.riesenacht.biotopium.bus.BlockCandidateBus
+import ch.riesenacht.biotopium.bus.IncomingActionBus
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
 import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
-import ch.riesenacht.biotopium.bus.IncomingActionBus
 
 /**
  * State manager of the blockchain.
@@ -72,9 +72,11 @@ object BlockchainManager {
         if(validator.validateNew(block, blockchain)) {
             if(mutableBlockchain.add(block)) {
 
-                if(block.data is ActionFrame<out Action>) {
-                    // publish the action
-                    IncomingActionBus.onNext(block.data)
+                block.data.forEach {
+                    if(it is ActionRecord<out Action>) {
+                        // publish the action
+                        IncomingActionBus.onNext(it)
+                    }
                 }
 
                 return true

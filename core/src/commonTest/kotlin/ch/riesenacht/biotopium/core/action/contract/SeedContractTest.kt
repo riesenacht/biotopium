@@ -57,7 +57,7 @@ class SeedContractTest : ContractTest() {
         val plant = GrowingPlant(owner, seed.plantType, PlantGrowth.SEED)
 
         val content = SeedAction(plot.copy(plant = plant), seed)
-        val action = createActionFrame(currentTimestamp, owner, content)
+        val action = createActionRecord(currentTimestamp, owner, content)
 
         execContract(action, world)
 

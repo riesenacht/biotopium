@@ -19,7 +19,7 @@
 package ch.riesenacht.biotopium.bus
 
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 
 /**
  * Represents the event bus for outgoing actions.
@@ -28,4 +28,4 @@ import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
  *
  * @author Manuel Riesen
  */
-object OutgoingActionBus : EventBus<ActionFrame<out Action>>()
+object OutgoingActionBus : EventBus<ActionRecord<out Action>>()

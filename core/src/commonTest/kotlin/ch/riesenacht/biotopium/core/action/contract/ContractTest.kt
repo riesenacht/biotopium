@@ -20,8 +20,8 @@ package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
-import ch.riesenacht.biotopium.core.action.model.frame.toActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
+import ch.riesenacht.biotopium.core.action.model.record.toActionRecord
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
@@ -81,10 +81,10 @@ abstract class ContractTest {
     protected val currentTimestamp: Timestamp
     get() = DateUtils.currentTimestamp()
 
-    protected inline fun <reified T : Action> createActionFrame(timestamp: Timestamp, author: Address, action: T, privateKey: PrivateKey = authorKeyPair.privateKey): ActionFrame<T> {
+    protected inline fun <reified T : Action> createActionRecord(timestamp: Timestamp, author: Address, action: T, privateKey: PrivateKey = authorKeyPair.privateKey): ActionRecord<T> {
         val raw = RawBlockRecord(timestamp, author, action)
         val hashed = raw.toHashedRecord(BlockUtils.hash(raw))
-        return hashed.toActionFrame(BlockUtils.sign(hashed, privateKey))
+        return hashed.toActionRecord(BlockUtils.sign(hashed, privateKey))
     }
 
     protected fun createMutableTestWorldWithPlayer(address: Address): MutableWorld {
@@ -98,7 +98,7 @@ abstract class ContractTest {
         return TestMutableWorld()
     }
 
-    protected fun <T : Action> execContract(action: ActionFrame<T>, world: MutableWorld) {
+    protected fun <T : Action> execContract(action: ActionRecord<T>, world: MutableWorld) {
         ActionContractManager.executeContract(action, world)
     }
 }

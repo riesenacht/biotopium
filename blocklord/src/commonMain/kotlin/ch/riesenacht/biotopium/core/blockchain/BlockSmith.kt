@@ -22,17 +22,18 @@ import ch.riesenacht.biotopium.bus.ActionCandidateBus
 import ch.riesenacht.biotopium.bus.OutgoingBlockBus
 import ch.riesenacht.biotopium.core.action.ActionManager
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
+import ch.riesenacht.biotopium.core.blockchain.model.record.recordBookOf
 import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.logging.Logging
 
 /**
  * The block smith is an autonomous factory for blocks.
  * Whenever an action candidate is published on the [ActionCandidateBus],
- * the block smith validated the action candidate before creating a new block containing the validated action frame.
+ * the block smith validated the action candidate before creating a new block containing the validated action record.
  * The produced new blocks are then published on the [OutgoingBlockBus].
  *
  * @author Manuel Riesen
@@ -79,13 +80,13 @@ object BlockSmith {
      * Creates a new block out of a given [action].
      * @return the new block
      */
-    private fun createBlock(action: ActionFrame<out Action>): Block {
+    private fun createBlock(action: ActionRecord<out Action>): Block {
         val last = blockchainManager.blockchain.last()
         val raw = RawBlock(
             height = last.height + 1u,
             timestamp = DateUtils.currentTimestamp(),
             author = Address(keyManager.keyPair.publicKey),
-            data = action,
+            data = recordBookOf(action),
             prevHash = last.hash
         )
         val hash = BlockUtils.hash(raw)

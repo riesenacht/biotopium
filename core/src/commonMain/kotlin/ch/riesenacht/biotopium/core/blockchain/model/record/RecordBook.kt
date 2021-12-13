@@ -18,13 +18,17 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.record
 
-import ch.riesenacht.biotopium.core.blockchain.model.Hashed
-import ch.riesenacht.biotopium.core.blockchain.model.Signed
+import ch.riesenacht.biotopium.core.blockchain.model.Book
+import ch.riesenacht.biotopium.core.blockchain.model.bookOf
 
 /**
- * Represents a block record contained in a block on the blockchain.
- * Block records can hold content of a given [type][T].
+ * Represents a [book][Book] containing block records.
  *
  * @author Manuel Riesen
  */
-interface BlockRecord<T : BlockRecordContent> : AbstractBlockRecord<T>, Hashed, Signed
+typealias RecordBook = Book<BlockRecord<*>>
+
+/**
+ * Creates a [record book][RecordBook] containing the given [records].
+ */
+fun <T : BlockRecordContent> recordBookOf(vararg records: BlockRecord<T>): RecordBook = bookOf(*records)

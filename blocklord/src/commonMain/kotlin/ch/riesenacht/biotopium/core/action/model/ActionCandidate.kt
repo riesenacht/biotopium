@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 
 /**
  * Represents a candidate action.
@@ -27,4 +27,4 @@ import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
  * @author Manuel Riesen
  */
 @JvmInline
-value class ActionCandidate<T : Action>(val candidate: ActionFrame<T>)
+value class ActionCandidate<T : Action>(val candidate: ActionRecord<T>)

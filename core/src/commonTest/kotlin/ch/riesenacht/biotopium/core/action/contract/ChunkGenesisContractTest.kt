@@ -41,7 +41,7 @@ class ChunkGenesisContractTest : ContractTest() {
         val tile11 = DefaultTile(1.coord, 1.coord)
 
         val content = ChunkGenesisAction(listOf(tile11))
-        val action = createActionFrame(currentTimestamp, owner, content)
+        val action = createActionRecord(currentTimestamp, owner, content)
 
         execContract(action, world)
 

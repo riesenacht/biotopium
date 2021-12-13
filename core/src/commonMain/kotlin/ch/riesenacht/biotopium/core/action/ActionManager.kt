@@ -20,8 +20,8 @@ package ch.riesenacht.biotopium.core.action
 
 import ch.riesenacht.biotopium.bus.OutgoingActionBus
 import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
-import ch.riesenacht.biotopium.core.action.model.frame.toActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
+import ch.riesenacht.biotopium.core.action.model.record.toActionRecord
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.KeyManager
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
@@ -41,7 +41,7 @@ object ActionManager {
      * Envelopes an [action].
      * @return the action envelope
      */
-    fun <T : Action> envelope(action: T): ActionFrame<T> {
+    fun <T : Action> envelope(action: T): ActionRecord<T> {
         val timestamp = DateUtils.currentTimestamp()
         val author = keyManager.address
         val raw = RawBlockRecord(
@@ -50,13 +50,13 @@ object ActionManager {
             action
         )
         val hashed = raw.toHashedRecord(BlockUtils.hash(raw))
-        return hashed.toActionFrame(BlockUtils.sign(hashed, keyManager.keyPair.privateKey))
+        return hashed.toActionRecord(BlockUtils.sign(hashed, keyManager.keyPair.privateKey))
     }
 
     /**
      * Checks whether a given [action] is valid.
      */
-    fun <T : Action> isValid(action: ActionFrame<T>): Boolean {
+    fun <T : Action> isValid(action: ActionRecord<T>): Boolean {
         val world = WorldStateManager
         return ActionValidator.validate(action, world)
     }

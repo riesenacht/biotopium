@@ -18,13 +18,17 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.record
 
-import ch.riesenacht.biotopium.core.blockchain.model.Hashed
-import ch.riesenacht.biotopium.core.blockchain.model.Signed
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * Represents a block record contained in a block on the blockchain.
- * Block records can hold content of a given [type][T].
+ * Represents a content of a record containing a string.
+ * This is only used for testing purposes.
+ *
+ * @see BlockRecordContent
  *
  * @author Manuel Riesen
  */
-interface BlockRecord<T : BlockRecordContent> : AbstractBlockRecord<T>, Hashed, Signed
+@Serializable
+@SerialName("StringRecordContent")
+class StringRecordContent(val str: String) : BlockRecordContent

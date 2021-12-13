@@ -37,6 +37,4 @@ data class HashedBlockRecord<T : BlockRecordContent>(
     override val author: Address,
     override val content: T,
     override val hash: Hash
-) : AbstractBlockRecord<T>, Hashed {
-
-}
+) : AbstractBlockRecord<T>, Hashed

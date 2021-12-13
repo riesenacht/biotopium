@@ -23,6 +23,7 @@ import ch.riesenacht.biotopium.core.blockchain.model.OriginInfo
 
 /**
  * Abstract representation of a block record.
+ * The abstract block record contains all common properties.
  *
  * @author Manuel Riesen
  */

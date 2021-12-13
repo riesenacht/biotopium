@@ -20,8 +20,8 @@ package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
-import ch.riesenacht.biotopium.core.action.model.frame.ActionFrame
-import ch.riesenacht.biotopium.core.action.model.frame.toActionFrame
+import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
+import ch.riesenacht.biotopium.core.action.model.record.toActionRecord
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
@@ -60,21 +60,26 @@ abstract class EncoderTest {
     protected val defaultOwner: Owner
     get() = Owner(authorKeyPair.publicKey)
 
+    /**
+     * Applies the relevant effects for an encoder test.
+     */
+    protected fun applyEffects() {
+    }
 
     /**
      * Generates a default test action.
      */
     protected fun generateDefaultTestAction() = ChunkGenesisAction(emptyList())
 
-    protected inline fun <reified T : Action> createActionFrame(
+    protected inline fun <reified T : Action> createActionRecord(
         timestamp: Timestamp = zeroTimestamp,
         author: Address = defaultOwner,
         content: T,
         privateKey: PrivateKey = authorKeyPair.privateKey
-    ): ActionFrame<T> {
+    ): ActionRecord<T> {
         val raw = RawBlockRecord(timestamp, author, content)
         val hashed = raw.toHashedRecord(BlockUtils.hash(raw))
-        return hashed.toActionFrame(BlockUtils.sign(hashed, privateKey))
+        return hashed.toActionRecord(BlockUtils.sign(hashed, privateKey))
     }
 
     /**
@@ -88,7 +93,7 @@ abstract class EncoderTest {
             Timestamp(1),
             Hash("prevHash"),
             Address.fromBase64("test"),
-            createActionFrame(content = action)
+            listOf(createActionRecord(content = action))
         )
         return raw.toHashedBlock(BlockUtils.hash(raw.toHashable()))
     }
