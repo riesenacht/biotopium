@@ -49,6 +49,7 @@ object Blocklord : Biotopium(blocklordP2pConfig, emptyList()) {
             val message = BlockAddMessage(it)
             networkManager.sendBroadcast(message)
         }
+
     }
 }
 
@@ -56,6 +57,7 @@ suspend fun main() {
     LoggingConfig.setLoggingLevel(LoggingLevel.DEBUG)
     applyEffect(CoreModuleEffect)
     applyEffect(BlocklordModuleEffect)
+    Blocklord.startP2pNode()
     println("blocklord started")
     awaitCancellation()
 }

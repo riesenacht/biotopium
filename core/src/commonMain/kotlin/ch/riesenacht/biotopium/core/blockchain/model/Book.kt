@@ -29,3 +29,8 @@ typealias Book<T> = List<T>
  * Creates a [book][Book] containing the given [elements].
  */
 fun <T> bookOf(vararg elements: T) = listOf(*elements)
+
+/**
+ * Creates a [book][Book] containing the given [elements].
+ */
+fun <T> bookOf(elements: List<T>) = elements.toList()

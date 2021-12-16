@@ -69,7 +69,7 @@ abstract class Biotopium(
             val reqMessage = wrapper.message
             val height = reqMessage.height
             logger.debug { "received chain request for height: $height" }
-            if(height <= blockchainManager.maxHeight) {
+            if(height < blockchainManager.maxHeight) {
                 val startIndex = blockchainManager.blockchain.indexOfFirst { it.height == height }
                 val blockchain = blockchainManager.blockchain.drop(startIndex)
 
@@ -85,5 +85,19 @@ abstract class Biotopium(
         OutgoingActionBus.subscribe { action ->
             networkManager.send(randomBlocklordPeer, ActionReqMessage(action))
         }
+    }
+
+    /**
+     * Starts the underlying peer-to-peer node over the network manager.
+     */
+    suspend fun startP2pNode() {
+        networkManager.startP2pNode()
+    }
+
+    /**
+     * Stops the underlying peer-to-peer node over the network manager.
+     */
+    suspend fun stopP2pNode() {
+        networkManager.stopP2pNode()
     }
 }

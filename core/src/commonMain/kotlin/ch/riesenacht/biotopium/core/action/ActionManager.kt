@@ -27,6 +27,7 @@ import ch.riesenacht.biotopium.core.blockchain.KeyManager
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
 import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.core.world.WorldStateManager
+import ch.riesenacht.biotopium.logging.Logging
 
 /**
  * The manager for actions.
@@ -36,6 +37,8 @@ import ch.riesenacht.biotopium.core.world.WorldStateManager
 object ActionManager {
 
     private val keyManager: KeyManager = KeyManager
+
+    private val logger = Logging.logger {  }
 
     /**
      * Envelopes an [action].
@@ -73,6 +76,8 @@ object ActionManager {
             OutgoingActionBus.onNext(envelope)
             return true
         }
+
+        logger.debug { "not creating invalid action: $action" }
 
         return false
     }

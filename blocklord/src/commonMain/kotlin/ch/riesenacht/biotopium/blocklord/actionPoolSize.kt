@@ -16,24 +16,9 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model.record
-
-import ch.riesenacht.biotopium.core.blockchain.model.Book
-import ch.riesenacht.biotopium.core.blockchain.model.bookOf
+package ch.riesenacht.biotopium.blocklord
 
 /**
- * Represents a [book][Book] containing block records.
- *
- * @author Manuel Riesen
+ * The size of the action pool.
  */
-typealias RecordBook = Book<BlockRecord<*>>
-
-/**
- * Creates a [record book][RecordBook] containing the given [records].
- */
-fun <T : BlockRecordContent> recordBookOf(vararg records: BlockRecord<T>): RecordBook = bookOf(*records)
-
-/**
- * Creates a [record book][RecordBook] containing the given [records].
- */
-fun recordBookOf(records: List<BlockRecord<out BlockRecordContent>>): RecordBook = bookOf(records)
+const val actionPoolSize = 1

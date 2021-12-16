@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.blockchain
 
+import ch.riesenacht.biotopium.blocklord.actionPoolSize
 import ch.riesenacht.biotopium.bus.ActionCandidateBus
 import ch.riesenacht.biotopium.bus.OutgoingBlockBus
 import ch.riesenacht.biotopium.core.action.ActionManager
@@ -26,6 +27,7 @@ import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
+import ch.riesenacht.biotopium.core.blockchain.model.record.RecordBook
 import ch.riesenacht.biotopium.core.blockchain.model.record.recordBookOf
 import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.logging.Logging
@@ -48,6 +50,12 @@ object BlockSmith {
 
     private val logger = Logging.logger { }
 
+    /**
+     * The action pool.
+     * Contains validated actions which are not yet written on the blockchain.
+     */
+    private val actionPool: MutableList<ActionRecord<out Action>> = mutableListOf()
+
     init {
         ActionCandidateBus.subscribe {
 
@@ -56,19 +64,30 @@ object BlockSmith {
             // validate action
             if(actionManager.isValid(it.candidate)) {
 
-                // create new block
-                val block = createBlock(it.candidate)
+                // add action to pool
+                actionPool.add(it.candidate)
+                logger.debug { "action added to pool: ${it.candidate}" }
 
-                // add the new block to the blockchain
-                val added = blockchainManager.add(block)
+                if(actionPool.size >= actionPoolSize) {
 
-                if(added) {
-                    logger.debug { "new block added: $block" }
+                    // create new block
+                    val block = createBlock(actionPool)
 
-                    // publish the new block
-                    OutgoingBlockBus.onNext(block)
-                } else {
-                    logger.debug { "failed to create new block: $block" }
+                    // add the new block to the blockchain
+                    val added = blockchainManager.add(block)
+
+                    if(added) {
+                        logger.debug { "new block added: $block" }
+
+                        // publish the new block
+                        OutgoingBlockBus.onNext(block)
+                    } else {
+                        logger.debug { "failed to create new block: $block" }
+                    }
+
+                    // clear pool
+                    actionPool.clear()
+
                 }
             } else {
                 logger.debug { "action not valid: ${it.candidate}" }
@@ -77,22 +96,22 @@ object BlockSmith {
     }
 
     /**
-     * Creates a new block out of a given [action].
+     * Creates a new block out of the given [actions].
      * @return the new block
      */
-    private fun createBlock(action: ActionRecord<out Action>): Block {
+    private fun createBlock(actions: List<ActionRecord<out Action>>): Block {
         val last = blockchainManager.blockchain.last()
         val raw = RawBlock(
             height = last.height + 1u,
             timestamp = DateUtils.currentTimestamp(),
             author = Address(keyManager.keyPair.publicKey),
-            data = recordBookOf(action),
+            data = recordBookOf(actions),
             prevHash = last.hash
         )
         val hash = BlockUtils.hash(raw)
 
         val hashed = raw.toHashedBlock(hash)
         return hashed.toBlock(BlockUtils.sign(hashed, keyManager.keyPair.privateKey))
-
     }
+
 }

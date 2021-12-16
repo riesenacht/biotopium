@@ -25,6 +25,7 @@ import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
 import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.logging.Logging
 
 /**
  * State manager of the blockchain.
@@ -37,7 +38,7 @@ object BlockchainManager {
      * The maximum height on the blockchain.
      */
     val maxHeight: ULong
-    get() = blockchain.last().height
+    get() = if(blockchain.isEmpty()) 0u else blockchain.last().height
 
     /**
      * Mutable variant of the blockchain.
@@ -49,6 +50,8 @@ object BlockchainManager {
      * as well as the current blockchain.
      */
     private val validator = BlockValidator
+
+    private val logger = Logging.logger { }
 
     /**
      * The most recent version of the blockchain.
@@ -81,6 +84,8 @@ object BlockchainManager {
 
                 return true
             }
+        } else {
+            logger.debug { "dropping invalid block: $block" }
         }
         return false
     }
