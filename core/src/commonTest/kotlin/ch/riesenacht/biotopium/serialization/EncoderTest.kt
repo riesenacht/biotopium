@@ -60,11 +60,6 @@ abstract class EncoderTest {
     protected val defaultOwner: Owner
     get() = Owner(authorKeyPair.publicKey)
 
-    /**
-     * Applies the relevant effects for an encoder test.
-     */
-    protected fun applyEffects() {
-    }
 
     /**
      * Generates a default test action.
@@ -86,7 +81,7 @@ abstract class EncoderTest {
      * Generates a default hashed block data object with a given [action].
      * If no [action] is given, the default test action is used.
      */
-    protected fun generateDefaultHashedBlock(action: Action = generateDefaultTestAction()): HashedBlock {
+    private fun generateDefaultHashedBlock(action: Action = generateDefaultTestAction()): HashedBlock {
 
         val raw = RawBlock(
             1u,

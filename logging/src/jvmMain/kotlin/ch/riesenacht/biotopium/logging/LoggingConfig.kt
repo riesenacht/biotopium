@@ -32,6 +32,6 @@ actual object LoggingConfig {
      * Sets the logging [level].
      */
     actual fun setLoggingLevel(level: LoggingLevel) {
-        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, level.name);
+        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, level.name)
     }
 }

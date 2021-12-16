@@ -24,7 +24,6 @@ import ch.riesenacht.biotopium.network.model.PeerId
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
-import ch.riesenacht.biotopium.network.model.message.blockchain.ActionReqMessage
 import kotlin.reflect.KClass
 
 /**

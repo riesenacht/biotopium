@@ -18,7 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action
 
-import ch.riesenacht.biotopium.core.CoreModuleEffect
+import ch.riesenacht.biotopium.TestCoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.action.model.record.toActionRecord
@@ -97,7 +97,7 @@ class ActionValidatorTest {
 
     @BeforeTest
     fun init() {
-        applyEffect(CoreModuleEffect)
+        applyEffect(TestCoreModuleEffect)
     }
 
     /*

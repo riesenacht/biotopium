@@ -35,7 +35,7 @@ interface AbstractBlockRecord<T : BlockRecordContent> : OriginInfo, HashableProd
     val content: T
 
     /**
-     * Creates a hashable block record out of the current recordd.
+     * Creates a hashable block record out of the current record.
      * Internally, a [RawBlockRecord] is used to achieve this.
      */
     override fun toHashable(): RawBlockRecord<T> = RawBlockRecord(

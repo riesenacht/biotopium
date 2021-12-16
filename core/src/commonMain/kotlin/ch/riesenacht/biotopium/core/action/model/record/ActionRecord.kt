@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.core.action.model.record
 
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.blockchain.model.block.BlockData
 import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecord
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
 import ch.riesenacht.biotopium.core.crypto.model.Hash
@@ -44,7 +43,7 @@ data class ActionRecord<T : Action>(
     override val content: T,
     override val hash: Hash,
     override val sign: Signature,
-) : BlockRecord<T>, BlockData {
+) : BlockRecord<T> {
 
     override fun toHashable() = RawBlockRecord(
         timestamp,
