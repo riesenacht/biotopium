@@ -27,6 +27,10 @@ import ch.riesenacht.biotopium.core.blockchain.model.record.*
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.Sha3
 import ch.riesenacht.biotopium.core.crypto.model.Hash
+import ch.riesenacht.biotopium.core.crypto.model.KeyPair
+import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
+import ch.riesenacht.biotopium.core.crypto.model.PublicKey
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.time.model.Timestamp
 import kotlin.test.BeforeTest
@@ -41,10 +45,10 @@ import kotlin.test.assertTrue
  */
 class BlockValidatorTest {
 
-    private val authorKeyPair = Ed25519.generateKeyPair()
-
-    private val author: Address
-    get() = Address(authorKeyPair.publicKey)
+    private val authorKeyPair = KeyPair(
+        privateKey = PrivateKey("AAYWz/KEvts4DfiqhXI+aO/G+yCC27OUXxgc9bbr8ZHlszjCgLKGKqSzy9n5l3JfgHse+O90RrCWOcn3pvug7A=="),
+        publicKey = PublicKey("5bM4woCyhiqks8vZ+ZdyX4B7HvjvdEawljnJ96b7oOw=")
+    )
 
     private val zeroTimestamp: Timestamp
     get() = Timestamp(0)
@@ -52,25 +56,25 @@ class BlockValidatorTest {
     /**
      * Generates a genesis block.
      */
-    private fun generateGenesisBlock(): Block {
+    private fun generateGenesisBlock(keyPair: KeyPair = authorKeyPair): Block {
         val raw = RawBlock(
             height = 0u,
             timestamp = zeroTimestamp,
-            author = author,
+            author = Address(keyPair.publicKey),
             data = EmptyRecordBook,
             prevHash = Hash("")
         )
         val hash = BlockUtils.hash(raw)
 
         val hashed = raw.toHashedBlock(hash)
-        return hashed.toBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
+        return hashed.toBlock(BlockUtils.sign(hashed, keyPair.privateKey))
     }
 
 
-    private fun generateTestStringBlockRecord(): StringRecord {
+    private fun generateTestStringBlockRecord(keyPair: KeyPair = authorKeyPair): StringRecord {
         val raw = RawBlockRecord(
             timestamp = zeroTimestamp,
-            author = author,
+            author = Address(keyPair.publicKey),
             content = StringRecordContent("")
         )
         val hash = BlockUtils.hash(raw)
@@ -82,21 +86,21 @@ class BlockValidatorTest {
             author = hashed.author,
             hash = hashed.hash,
             content = hashed.content,
-            sign = BlockUtils.sign(hashed, authorKeyPair.privateKey)
+            sign = BlockUtils.sign(hashed, keyPair.privateKey)
         )
     }
 
-    private fun generateNextBlock(prev: Block): Block {
+    private fun generateNextBlock(prev: Block, keyPair: KeyPair = authorKeyPair): Block {
         val timestamp = Timestamp(prev.timestamp.epochMillis + 1)
         val raw = RawBlock(
             height = prev.height + 1u,
             timestamp = timestamp,
-            author = author,
-            data = recordBookOf(generateTestStringBlockRecord()),
+            author = Address(keyPair.publicKey),
+            data = recordBookOf(generateTestStringBlockRecord(keyPair)),
             prevHash = prev.hash
         )
         val hashed = raw.toHashedBlock(BlockUtils.hash(raw))
-        return hashed.toBlock(BlockUtils.sign(hashed, authorKeyPair.privateKey))
+        return hashed.toBlock(BlockUtils.sign(hashed, keyPair.privateKey))
     }
 
     private fun generateBlockchain(size: Int): Blockchain {
@@ -113,7 +117,7 @@ class BlockValidatorTest {
 
     @BeforeTest
     fun init() {
-        applyEffect(TestCoreModuleEffect)
+        applyEffect(TestCoreModuleEffect, EffectProfile.TEST)
     }
 
     @Test
@@ -310,6 +314,25 @@ class BlockValidatorTest {
         val newKeyPair = Ed25519.generateKeyPair()
         val block = generateNextBlock(genesisBlock)
         val invalidBlock = block.copy(data = block.data.map { data -> (data as StringRecord).copy(sign = BlockUtils.sign(data, newKeyPair.privateKey)) }.toList())
+
+        val blockchain = listOf(genesisBlock, invalidBlock)
+        assertFalse(BlockValidator.validateChain(blockchain))
+    }
+
+    @Test
+    fun testValidateChain_negative_genesisBlock_invalidBlocklord() {
+        val invalidBlocklord = Ed25519.generateKeyPair()
+        val invalidGenesisBlock = generateGenesisBlock(invalidBlocklord)
+
+        val blockchain = listOf(invalidGenesisBlock)
+        assertFalse(BlockValidator.validateChain(blockchain))
+    }
+
+    @Test
+    fun testValidateChain_negative_firstBlockAfterGenesis_invalidBlocklord() {
+        val invalidBlocklord = Ed25519.generateKeyPair()
+        val genesisBlock = generateGenesisBlock()
+        val invalidBlock = generateNextBlock(genesisBlock, invalidBlocklord)
 
         val blockchain = listOf(genesisBlock, invalidBlock)
         assertFalse(BlockValidator.validateChain(blockchain))

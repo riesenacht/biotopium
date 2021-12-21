@@ -22,17 +22,30 @@ package ch.riesenacht.biotopium.core.effect
  * Represents an effect of a module.
  * An effect is a component which applies an effect to other components.
  * Effects and their effect receivers are usually objects (singletons).
- * Module effects are applied over the init-block.
  *
  * Effects should be applied using the [applyEffect] function.
  *
- * @param applier the function invoked on init
+ * @property applier the function invoked on init
  * @param nested the nested module effects
  *
  * @author Manuel Riesen
  */
-abstract class ModuleEffect(applier: (() -> Unit)? = null, vararg nested: ModuleEffect) {
-    init {
+abstract class ModuleEffect(
+        private val applier: (() -> Unit)? = null,
+        private vararg val nested: ModuleEffect,
+        private val profile: EffectProfile = EffectProfile.MAIN
+) {
+
+    /**
+     * Applies the current module effect.
+     */
+    fun apply(profile: EffectProfile = EffectProfile.MAIN) {
+
+        // exclude self and nested effects
+        if(profile != this.profile && !profile.also.contains(this.profile)) return
+
         applier?.invoke()
+        nested.forEach { it.apply(profile) }
     }
+
 }

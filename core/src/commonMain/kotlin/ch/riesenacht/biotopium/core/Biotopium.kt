@@ -21,11 +21,11 @@ package ch.riesenacht.biotopium.core
 import ch.riesenacht.biotopium.bus.BlockCandidateBus
 import ch.riesenacht.biotopium.bus.OutgoingActionBus
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
+import ch.riesenacht.biotopium.core.blockchain.KeyManager
 import ch.riesenacht.biotopium.core.blockchain.model.BlockCandidate
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.NetworkManager
 import ch.riesenacht.biotopium.network.model.PeerId
-import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.blockchain.ActionReqMessage
 import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
 import ch.riesenacht.biotopium.network.model.message.blockchain.ChainFwdMessage
@@ -33,29 +33,28 @@ import ch.riesenacht.biotopium.network.model.message.blockchain.ChainReqMessage
 
 /**
  * Represents the root of a biotopium instance.
- * @param p2pConfig the peer-to-peer configuration of the instance
- * @property blocklordPeerIds the peer IDs of the blocklords to use
+ * @property config the biotopium configuration
  *
  * @author Manuel Riesen
  */
-abstract class Biotopium(
-    p2pConfig: P2pConfiguration,
-    val blocklordPeerIds: List<PeerId>
-) {
+abstract class Biotopium(private val config: BiotopiumConfig) {
 
     /**
      * The network manager of the current biotopium instance.
      */
-    protected val networkManager: NetworkManager = NetworkManager(p2pConfig)
+    protected val networkManager: NetworkManager = NetworkManager(config.p2pConfig)
 
     private val blockchainManager = BlockchainManager
 
     protected val logger = Logging.logger { }
 
     private val randomBlocklordPeer: PeerId
-    get() = blocklordPeerIds.random()
+    get() = config.blocklordPeerIds.random()
 
     init {
+
+        KeyManager.keyPair = config.keyPair
+
         networkManager.registerMessageHandler(BlockAddMessage::class) { wrapper, _ ->
             val message = wrapper.message
             BlockCandidateBus.onNext(BlockCandidate(message.block))

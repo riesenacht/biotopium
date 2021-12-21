@@ -16,20 +16,27 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core
+package ch.riesenacht.biotopium.core.blockchain.effect
 
-import ch.riesenacht.biotopium.core.blockchain.effect.DevBlocklordSourceInitEffect
+import ch.riesenacht.biotopium.core.blockchain.BlocklordSource
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.ModuleEffect
-import ch.riesenacht.biotopium.serialization.CoreSerializersModuleEffect
+import ch.riesenacht.biotopium.core.effect.SideEffect
 
 /**
- * The core module effect.
- * Contains all effects of the core module as nested effects.
- * Applying this effect means applying every effect of the core module.
+ * The module effect for initializing the [BlocklordSource] with the list of trusted [blocklords].
+ * The blocklord source is informed whether the list is [trusted] or not.
+ * A [profile] can be set.
  *
  * @author Manuel Riesen
  */
-object CoreModuleEffect : ModuleEffect(nested = arrayOf(
-    CoreSerializersModuleEffect,
-    DevBlocklordSourceInitEffect
-))
+@SideEffect(receiver = BlocklordSource::class)
+abstract class BlocklordSourceInitEffect(
+    blocklords: List<Address>,
+    trusted: Boolean,
+    profile: EffectProfile = EffectProfile.MAIN
+) : ModuleEffect({
+    // initialize blocklord source
+    BlocklordSource.init(blocklords, trusted)
+}, profile = profile)

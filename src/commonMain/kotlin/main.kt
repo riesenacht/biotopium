@@ -18,6 +18,8 @@
 
 
 import ch.riesenacht.biotopium.core.CoreModuleEffect
+import ch.riesenacht.biotopium.core.crypto.Ed25519
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.logging.LoggingConfig
 import ch.riesenacht.biotopium.logging.LoggingLevel
@@ -28,6 +30,6 @@ suspend fun main() = Korge(width = 800, height = 500, title = "biotopium", bgcol
 
     LoggingConfig.setLoggingLevel(LoggingLevel.DEBUG)
 
-    applyEffect(CoreModuleEffect)
+    applyEffect(CoreModuleEffect, EffectProfile.DEV)
 
 }

@@ -24,6 +24,7 @@ import ch.riesenacht.biotopium.bus.OutgoingBlockBus
 import ch.riesenacht.biotopium.core.Biotopium
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.ActionCandidate
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.logging.LoggingConfig
 import ch.riesenacht.biotopium.logging.LoggingLevel
@@ -36,7 +37,7 @@ import kotlinx.coroutines.awaitCancellation
  *
  * @author Manuel Riesen
  */
-object Blocklord : Biotopium(blocklordP2pConfig, emptyList()) {
+object Blocklord : Biotopium(blocklordConfig) {
 
     init {
         networkManager.registerMessageHandler(ActionReqMessage::class) { wrapper, _ ->
@@ -55,8 +56,8 @@ object Blocklord : Biotopium(blocklordP2pConfig, emptyList()) {
 
 suspend fun main() {
     LoggingConfig.setLoggingLevel(LoggingLevel.DEBUG)
-    applyEffect(CoreModuleEffect)
-    applyEffect(BlocklordModuleEffect)
+    applyEffect(CoreModuleEffect, EffectProfile.DEV)
+    applyEffect(BlocklordModuleEffect, EffectProfile.DEV)
     Blocklord.startP2pNode()
     println("blocklord started")
     awaitCancellation()

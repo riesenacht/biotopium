@@ -16,11 +16,23 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium
+package ch.riesenacht.biotopium.core.blockchain
 
-import ch.riesenacht.biotopium.core.Biotopium
+import ch.riesenacht.biotopium.core.blockchain.effect.BlocklordSourceInitEffect
+import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 
 /**
- * Represents a biotopium instance in client-mode.
+ * The module effect for initializing the blocklord source
+ * with the test blocklord addresses.
+ * Be aware: applying this effect initializes the blocklord source with *insecure* addresses!
+ *
+ * @author Manuel Riesen
  */
-object BiotopiumClient : Biotopium(biotopiumClientConfig)
+object TestBlocklordSourceInitEffect : BlocklordSourceInitEffect(
+    listOf(
+        Address.fromBase64("5bM4woCyhiqks8vZ+ZdyX4B7HvjvdEawljnJ96b7oOw=")
+    ),
+    trusted = false,
+    profile = EffectProfile.TEST
+)

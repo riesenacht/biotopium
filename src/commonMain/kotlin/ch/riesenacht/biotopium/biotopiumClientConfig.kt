@@ -18,9 +18,14 @@
 
 package ch.riesenacht.biotopium
 
-import ch.riesenacht.biotopium.core.Biotopium
+import ch.riesenacht.biotopium.core.BiotopiumConfig
+import ch.riesenacht.biotopium.core.crypto.Ed25519
 
 /**
- * Represents a biotopium instance in client-mode.
+ * The configuration for the biotopium client instance.
  */
-object BiotopiumClient : Biotopium(biotopiumClientConfig)
+val biotopiumClientConfig = BiotopiumConfig(
+    clientP2pConfig,
+    blocklordPeerIds,
+    Ed25519.generateKeyPair()
+)

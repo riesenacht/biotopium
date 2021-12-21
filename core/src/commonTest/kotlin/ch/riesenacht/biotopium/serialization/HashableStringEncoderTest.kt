@@ -2,6 +2,7 @@ package ch.riesenacht.biotopium.serialization
 
 import ch.riesenacht.biotopium.TestCoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.*
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.world.model.Owner
 import ch.riesenacht.biotopium.core.world.model.coord
@@ -24,7 +25,7 @@ class HashableStringEncoderTest : EncoderTest() {
 
     @BeforeTest
     fun init() {
-        applyEffect(TestCoreModuleEffect)
+        applyEffect(TestCoreModuleEffect, EffectProfile.TEST)
     }
 
     @Test

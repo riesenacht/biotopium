@@ -16,21 +16,23 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core
+
+import ch.riesenacht.biotopium.core.crypto.model.KeyPair
+import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 
 /**
- * Represents a homogenous, ordered collection of elements.
+ * Represents the configuration for the biotopium instance.
+ *
+ * @property p2pConfig peer-to-peer configuration
+ * @property blocklordPeerIds peer IDs of blocklords
+ * @property keyPair key pair
  *
  * @author Manuel Riesen
  */
-typealias Book<T> = List<T>
-
-/**
- * Creates a [book][Book] containing the given [elements].
- */
-fun <T> bookOf(vararg elements: T) = listOf(*elements)
-
-/**
- * Creates a [book][Book] containing the given [elements].
- */
-fun <T> bookOf(elements: List<T>) = elements.toList()
+class BiotopiumConfig(
+    val p2pConfig: P2pConfiguration,
+    val blocklordPeerIds: List<PeerId>,
+    val keyPair: KeyPair,
+)

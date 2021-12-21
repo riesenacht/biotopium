@@ -27,6 +27,7 @@ import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.core.time.model.Timestamp
@@ -97,7 +98,7 @@ class ActionValidatorTest {
 
     @BeforeTest
     fun init() {
-        applyEffect(TestCoreModuleEffect)
+        applyEffect(TestCoreModuleEffect, EffectProfile.TEST)
     }
 
     /*

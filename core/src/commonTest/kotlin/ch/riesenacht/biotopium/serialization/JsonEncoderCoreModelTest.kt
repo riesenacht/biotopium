@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.serialization
 import ch.riesenacht.biotopium.TestCoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.item.*
@@ -44,7 +45,7 @@ class JsonEncoderCoreModelTest : EncoderTest() {
 
     @BeforeTest
     fun init() {
-        applyEffect(TestCoreModuleEffect)
+        applyEffect(TestCoreModuleEffect, EffectProfile.TEST)
     }
 
     @Test

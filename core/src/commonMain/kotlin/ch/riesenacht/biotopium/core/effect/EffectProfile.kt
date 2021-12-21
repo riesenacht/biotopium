@@ -16,11 +16,33 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium
-
-import ch.riesenacht.biotopium.core.Biotopium
+package ch.riesenacht.biotopium.core.effect
 
 /**
- * Represents a biotopium instance in client-mode.
+ * Represents a profile (or context) of a module effect.
+ *
+ * @property also all profiles which are inherited or applied as well
+ *
+ * @author Manuel Riesen
  */
-object BiotopiumClient : Biotopium(biotopiumClientConfig)
+enum class EffectProfile(
+    vararg val also: EffectProfile = emptyArray()
+) {
+    /**
+     * The main profile.
+     * Can be seen as the default context.
+     */
+    MAIN,
+
+    /**
+     * The development profile.
+     * This profile is used for development instances only.
+     */
+    DEV(MAIN),
+
+    /**
+     * The test profile.
+     * This profile is used for testing only (e.g. unit tests).
+     */
+    TEST(MAIN)
+}

@@ -19,7 +19,6 @@
 package ch.riesenacht.biotopium.core.blockchain
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
-import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.model.KeyPair
 
 /**
@@ -33,10 +32,11 @@ object KeyManager {
      * The key pair of the client.
      */
     //TODO change key source, should be configurable
-    val keyPair: KeyPair = Ed25519.generateKeyPair()
+    lateinit var keyPair: KeyPair
 
     /**
      * The address of the client.
      */
     val address: Address by lazy { Address(keyPair.publicKey) }
+
 }

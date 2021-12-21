@@ -18,8 +18,8 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.record
 
-import ch.riesenacht.biotopium.core.blockchain.model.Book
-import ch.riesenacht.biotopium.core.blockchain.model.bookOf
+import ch.riesenacht.biotopium.core.Book
+import ch.riesenacht.biotopium.core.bookOf
 
 /**
  * Represents a [book][Book] containing block records.

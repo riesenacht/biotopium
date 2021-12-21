@@ -16,11 +16,15 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium
+package ch.riesenacht.biotopium.blocklord
 
-import ch.riesenacht.biotopium.core.Biotopium
+import ch.riesenacht.biotopium.core.BiotopiumConfig
 
 /**
- * Represents a biotopium instance in client-mode.
+ * The configuration of the blocklord biotopium instance.
  */
-object BiotopiumClient : Biotopium(biotopiumClientConfig)
+val blocklordConfig = BiotopiumConfig(
+    blocklordP2pConfig,
+    emptyList(),
+    blocklordKeys
+)

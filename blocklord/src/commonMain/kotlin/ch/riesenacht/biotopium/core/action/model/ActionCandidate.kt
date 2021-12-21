@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.action.model
 
 import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
+import kotlin.jvm.JvmInline
 
 /**
  * Represents a candidate action.

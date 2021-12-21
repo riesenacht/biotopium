@@ -26,9 +26,8 @@ import ch.riesenacht.biotopium.core.effect.ModuleEffect
  *
  * @author Manuel Riesen
  */
-object BlocklordComponentInitEffect : ModuleEffect() {
-    init {
-        // trigger block smith initialization
-        BlockSmith
-    }
-}
+object BlocklordComponentInitEffect : ModuleEffect({
+
+    // trigger block smith initialization
+    BlockSmith
+})

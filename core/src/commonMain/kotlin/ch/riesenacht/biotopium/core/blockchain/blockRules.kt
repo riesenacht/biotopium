@@ -40,6 +40,9 @@ val generalBlockRules = blockRuleset {
         }
     }
 
+    // The author of the block is a blocklord
+    rule { block: Block, _: Block -> BlocklordSource.isTrusted(block.author) }
+
     // The signature of the block data author is valid
     rule { block: Block, _: Block ->
         block.data.all { data ->

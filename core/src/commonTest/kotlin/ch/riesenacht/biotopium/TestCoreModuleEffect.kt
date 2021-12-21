@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium
 
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.blockchain.BlockchainTestSerializersModuleEffect
+import ch.riesenacht.biotopium.core.blockchain.TestBlocklordSourceInitEffect
 import ch.riesenacht.biotopium.core.effect.ModuleEffect
 
 /**
@@ -29,5 +30,6 @@ import ch.riesenacht.biotopium.core.effect.ModuleEffect
  */
 object TestCoreModuleEffect : ModuleEffect(nested = arrayOf(
     CoreModuleEffect,
-    BlockchainTestSerializersModuleEffect
+    BlockchainTestSerializersModuleEffect,
+    TestBlocklordSourceInitEffect
 ))

@@ -25,6 +25,6 @@ package ch.riesenacht.biotopium.core.effect
  * it is not very expressive.
  * It is strongly recommended using this function for applying effects.
  */
-fun applyEffect(vararg effect: ModuleEffect) {
-
+fun applyEffect(effect: ModuleEffect, profile: EffectProfile = EffectProfile.MAIN) {
+    effect.apply(profile)
 }

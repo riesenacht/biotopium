@@ -16,11 +16,21 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium
-
-import ch.riesenacht.biotopium.core.Biotopium
+package ch.riesenacht.biotopium.core
 
 /**
- * Represents a biotopium instance in client-mode.
+ * Represents a homogenous, ordered collection of elements.
+ *
+ * @author Manuel Riesen
  */
-object BiotopiumClient : Biotopium(biotopiumClientConfig)
+typealias Book<T> = List<T>
+
+/**
+ * Creates a [book][Book] containing the given [elements].
+ */
+fun <T> bookOf(vararg elements: T) = listOf(*elements)
+
+/**
+ * Creates a [book][Book] containing the given [elements].
+ */
+fun <T> bookOf(elements: List<T>) = elements.toList()

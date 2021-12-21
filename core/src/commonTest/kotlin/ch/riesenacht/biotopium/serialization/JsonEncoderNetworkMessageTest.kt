@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.serialization
 import ch.riesenacht.biotopium.TestCoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.network.model.PeerId
 import ch.riesenacht.biotopium.network.model.message.DebugMessage
@@ -43,7 +44,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
 
     @BeforeTest
     fun init() {
-        applyEffect(TestCoreModuleEffect)
+        applyEffect(TestCoreModuleEffect, EffectProfile.TEST)
     }
 
     @Test

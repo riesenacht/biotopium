@@ -16,11 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium
+package ch.riesenacht.biotopium.blocklord
 
-import ch.riesenacht.biotopium.core.Biotopium
+import ch.riesenacht.biotopium.core.crypto.model.KeyPair
+import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
+import ch.riesenacht.biotopium.core.crypto.model.PublicKey
 
 /**
- * Represents a biotopium instance in client-mode.
+ * The key pair of the blocklord.
  */
-object BiotopiumClient : Biotopium(biotopiumClientConfig)
+val blocklordKeys = KeyPair(
+    privateKey = PrivateKey(base64="JR8g3OHi0ZD5DVFr4Np2kJNSRaivWKNTn60i2a5/5XSZavdyWMheSlAS3iTqwruF+/yV9vtIl+oynEhBo3T5pg=="),
+    publicKey = PublicKey(base64="mWr3cljIXkpQEt4k6sK7hfv8lfb7SJfqMpxIQaN0+aY=")
+)
