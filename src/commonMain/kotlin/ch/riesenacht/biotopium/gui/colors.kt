@@ -16,8 +16,37 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+package ch.riesenacht.biotopium.gui
 
-import com.soywiz.korge.Korge
-import ch.riesenacht.biotopium.gui.BiotopiumModule
+import com.soywiz.korim.color.Colors
 
-suspend fun main() = Korge(Korge.Config(module = BiotopiumModule, debug = true))
+/**
+ * The primary color.
+ */
+val primaryColor = Colors["#50C878"]
+
+/**
+ * Darker variant of the primary color.
+ */
+val darkPrimaryColor = Colors["#257A41"]
+
+/**
+ * The accent color.
+ */
+val accentColor = Colors["#C763BE"]
+
+/**
+ * The secondary color.
+ */
+val secondaryColor = Colors["#C78F3C"]
+
+/**
+ * Darker variant of the secondary color.
+ */
+val darkSecondaryColor = Colors["#7A4025"]
+
+/**
+ * The neutral color.
+ */
+val neutralColor = Colors["#F8FCFA"]
+

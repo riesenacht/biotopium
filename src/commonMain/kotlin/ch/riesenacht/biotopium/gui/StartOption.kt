@@ -16,8 +16,15 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+package ch.riesenacht.biotopium.gui
 
-import com.soywiz.korge.Korge
-import ch.riesenacht.biotopium.gui.BiotopiumModule
-
-suspend fun main() = Korge(Korge.Config(module = BiotopiumModule, debug = true))
+/**
+ * The start option for biotopium.
+ * Whether to create a new account or to import a key.
+ *
+ * @author Manuel Riesen
+ */
+enum class StartOption {
+    NEW_ACCOUNT,
+    IMPORT_KEY
+}

@@ -16,8 +16,16 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+package ch.riesenacht.biotopium.gui.menu
 
-import com.soywiz.korge.Korge
-import ch.riesenacht.biotopium.gui.BiotopiumModule
+import com.soywiz.korge.scene.Scene
+import com.soywiz.korge.view.*
+import ch.riesenacht.biotopium.gui.GameConfig
 
-suspend fun main() = Korge(Korge.Config(module = BiotopiumModule, debug = true))
+class MainMenuScene(private val config: GameConfig) : Scene() {
+
+    override suspend fun Container.sceneInit() {
+        mainMenu(this.containerRoot.width, this.containerRoot.height, config, this@MainMenuScene)
+    }
+
+}

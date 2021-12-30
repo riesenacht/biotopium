@@ -16,8 +16,14 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+package ch.riesenacht.biotopium.gui
 
-import com.soywiz.korge.Korge
-import ch.riesenacht.biotopium.gui.BiotopiumModule
+import com.soywiz.korge.view.Text
+import com.soywiz.korma.geom.Rectangle
 
-suspend fun main() = Korge(Korge.Config(module = BiotopiumModule, debug = true))
+/**
+ * Adjusts the text bounds to the current width and height.
+ */
+fun Text.adjustBounds() {
+    setTextBounds(Rectangle(0.0, 0.0, this.width, this.height))
+}

@@ -16,8 +16,17 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+package ch.riesenacht.biotopium.gui
 
-import com.soywiz.korge.Korge
-import ch.riesenacht.biotopium.gui.BiotopiumModule
+/**
+ * Represents the game configuration.
+ *
+ * @author Manuel Riesen
+ */
+class GameConfig {
 
-suspend fun main() = Korge(Korge.Config(module = BiotopiumModule, debug = true))
+    /**
+     * The start option.
+     */
+    var startOption: StartOption? = null
+}

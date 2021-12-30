@@ -16,8 +16,18 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+package ch.riesenacht.biotopium.gui.realm
 
-import com.soywiz.korge.Korge
-import ch.riesenacht.biotopium.gui.BiotopiumModule
+import com.soywiz.korge.scene.Scene
+import com.soywiz.korge.view.Container
+import ch.riesenacht.biotopium.gui.GameConfig
 
-suspend fun main() = Korge(Korge.Config(module = BiotopiumModule, debug = true))
+/**
+ * The realm scene.
+ */
+class RealmScene(config: GameConfig) : Scene() {
+
+    override suspend fun Container.sceneInit() {
+        TODO("realm scene not implemented")
+    }
+}
