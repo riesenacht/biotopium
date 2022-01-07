@@ -99,6 +99,12 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
      * Registers a new message [handler] for a [type] of [Message] on the [p2pNode].
      * Delegates to the [p2pNode].
      */
-     fun <T : Message> registerMessageHandler(type: KClass<T>, handler: MessageHandler<T>) = p2pNode.registerMessageHandler(type, handler)
+    fun <T : Message> registerMessageHandler(type: KClass<T>, handler: MessageHandler<T>) = p2pNode.registerMessageHandler(type, handler)
 
+
+    /**
+     * Removes a message [handler] for a [type] of [Message] on the [p2pNode].
+     * Delegates to the [p2pNode].
+     */
+    fun <T : Message> removeMessageHandler(type: KClass<T>, handler: MessageHandler<T>) = p2pNode.removeMessageHandler(type, handler)
 }

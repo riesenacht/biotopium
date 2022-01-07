@@ -31,7 +31,6 @@ object KeyManager {
     /**
      * The key pair of the client.
      */
-    //TODO change key source, should be configurable
     lateinit var keyPair: KeyPair
 
     /**

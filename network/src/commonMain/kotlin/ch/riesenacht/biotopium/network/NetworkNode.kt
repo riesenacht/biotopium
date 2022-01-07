@@ -100,6 +100,13 @@ abstract class NetworkNode : NetworkContext {
     }
 
     /**
+     * Removes a [handler] for a message [type].
+     */
+    fun <T : Message> removeMessageHandler(type: KClass<T>, handler: MessageHandler<T>) {
+        handlerMap[type] = handlerMap[type]?.filterNot { it == handler }?.toMutableList() ?: mutableListOf()
+    }
+
+    /**
      * Handles the incoming [serialized] message.
      * The corresponding message handlers are called.
      */
