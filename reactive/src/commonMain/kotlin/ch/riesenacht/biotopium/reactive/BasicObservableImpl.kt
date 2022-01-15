@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -16,16 +16,26 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.bus
+package ch.riesenacht.biotopium.reactive
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
-import ch.riesenacht.biotopium.bus.EventBus
+import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.subscribe
 
 /**
- * Represents the event bus for outgoing blocks.
- * Outgoing means, the blocks are created by the current blocklord
- * and are ready to be published to the network.
+ * Implementation of [BasicObservable].
+ *
+ * @property observable the underlying observable
  *
  * @author Manuel Riesen
  */
-object OutgoingBlockBus : EventBus<Block>()
+abstract class BasicObservableImpl<T>(
+    private val observable: Observable<T>
+) : BasicObservable<T> {
+
+    /**
+     * Subscribes to the observable.
+     * [onNext] is called on each state change.
+     */
+    override fun subscribe(onNext: ((T) -> Unit)) = observable.subscribe(onNext = onNext)
+
+}

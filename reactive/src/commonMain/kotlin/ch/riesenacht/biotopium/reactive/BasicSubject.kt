@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -16,16 +16,24 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.bus
+package ch.riesenacht.biotopium.reactive
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
-import ch.riesenacht.biotopium.bus.EventBus
 
 /**
- * Represents the event bus for outgoing blocks.
- * Outgoing means, the blocks are created by the current blocklord
- * and are ready to be published to the network.
+ * Represents a basic subject.
+ * The type of the underlying subject is less important and is defined by the implementation.
  *
  * @author Manuel Riesen
  */
-object OutgoingBlockBus : EventBus<Block>()
+interface BasicSubject<T> {
+
+    /**
+     * Sets the next [item] of the subject.
+     */
+    fun onNext(item: T)
+
+    /**
+     * Sets multiple next [items] of the subject.
+     */
+    fun allOnNext(items: List<T>)
+}

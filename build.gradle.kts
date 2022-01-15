@@ -10,6 +10,7 @@ val biotopiumArtifactId: String by project
 val biotopiumVersion: String by project
 val reaktiveVersion: String by project
 val biotopiumLoggingArtifactId: String by project
+val biotopiumReactiveArtifactId: String by project
 val biotopiumNetworkArtifactId: String by project
 val biotopiumCoreArtifactId: String by project
 val jvmTargetVersion: String by project
@@ -51,9 +52,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":$biotopiumLoggingArtifactId"))
+                implementation(project(":$biotopiumReactiveArtifactId"))
                 implementation(project(":$biotopiumCoreArtifactId"))
                 implementation(project(":$biotopiumNetworkArtifactId"))
-                implementation("com.badoo.reaktive:reaktive:$reaktiveVersion")
             }
         }
         val commonTest by getting {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -16,16 +16,33 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.bus
+package ch.riesenacht.biotopium.reactive.collection
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
-import ch.riesenacht.biotopium.bus.EventBus
+import kotlin.test.assertEquals
 
 /**
- * Represents the event bus for outgoing blocks.
- * Outgoing means, the blocks are created by the current blocklord
- * and are ready to be published to the network.
+ * Event recorder for testing events.
  *
  * @author Manuel Riesen
  */
-object OutgoingBlockBus : EventBus<Block>()
+class EventRecorder {
+
+    /**
+     * The number of occurred events.
+     */
+    private var numEvents: Int = 0
+
+    /**
+     * Records the event.
+     * Increments the number of occured events.
+     */
+    fun record() = numEvents++
+
+    /**
+     * Asserts that an [expected] number of events occurred.
+     * @param countFirst whether the first event is counted as well.
+     */
+    fun assertEvents(expected: Int, countFirst: Boolean = false) {
+        assertEquals(expected, this.numEvents - (if(countFirst) 0 else 1))
+    }
+}

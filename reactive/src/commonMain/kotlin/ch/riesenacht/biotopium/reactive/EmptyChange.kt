@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -16,16 +16,13 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.bus
-
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
-import ch.riesenacht.biotopium.bus.EventBus
+package ch.riesenacht.biotopium.reactive
 
 /**
- * Represents the event bus for outgoing blocks.
- * Outgoing means, the blocks are created by the current blocklord
- * and are ready to be published to the network.
+ * Represents an empty change.
+ * This type is passed as parameter
+ * for subjects without any value except the information of change.
  *
  * @author Manuel Riesen
  */
-object OutgoingBlockBus : EventBus<Block>()
+object EmptyChange

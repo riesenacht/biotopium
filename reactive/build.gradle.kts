@@ -5,8 +5,8 @@ plugins {
 
 val jvmTargetVersion: String by project
 val kotlinxSerializationJsonVersion: String by project
+val reaktiveVersion: String by project
 val biotopiumLoggingArtifactId: String by project
-val biotopiumReactiveArtifactId: String by project
 val biotopiumNetworkArtifactId: String by project
 val biotopiumSubmoduleGroupId: String by project
 val biotopiumVersion: String by project
@@ -20,6 +20,7 @@ repositories {
 }
 
 kotlin {
+
     js(IR) {
         binaries.executable()
         browser {
@@ -28,6 +29,7 @@ kotlin {
             }
         }
     }
+
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = jvmTargetVersion
@@ -37,13 +39,11 @@ kotlin {
             useJUnitPlatform()
         }
     }
+
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":$biotopiumLoggingArtifactId"))
-                implementation(project(":$biotopiumReactiveArtifactId"))
-                implementation(project(":$biotopiumNetworkArtifactId"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationJsonVersion")
+                api("com.badoo.reaktive:reaktive:1.2.0")
             }
         }
         val commonTest by getting {
@@ -51,25 +51,5 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting {
-            dependencies {
-
-                // LazySodium Java, libsodium for JVM
-                implementation("com.goterl:lazysodium-java:5.1.1")
-            }
-        }
-        val jvmTest by getting
-        val jsMain by getting {
-            dependencies {
-
-                // SHA-3 implementation for JavaScript (SHA-3 FIPS 202 standard)
-                implementation(npm("sha3", "2.1.4"))
-
-                // Port of TweetNaCl / NaCl
-                implementation(npm("tweetnacl", "1.0.3"))
-                implementation(npm("tweetnacl-util", "0.15.1"))
-            }
-        }
-        val jsTest by getting
     }
 }
