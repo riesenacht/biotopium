@@ -23,6 +23,7 @@ import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
+import ch.riesenacht.biotopium.reactive.collection.MutableObservableMap
 
 /**
  * Represents the world in its mutable form.
@@ -34,18 +35,18 @@ interface MutableWorld {
     /**
      * Mutable tile map.
      */
-    val tiles: MutableMap<Pair<Coordinate, Coordinate>, Tile>
+    val tiles: MutableObservableMap<Pair<Coordinate, Coordinate>, Tile>
 
 
     /**
      * Mutable realm map.
      */
-    val realms: MutableMap<Pair<RealmIndex, RealmIndex>, Realm>
+    val realms: MutableObservableMap<Pair<RealmIndex, RealmIndex>, Realm>
 
 
     /**
      * Mutable player map.
      */
-    val players: MutableMap<Address, Player>
+    val players: MutableObservableMap<Address, Player>
 
 }

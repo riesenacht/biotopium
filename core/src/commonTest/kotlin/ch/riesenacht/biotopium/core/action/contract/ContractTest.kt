@@ -39,6 +39,8 @@ import ch.riesenacht.biotopium.core.world.model.Owner
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
+import ch.riesenacht.biotopium.reactive.collection.MutableObservableMap
+import ch.riesenacht.biotopium.reactive.collection.mutableObservableMapOf
 import kotlin.test.BeforeTest
 
 abstract class ContractTest {
@@ -50,22 +52,22 @@ abstract class ContractTest {
 
     protected class TestMutableWorld : MutableWorld {
 
-        override val tiles: MutableMap<Pair<Coordinate, Coordinate>, Tile> = mutableMapOf()
+        override val tiles: MutableObservableMap<Pair<Coordinate, Coordinate>, Tile> = mutableObservableMapOf()
 
 
-        override val realms: MutableMap<Pair<RealmIndex, RealmIndex>, Realm> = mutableMapOf()
+        override val realms: MutableObservableMap<Pair<RealmIndex, RealmIndex>, Realm> = mutableObservableMapOf()
 
 
-        override val players: MutableMap<Address, Player> = mutableMapOf()
+        override val players: MutableObservableMap<Address, Player> = mutableObservableMapOf()
     }
 
     protected class TestWorld: World {
 
-        override val tiles = mutableMapOf<Pair<Coordinate, Coordinate>, Tile>()
+        override val tiles = mutableObservableMapOf<Pair<Coordinate, Coordinate>, Tile>()
 
-        override val realms = mutableMapOf<Pair<RealmIndex, RealmIndex>, Realm>()
+        override val realms = mutableObservableMapOf<Pair<RealmIndex, RealmIndex>, Realm>()
 
-        override val players = mutableMapOf<Address, Player>()
+        override val players = mutableObservableMapOf<Address, Player>()
 
     }
 

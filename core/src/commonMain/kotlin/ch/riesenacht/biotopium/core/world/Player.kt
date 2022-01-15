@@ -20,6 +20,9 @@ package ch.riesenacht.biotopium.core.world
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.world.model.item.Item
+import ch.riesenacht.biotopium.reactive.collection.MutableObservableList
+import ch.riesenacht.biotopium.reactive.collection.ObservableList
+import ch.riesenacht.biotopium.reactive.collection.mutableObservableListOf
 
 /**
  * Represents a player.
@@ -35,12 +38,12 @@ data class Player(
     /**
      * Mutable variant of the player's inventory.
      */
-    private val mutableItems: MutableList<Item> = mutableListOf()
+    private val mutableItems: MutableObservableList<Item> = mutableObservableListOf()
 
     /**
      * The player's inventory.
      */
-    val items: List<Item>
+    val items: ObservableList<Item>
     get() = mutableItems
 
     /**

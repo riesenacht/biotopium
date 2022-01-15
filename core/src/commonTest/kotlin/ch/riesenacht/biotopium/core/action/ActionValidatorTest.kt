@@ -43,6 +43,7 @@ import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
 import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 import ch.riesenacht.biotopium.core.world.model.plant.growthRate
+import ch.riesenacht.biotopium.reactive.collection.mutableObservableMapOf
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -88,11 +89,11 @@ class ActionValidatorTest {
 
     private class TestWorld: World {
 
-        override val tiles = mutableMapOf<Pair<Coordinate, Coordinate>, Tile>()
+        override val tiles = mutableObservableMapOf<Pair<Coordinate, Coordinate>, Tile>()
 
-        override val realms = mutableMapOf<Pair<RealmIndex, RealmIndex>, Realm>()
+        override val realms = mutableObservableMapOf<Pair<RealmIndex, RealmIndex>, Realm>()
 
-        override val players = mutableMapOf<Address, Player>()
+        override val players = mutableObservableMapOf<Address, Player>()
 
     }
 

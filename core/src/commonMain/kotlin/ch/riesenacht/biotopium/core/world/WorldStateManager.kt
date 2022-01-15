@@ -25,6 +25,9 @@ import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
+import ch.riesenacht.biotopium.reactive.collection.MutableObservableMap
+import ch.riesenacht.biotopium.reactive.collection.ObservableMap
+import ch.riesenacht.biotopium.reactive.collection.mutableObservableMapOf
 
 /**
  * State manager of the world.
@@ -36,48 +39,48 @@ object WorldStateManager: World {
     /**
      * Mutable tile map.
      */
-    private val mutableTiles: MutableMap<Pair<Coordinate, Coordinate>, Tile> = mutableMapOf()
+    private val mutableTiles: MutableObservableMap<Pair<Coordinate, Coordinate>, Tile> = mutableObservableMapOf()
 
     /**
      * Tile map.
      * Each tile is mapped by its coordinates.
      */
-    override val tiles: Map<Pair<Coordinate, Coordinate>, Tile>
+    override val tiles: ObservableMap<Pair<Coordinate, Coordinate>, Tile>
     get() = mutableTiles
 
     /**
      * Mutable realm map.
      */
-    private val mutableRealms: MutableMap<Pair<RealmIndex, RealmIndex>, Realm> = mutableMapOf()
+    private val mutableRealms: MutableObservableMap<Pair<RealmIndex, RealmIndex>, Realm> = mutableObservableMapOf()
 
     /**
      * Realm map.
      * Each realm is mapped by its realm indices.
      */
-    override val realms: Map<Pair<RealmIndex, RealmIndex>, Realm>
+    override val realms: ObservableMap<Pair<RealmIndex, RealmIndex>, Realm>
     get() = mutableRealms
 
     /**
      * Mutable player map.
      */
-    private val mutablePlayers: MutableMap<Address, Player> = mutableMapOf()
+    private val mutablePlayers: MutableObservableMap<Address, Player> = mutableObservableMapOf()
 
     /**
      * Player map.
      * Each player is mapped by its wallet address.
      */
-    override val players: Map<Address, Player>
+    override val players: ObservableMap<Address, Player>
     get() = mutablePlayers
 
     /**
      * Represents the world in its mutable state.
      */
     private val mutableWorld = object : MutableWorld {
-        override val tiles: MutableMap<Pair<Coordinate, Coordinate>, Tile>
+        override val tiles: MutableObservableMap<Pair<Coordinate, Coordinate>, Tile>
             get() = mutableTiles
-        override val realms: MutableMap<Pair<RealmIndex, RealmIndex>, Realm>
+        override val realms: MutableObservableMap<Pair<RealmIndex, RealmIndex>, Realm>
             get() = mutableRealms
-        override val players: MutableMap<Address, Player>
+        override val players: MutableObservableMap<Address, Player>
             get() = mutablePlayers
     }
 
