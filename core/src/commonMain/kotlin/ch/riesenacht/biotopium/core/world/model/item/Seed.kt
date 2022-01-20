@@ -22,6 +22,7 @@ import ch.riesenacht.biotopium.core.world.model.Owner
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 /**
  * Represents a seed of a plant.
@@ -38,4 +39,6 @@ data class Seed(
     override val plantType: PlantType
 ) : Item, PlantItem {
     override val type = ItemType.SEED
+    @Transient
+    override val identifier = "${super.identifier}_${plantType.name.lowercase()}"
 }

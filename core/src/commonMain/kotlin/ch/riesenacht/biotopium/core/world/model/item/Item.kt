@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.world.model.item
 
 import ch.riesenacht.biotopium.core.world.model.Element
+import kotlinx.serialization.Transient
 
 /**
  * Represents an item.
@@ -32,4 +33,11 @@ sealed interface Item : Element {
      * The type of item
      */
     val type: ItemType
+
+    /**
+     * The identifier of the item
+     */
+    @Transient
+    val identifier: String
+    get() = type.name.lowercase()
 }

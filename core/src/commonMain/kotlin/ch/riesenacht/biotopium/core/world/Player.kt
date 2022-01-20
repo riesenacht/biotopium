@@ -47,16 +47,22 @@ data class Player(
     get() = mutableItems
 
     /**
-     * Adds an item to the player's inventory.
+     * Adds an [item] to the player's inventory.
      */
     fun addItem(item: Item) {
         mutableItems.add(item)
     }
 
+    /**
+     * Removes an [item] from the player's inventory.
+     */
     fun removeItem(item: Item) {
         mutableItems.remove(item)
     }
 
+    /**
+     * Adds all [items] to the player's inventory.
+     */
     fun addAllItems(items: List<Item>) {
         mutableItems.addAll(items)
     }
