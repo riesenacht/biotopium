@@ -19,22 +19,18 @@
 package ch.riesenacht.biotopium.gui.menu
 
 import ch.riesenacht.biotopium.gui.*
-import com.soywiz.klock.seconds
+import ch.riesenacht.biotopium.gui.realm.RealmScene
+import ch.riesenacht.biotopium.gui.skin.BiotopiumUISkin
 import com.soywiz.korge.input.onClick
-import com.soywiz.korge.scene.MaskTransition
 import com.soywiz.korge.scene.SceneContainer
 import com.soywiz.korge.ui.korui.korui
 import com.soywiz.korge.ui.uiButton
 import com.soywiz.korge.ui.uiSkin
 import com.soywiz.korge.view.*
-import com.soywiz.korge.view.filter.TransitionFilter
 import com.soywiz.korio.async.launchImmediately
 import com.soywiz.korui.layout.horizontal
 import com.soywiz.korui.layout.preferredWidth
 import com.soywiz.korui.layout.vertical
-import ch.riesenacht.biotopium.gui.realm.RealmScene
-import ch.riesenacht.biotopium.gui.skin.BiotopiumUISkin
-import ch.riesenacht.biotopium.gui.adjustBounds
 
 /**
  * Starts the biotopium game.
@@ -42,10 +38,7 @@ import ch.riesenacht.biotopium.gui.adjustBounds
  */
 private fun startBiotopium(sceneContainer: SceneContainer, config: GameConfig) {
     launchImmediately(sceneContainer.coroutineContext) {
-        sceneContainer.changeTo<RealmScene>(config,
-            transition = MaskTransition(TransitionFilter.Transition.CIRCULAR),
-            time = 1.seconds
-        )
+        sceneContainer.changeTo<RealmScene>(config)
     }
 }
 

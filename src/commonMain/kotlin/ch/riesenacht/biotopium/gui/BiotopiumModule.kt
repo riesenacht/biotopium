@@ -18,17 +18,18 @@
 
 package ch.riesenacht.biotopium.gui
 
+import ch.riesenacht.biotopium.BiotopiumClient
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
+import ch.riesenacht.biotopium.gui.menu.MainMenuScene
+import ch.riesenacht.biotopium.gui.realm.RealmScene
 import ch.riesenacht.biotopium.logging.LoggingConfig
 import ch.riesenacht.biotopium.logging.LoggingLevel
 import com.soywiz.korge.scene.Module
 import com.soywiz.korinject.AsyncInjector
 import com.soywiz.korma.geom.Size
 import com.soywiz.korma.geom.SizeInt
-import ch.riesenacht.biotopium.gui.menu.MainMenuScene
-import ch.riesenacht.biotopium.gui.realm.RealmScene
 
 /**
  * The biotopium game module.
@@ -51,6 +52,9 @@ object BiotopiumModule : Module() {
     init {
         LoggingConfig.setLoggingLevel(LoggingLevel.DEBUG)
         applyEffect(CoreModuleEffect, EffectProfile.DEV)
+
+        //TODO simple workaround to enforce initialization
+        BiotopiumClient
     }
 
     override suspend fun AsyncInjector.configure() {

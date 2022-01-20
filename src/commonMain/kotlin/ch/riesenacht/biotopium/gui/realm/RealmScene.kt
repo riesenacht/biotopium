@@ -18,9 +18,12 @@
 
 package ch.riesenacht.biotopium.gui.realm
 
+import ch.riesenacht.biotopium.core.blockchain.KeyManager
+import ch.riesenacht.biotopium.core.world.WorldStateManager
+import ch.riesenacht.biotopium.gui.GameConfig
+import ch.riesenacht.biotopium.gui.toolbar.flexToolbar
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.view.Container
-import ch.riesenacht.biotopium.gui.GameConfig
 
 /**
  * The realm scene.
@@ -28,6 +31,10 @@ import ch.riesenacht.biotopium.gui.GameConfig
 class RealmScene(config: GameConfig) : Scene() {
 
     override suspend fun Container.sceneInit() {
-        TODO("realm scene not implemented")
+        //TODO state management problem
+        val player = WorldStateManager.players[KeyManager.address]
+        if(player != null) {
+            val toolbar = flexToolbar(80.0, player.items)
+        }
     }
 }
