@@ -18,8 +18,8 @@
 
 package ch.riesenacht.biotopium.reactive.collection
 
-import ch.riesenacht.biotopium.reactive.BasicSubjectImpl
-import ch.riesenacht.biotopium.reactive.EmptyChange
+import ch.riesenacht.biotopium.reactive.*
+import com.badoo.reaktive.disposable.Disposable
 
 /**
  * Represents an observable mutable [map] consisting of [key][K]-[value][V] pairs.
@@ -33,29 +33,57 @@ class MutableObservableMap<K, V>(
     /**
      * The underlying basic subject for change detection.
      */
-    private val subject: BasicSubjectImpl<EmptyChange> = BasicSubjectImpl(EmptyChange)
+    private lateinit var subject: BasicSubject<Mutation<K>>
+
+    /**
+     * Whether the map is reactive or not.
+     * The list becomes reactive if at least one subscriber exists.
+     */
+    private var reactive: Boolean = false
+    set(value) {
+        if(field) return
+        subject = BasicSubjectImpl(Mutation(Operation.NONE, null))
+        field = value
+    }
+
+    /**
+     * Notifies the subject about an occurred [operation][op] at a [key].
+     */
+    private fun mutation(op: Operation, key: K) {
+        if(reactive) subject.onNext(Mutation(op, key))
+    }
+
+    /**
+     * Notifies the subject about an occurred [operation][op] at [keys].
+     */
+    private fun mutation(op: Operation, keys: Collection<K>) {
+        if(reactive) subject.allOnNext(keys.map { Mutation(op, it) })
+    }
 
     override fun clear() {
-        subject.onNext(EmptyChange)
+        mutation(Operation.REMOVE, map.keys)
         map.clear()
     }
 
     override fun put(key: K, value: V): V? {
-        subject.onNext(EmptyChange)
+        mutation(Operation.ADD, key)
         return map.put(key, value)
     }
 
     override fun putAll(from: Map<out K, V>) {
-        subject.onNext(EmptyChange)
+        mutation(Operation.ADD, from.keys)
         return map.putAll(from)
     }
 
     override fun remove(key: K): V? {
-        subject.onNext(EmptyChange)
+        mutation(Operation.REMOVE, key)
         return map.remove(key)
     }
 
-    override fun subscribe(onNext: (EmptyChange) -> Unit) = subject.subscribe(onNext)
+    override fun subscribe(onNext: (Mutation<K>) -> Unit): Disposable {
+        reactive = true
+        return subject.subscribe(onNext)
+    }
 }
 
 /**

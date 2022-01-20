@@ -16,18 +16,11 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.reactive.collection
-
-import ch.riesenacht.biotopium.reactive.BasicObservable
-import ch.riesenacht.biotopium.reactive.EmptyChange
-import ch.riesenacht.biotopium.reactive.Mutation
+package ch.riesenacht.biotopium.reactive
 
 /**
- * Represents an observable [map][Map] consisting of [key][K]-[value][V] pairs.
- *
- * @see Map
- * @see BasicObservable
+ * Represents a mutation of a [resource] with a specific [operation][op].
  *
  * @author Manuel Riesen
  */
-interface ObservableMap<K, V> : Map<K, V>, BasicObservable<Mutation<K>>
+open class Mutation<T>(val op: Operation, val resource: T?)

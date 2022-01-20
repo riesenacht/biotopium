@@ -67,7 +67,7 @@ class MutableObservableListTest {
 
         list.addAll(elements)
 
-        recorder.assertEvents(1)
+        recorder.assertEvents(3)
         elements.forEach {
             assertContains(list, it)
         }
@@ -103,7 +103,7 @@ class MutableObservableListTest {
 
         list.addAll(0, elements)
 
-        recorder.assertEvents(1)
+        recorder.assertEvents(3)
         elements.forEach {
             assertContains(list, it)
         }
@@ -142,7 +142,7 @@ class MutableObservableListTest {
         val elements = listOf(a, b)
         list.removeAll(elements)
 
-        recorder.assertEvents(1)
+        recorder.assertEvents(2)
         elements.forEach {
             assertFalse(list.contains(it))
         }
@@ -159,7 +159,7 @@ class MutableObservableListTest {
 
         list.clear()
 
-        recorder.assertEvents(1)
+        recorder.assertEvents(3)
         assertTrue(list.isEmpty())
     }
 
@@ -196,7 +196,7 @@ class MutableObservableListTest {
         }
 
         list[1] = d
-        recorder.assertEvents(1)
+        recorder.assertEvents(2)
         assertContains(list, a)
         assertFalse(list.contains(b))
         assertContains(list, c)

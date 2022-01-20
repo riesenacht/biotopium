@@ -121,7 +121,7 @@ class MutableObservableMapTest {
 
         list.clear()
 
-        recorder.assertEvents(1)
+        recorder.assertEvents(3)
         arrayOf(a, b, c).forEach {
             assertNull(list[it.first])
         }

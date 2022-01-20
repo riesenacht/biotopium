@@ -16,18 +16,27 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.reactive.collection
-
-import ch.riesenacht.biotopium.reactive.BasicObservable
-import ch.riesenacht.biotopium.reactive.EmptyChange
-import ch.riesenacht.biotopium.reactive.Mutation
+package ch.riesenacht.biotopium.reactive
 
 /**
- * Represents an observable [map][Map] consisting of [key][K]-[value][V] pairs.
- *
- * @see Map
- * @see BasicObservable
+ * Represents an operation applied on a resource.
  *
  * @author Manuel Riesen
  */
-interface ObservableMap<K, V> : Map<K, V>, BasicObservable<Mutation<K>>
+enum class Operation {
+
+    /**
+     * The operation of adding one or more elements to a collection.
+     */
+    ADD,
+
+    /**
+     * The operation of removing one or more elements from a collection.
+     */
+    REMOVE,
+
+    /**
+     * The operation of doing nothing.
+     */
+    NONE
+}

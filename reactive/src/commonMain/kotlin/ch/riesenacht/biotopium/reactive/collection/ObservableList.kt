@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.reactive.collection
 
 import ch.riesenacht.biotopium.reactive.BasicObservable
 import ch.riesenacht.biotopium.reactive.EmptyChange
+import ch.riesenacht.biotopium.reactive.Mutation
 
 /**
  * Represents an observable [list][List] containing elements of type [E].
@@ -29,4 +30,4 @@ import ch.riesenacht.biotopium.reactive.EmptyChange
  *
  * @author Manuel Riesen
  */
-interface ObservableList<E> : List<E>, BasicObservable<EmptyChange>
+interface ObservableList<E> : List<E>, BasicObservable<Mutation<E>>

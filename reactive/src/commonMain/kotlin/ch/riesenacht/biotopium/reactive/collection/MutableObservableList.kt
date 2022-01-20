@@ -19,7 +19,9 @@
 package ch.riesenacht.biotopium.reactive.collection
 
 import ch.riesenacht.biotopium.reactive.BasicSubjectImpl
-import ch.riesenacht.biotopium.reactive.EmptyChange
+import ch.riesenacht.biotopium.reactive.Mutation
+import ch.riesenacht.biotopium.reactive.Operation
+import com.badoo.reaktive.disposable.Disposable
 
 /**
  * Represents an observable mutable [list] of type [E].
@@ -33,54 +35,85 @@ class MutableObservableList<E>(
     /**
      * The underlying basic subject for change detection.
      */
-    private val subject: BasicSubjectImpl<EmptyChange> = BasicSubjectImpl(EmptyChange)
+    private lateinit var subject: BasicSubjectImpl<Mutation<E>>
+
+    /**
+     * Whether the list is reactive or not.
+     * The list becomes reactive if at least one subscriber exists.
+     */
+    private var reactive: Boolean = false
+    set(value) {
+        if(field) return
+        subject = BasicSubjectImpl(Mutation(Operation.NONE, null))
+        field = value
+    }
+
+    /**
+     * Notifies the subject about an occurred [operation][op] on an [element].
+     */
+    private fun mutation(op: Operation, element: E) {
+        if(reactive) subject.onNext(Mutation(op, element))
+    }
+
+    /**
+     * Notifies the subject about an occurred [operation][op] on [elements].
+     */
+    private fun mutation(op: Operation, elements: Collection<E>) {
+        if(reactive) subject.allOnNext(elements.map { Mutation(op, it) })
+    }
 
     override fun add(element: E): Boolean {
-        subject.onNext(EmptyChange)
+        mutation(Operation.ADD, element)
         return list.add(element)
     }
 
     override fun addAll(elements: Collection<E>): Boolean {
-        subject.onNext(EmptyChange)
+        mutation(Operation.ADD, elements)
         return list.addAll(elements)
     }
 
     override fun add(index: Int, element: E) {
-        subject.onNext(EmptyChange)
+        mutation(Operation.ADD, element)
         return list.add(index, element)
     }
 
     override fun addAll(index: Int, elements: Collection<E>): Boolean {
-        subject.onNext(EmptyChange)
+        mutation(Operation.ADD, elements)
         return list.addAll(index, elements)
     }
 
     override fun remove(element: E): Boolean {
-        subject.onNext(EmptyChange)
+        mutation(Operation.REMOVE, element)
         return list.remove(element)
     }
 
     override fun removeAll(elements: Collection<E>): Boolean {
-        subject.onNext(EmptyChange)
+        mutation(Operation.REMOVE, elements)
         return list.removeAll(elements)
     }
 
     override fun clear() {
-        subject.onNext(EmptyChange)
+        mutation(Operation.REMOVE, list)
         list.clear()
     }
 
     override fun removeAt(index: Int): E {
-        subject.onNext(EmptyChange)
+        mutation(Operation.REMOVE, list[index])
         return list.removeAt(index)
     }
 
     override fun set(index: Int, element: E): E {
-        subject.onNext(EmptyChange)
+        if(list[index] != null) {
+            mutation(Operation.REMOVE, list[index])
+        }
+        mutation(Operation.ADD, element)
         return list.set(index, element)
     }
 
-    override fun subscribe(onNext: ((EmptyChange) -> Unit)) = subject.subscribe(onNext = onNext)
+    override fun subscribe(onNext: ((Mutation<E>) -> Unit)): Disposable {
+        reactive = true
+        return subject.subscribe(onNext = onNext)
+    }
 }
 
 /**

@@ -25,7 +25,7 @@ package ch.riesenacht.biotopium.reactive
  *
  * @author Manuel Riesen
  */
-interface BasicSubject<T> {
+interface BasicSubject<T> : BasicObservable<T> {
 
     /**
      * Sets the next [item] of the subject.
