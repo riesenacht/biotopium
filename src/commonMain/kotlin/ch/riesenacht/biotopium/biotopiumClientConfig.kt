@@ -24,8 +24,9 @@ import ch.riesenacht.biotopium.core.crypto.Ed25519
 /**
  * The configuration for the biotopium client instance.
  */
-val biotopiumClientConfig = BiotopiumConfig(
-    clientP2pConfig,
-    blocklordPeerIds,
-    Ed25519.generateKeyPair()
-)
+val biotopiumClientConfig: BiotopiumConfig
+    get() = BiotopiumConfig(
+        clientP2pConfig,
+        blocklordPeerIds,
+        Ed25519.generateKeyPair()
+    )

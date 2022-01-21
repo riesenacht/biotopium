@@ -24,11 +24,13 @@ import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 /**
  * The peer-to-peer configuration of the client.
  */
-val clientP2pConfig = P2pConfiguration(
-    topic = BiotopiumProtocol.topic,
-    protocolName = BiotopiumProtocol.protocolName,
-    listenPort = 5559,
-    bootstrapPeers = listOf(
-        "/ip4/127.0.0.1/tcp/5558/ws/p2p/12D3KooWFBmiRR8avwf28vQXFZgF5PUxag9Nd3vQM7CMBdegGdh6"
+
+val clientP2pConfig: P2pConfiguration
+    get() = P2pConfiguration(
+        topic = BiotopiumProtocol.topic,
+        protocolName = BiotopiumProtocol.protocolName,
+        listenPort = 5559,
+        bootstrapPeers = listOf(
+            "/ip4/127.0.0.1/tcp/5558/ws/p2p/12D3KooWFBmiRR8avwf28vQXFZgF5PUxag9Nd3vQM7CMBdegGdh6"
+        )
     )
-)
