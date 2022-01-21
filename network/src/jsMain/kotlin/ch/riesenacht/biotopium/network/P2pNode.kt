@@ -94,7 +94,8 @@ actual class P2pNode actual constructor(
 
         libp2p.handle(p2pConfig.protocolName) {
             val stream = it.stream
-            pipe(stream as Stream) { source ->
+            //NOTE: do not cast explicitly to Stream
+            pipe(stream) { source ->
                 source.next()?.then { wrapper ->
                     val bufferList = wrapper.value
                     val message: SerializedMessage = bufferList.toString()
