@@ -42,7 +42,7 @@ class ItemDisplay(
 ) : FixedSizeContainer(width, height) {
 
     init {
-        val identifier = text(stack.item.identifier) {
+        val identifier = text(stack.item.identifier.chunked(11).joinToString { "$it\n" }) {
             alignment = TextAlignment.CENTER
             centerXOn(root)
             centerYOn(root)

@@ -24,6 +24,8 @@ import ch.riesenacht.biotopium.gui.GameConfig
 import ch.riesenacht.biotopium.gui.toolbar.flexToolbar
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.view.Container
+import com.soywiz.korge.view.centerXOn
+import com.soywiz.korge.view.text
 
 /**
  * The realm scene.
@@ -31,10 +33,13 @@ import com.soywiz.korge.view.Container
 class RealmScene(config: GameConfig) : Scene() {
 
     override suspend fun Container.sceneInit() {
-        //TODO state management problem
         val player = WorldStateManager.players[KeyManager.address]
         if(player != null) {
             val toolbar = flexToolbar(80.0, player.items)
+        } else {
+            text("An error occurred: Player cannot be loaded") {
+                centerXOn(root)
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ import ch.riesenacht.biotopium.BiotopiumClient
 import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
+import ch.riesenacht.biotopium.gui.bootstrap.BootstrapScene
 import ch.riesenacht.biotopium.gui.menu.MainMenuScene
 import ch.riesenacht.biotopium.gui.realm.RealmScene
 import ch.riesenacht.biotopium.logging.LoggingConfig
@@ -60,6 +61,7 @@ object BiotopiumModule : Module() {
     override suspend fun AsyncInjector.configure() {
         mapInstance(GameConfig())
         mapPrototype { MainMenuScene(get()) }
+        mapPrototype { BootstrapScene(get()) }
         mapPrototype { RealmScene(get()) }
     }
 }

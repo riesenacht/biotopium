@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.gui.menu
 
 import ch.riesenacht.biotopium.gui.*
+import ch.riesenacht.biotopium.gui.bootstrap.BootstrapScene
 import ch.riesenacht.biotopium.gui.realm.RealmScene
 import ch.riesenacht.biotopium.gui.skin.BiotopiumUISkin
 import com.soywiz.korge.input.onClick
@@ -38,7 +39,7 @@ import com.soywiz.korui.layout.vertical
  */
 private fun startBiotopium(sceneContainer: SceneContainer, config: GameConfig) {
     launchImmediately(sceneContainer.coroutineContext) {
-        sceneContainer.changeTo<RealmScene>(config)
+        sceneContainer.changeTo<BootstrapScene>(config)
     }
 }
 
