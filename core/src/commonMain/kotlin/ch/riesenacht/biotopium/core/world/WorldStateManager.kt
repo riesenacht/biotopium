@@ -18,13 +18,14 @@
 
 package ch.riesenacht.biotopium.core.world
 
-import ch.riesenacht.biotopium.bus.IncomingActionBus
+import ch.riesenacht.biotopium.core.action.ActionManager
 import ch.riesenacht.biotopium.core.action.contract.ActionContractManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.world.model.Coordinate
 import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
+import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.reactive.collection.MutableObservableMap
 import ch.riesenacht.biotopium.reactive.collection.ObservableMap
 import ch.riesenacht.biotopium.reactive.collection.mutableObservableMapOf
@@ -72,6 +73,8 @@ object WorldStateManager: World {
     override val players: ObservableMap<Address, Player>
     get() = mutablePlayers
 
+    private val logger = Logging.logger { }
+
     /**
      * Represents the world in its mutable state.
      */
@@ -85,7 +88,8 @@ object WorldStateManager: World {
     }
 
     init {
-        IncomingActionBus.subscribe {
+         ActionManager.registerActionListener {
+
             //execute incoming contracts
             ActionContractManager.executeContract(it, mutableWorld)
         }

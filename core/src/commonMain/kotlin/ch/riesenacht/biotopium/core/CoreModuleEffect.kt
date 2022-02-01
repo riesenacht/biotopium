@@ -18,8 +18,12 @@
 
 package ch.riesenacht.biotopium.core
 
+import ch.riesenacht.biotopium.core.action.ActionManager
+import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
+import ch.riesenacht.biotopium.core.blockchain.KeyManager
 import ch.riesenacht.biotopium.core.blockchain.effect.DevBlocklordSourceInitEffect
 import ch.riesenacht.biotopium.core.effect.ModuleEffect
+import ch.riesenacht.biotopium.core.world.WorldStateManager
 import ch.riesenacht.biotopium.serialization.CoreSerializersModuleEffect
 
 /**
@@ -29,7 +33,15 @@ import ch.riesenacht.biotopium.serialization.CoreSerializersModuleEffect
  *
  * @author Manuel Riesen
  */
-object CoreModuleEffect : ModuleEffect(nested = arrayOf(
+object CoreModuleEffect : ModuleEffect({
+
+    // init manager objects
+    WorldStateManager
+    ActionManager
+    BlockchainManager
+    KeyManager
+
+}, nested = arrayOf(
     CoreSerializersModuleEffect,
     DevBlocklordSourceInitEffect
 ))

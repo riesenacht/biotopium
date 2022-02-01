@@ -18,8 +18,10 @@
 
 package ch.riesenacht.biotopium.core.action
 
+import ch.riesenacht.biotopium.bus.IncomingActionBus
 import ch.riesenacht.biotopium.bus.OutgoingActionBus
 import ch.riesenacht.biotopium.core.action.model.Action
+import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.action.model.record.toActionRecord
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
@@ -38,7 +40,21 @@ object ActionManager {
 
     private val keyManager: KeyManager = KeyManager
 
-    private val logger = Logging.logger {  }
+    private val logger = Logging.logger { }
+
+    private val globalActionListeners: MutableList<ActionListener> = mutableListOf()
+
+    private val specificActionListeners: MutableMap<ActionType, MutableList<ActionListener>> = mutableMapOf()
+
+    init {
+        IncomingActionBus.subscribe { record ->
+            globalActionListeners.forEach { it.invoke(record) }
+            //TODO possible performance issue here
+            specificActionListeners[record.content.type]?.toList()?.forEach {
+                it.invoke(record)
+            }
+        }
+    }
 
     /**
      * Envelopes an [action].
@@ -81,4 +97,38 @@ object ActionManager {
 
         return false
     }
+
+    /**
+     * Registers an action [listener].
+     */
+    fun registerActionListener(listener: ActionListener) {
+        globalActionListeners.add(listener)
+    }
+
+    /**
+     * Registers an action [listener] for a specific [action type][actionType].
+     */
+    fun registerActionListener(actionType: ActionType, listener: ActionListener) {
+        if(!specificActionListeners.containsKey(actionType)) {
+            specificActionListeners[actionType] = mutableListOf()
+        }
+        specificActionListeners[actionType]?.add(listener)
+    }
+
+    /**
+     * Registers an action [listener] for an [actionType].
+     * The predicate [removeOn] sets a boundary to the listener's lifetime.
+     * If [removeOn] is `true`, the listener is removed.
+     */
+    fun registerActionListener(actionType: ActionType, removeOn: (ActionRecord<out Action>) -> Boolean, listener: ActionListener) {
+        var listenerWrapper: ActionListener? = null
+        listenerWrapper = ActionListener {
+            listener.invoke(it)
+            if(removeOn(it)) {
+                specificActionListeners[actionType]?.remove(listenerWrapper)
+            }
+        }
+        registerActionListener(actionType, listenerWrapper)
+    }
+
 }

@@ -92,7 +92,6 @@ func ListenStreamBlocking() CString {
 //export SendPubSub
 func SendPubSub(serialized *C.char) {
 	str := C.GoString(serialized)
-	println(str)
 	p2p.Instance().PubSub.Publish([]byte(str))
 }
 

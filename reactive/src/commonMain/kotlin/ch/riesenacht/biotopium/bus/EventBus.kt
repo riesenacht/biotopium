@@ -19,7 +19,9 @@
 package ch.riesenacht.biotopium.bus
 
 import com.badoo.reaktive.observable.subscribe
+import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.publish.PublishSubject
+import com.badoo.reaktive.subject.replay.ReplaySubject
 
 /**
  * Represents an event bus.
@@ -34,7 +36,7 @@ abstract class EventBus<T> {
     /**
      * The underlying subject.
      */
-    private val subject: PublishSubject<T> = PublishSubject()
+    private val subject: Subject<T> = PublishSubject()
 
     /**
      * Sends an [item] to the bus.
