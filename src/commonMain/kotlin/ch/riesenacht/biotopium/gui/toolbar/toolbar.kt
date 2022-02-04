@@ -19,8 +19,11 @@
 package ch.riesenacht.biotopium.gui.toolbar
 
 import ch.riesenacht.biotopium.core.world.model.item.Item
+import ch.riesenacht.biotopium.core.world.model.item.ItemType
 import ch.riesenacht.biotopium.gui.darkSecondaryColor
 import ch.riesenacht.biotopium.gui.toolbarSlotKeys
+import ch.riesenacht.biotopium.reactive.BasicSubject
+import ch.riesenacht.biotopium.reactive.BasicSubjectImpl
 import ch.riesenacht.biotopium.reactive.Operation
 import ch.riesenacht.biotopium.reactive.collection.ObservableList
 import com.badoo.reaktive.observable.subscribe
@@ -99,7 +102,7 @@ class Toolbar(root: Container, layout: ToolbarLayout, preferredSlotWidth: Double
     /**
      * The selected slot
      */
-    var selectedSlot: Slot
+    val selectedSlot: BasicSubject<Slot>
 
     init {
         val frameWidth = root.width
@@ -163,8 +166,8 @@ class Toolbar(root: Container, layout: ToolbarLayout, preferredSlotWidth: Double
                 }
             }
         }
+        selectedSlot = BasicSubjectImpl(slots[0])
         slots[0].select()
-        selectedSlot = slots[0]
 
         // key bindings
         keys {
@@ -245,8 +248,10 @@ class Toolbar(root: Container, layout: ToolbarLayout, preferredSlotWidth: Double
      */
     private fun select(slot: Slot) {
         this.slots.forEach { if(it != slot) it.deselect() }
-        this.selectedSlot = slot
+        this.selectedSlot.onNext(slot)
     }
+
+    fun findSlotByItemType(type: ItemType): Slot? = slots.find { it.stack?.item?.type == type }
 
     companion object {
 

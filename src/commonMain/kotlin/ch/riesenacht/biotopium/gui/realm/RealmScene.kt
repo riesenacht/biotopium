@@ -21,9 +21,13 @@ package ch.riesenacht.biotopium.gui.realm
 import ch.riesenacht.biotopium.core.blockchain.KeyManager
 import ch.riesenacht.biotopium.core.world.WorldStateManager
 import ch.riesenacht.biotopium.gui.GameConfig
+import ch.riesenacht.biotopium.gui.darkSecondaryColor
 import ch.riesenacht.biotopium.gui.toolbar.flexToolbar
+import ch.riesenacht.biotopium.gui.tutorial.RealmClaimTutorial
+import ch.riesenacht.biotopium.gui.tutorial.startTutorial
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.view.Container
+import com.soywiz.korge.view.centerOn
 import com.soywiz.korge.view.centerXOn
 import com.soywiz.korge.view.text
 
@@ -33,13 +37,26 @@ import com.soywiz.korge.view.text
 class RealmScene(config: GameConfig) : Scene() {
 
     override suspend fun Container.sceneInit() {
+        val realmScene = this
         val player = WorldStateManager.players[KeyManager.address]
-        if(player != null) {
-            val toolbar = flexToolbar(80.0, player.items)
-        } else {
+        if(player == null) {
             text("An error occurred: Player cannot be loaded") {
                 centerXOn(root)
             }
+            return
         }
+
+        val realm = WorldStateManager.realms.values.find { it.owner == player.address }
+
+        val toolbar = flexToolbar(80.0, player.items)
+
+        if(realm == null) {
+            text("You don't have a realm yet. Claim one using a realm claim paper") {
+                centerOn(root)
+                color = darkSecondaryColor
+            }
+            startTutorial(RealmClaimTutorial(toolbar))
+        }
+
     }
 }

@@ -16,21 +16,13 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.action
+package ch.riesenacht.biotopium.gui.tutorial
 
-import ch.riesenacht.biotopium.core.action.model.Action
-import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
+import com.soywiz.korge.view.Container
 
 /**
- * Represents an action handler.
- *
- * @author Manuel Riesen
+ * Starts a [tutorial] in the current container.
  */
-fun interface ActionListener {
-
-    /**
-     * Invokes the action handler with the action [record].
-     */
-    operator fun invoke(record: ActionRecord<out Action>)
-    
+fun Container.startTutorial(tutorial: Tutorial) {
+    tutorial.start(this)
 }

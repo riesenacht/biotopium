@@ -52,6 +52,12 @@ private val BIOTOPIUM_UI_SKIN_IMG by lazy {
 private val BiotopiumUISkinOnce = AsyncOnce<UISkin>()
 
 /**
+ * Direct access to the biotopium skin.
+ * The direct access field is populated on the first call of [BiotopiumUISkin].
+ */
+var BiotopiumUISkinDirect: UISkin? = null
+
+/**
  * The biotopium UI skin.
  */
 suspend fun BiotopiumUISkin(): UISkin = BiotopiumUISkinOnce {
@@ -60,10 +66,12 @@ suspend fun BiotopiumUISkin(): UISkin = BiotopiumUISkinOnce {
 
     fun <T : Bitmap> BitmapSlice<T>.ninePatch() = asNinePatchSimpleRatio(0.25, 0.25, 0.75, 0.75)
 
-    UISkin {
+    val skin = UISkin {
         buttonNormal = ui.sliceWithSize(0, 0, 64, 64).ninePatch()
         buttonOver = ui.sliceWithSize(64, 0, 64, 64).ninePatch()
         buttonDown = ui.sliceWithSize(127, 0, 64, 64).ninePatch()
         buttonBackColor = buttonBackColor.transform(biotopiumColorTransform)
     }
+    BiotopiumUISkinDirect = skin
+    skin
 }
