@@ -26,9 +26,7 @@ import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
 import ch.riesenacht.biotopium.logging.Logging
-import ch.riesenacht.biotopium.reactive.collection.MutableObservableMap
-import ch.riesenacht.biotopium.reactive.collection.ObservableMap
-import ch.riesenacht.biotopium.reactive.collection.mutableObservableMapOf
+import ch.riesenacht.biotopium.reactive.collection.*
 
 /**
  * State manager of the world.
@@ -40,25 +38,25 @@ object WorldStateManager: World {
     /**
      * Mutable tile map.
      */
-    private val mutableTiles: MutableObservableMap<Pair<Coordinate, Coordinate>, Tile> = mutableObservableMapOf()
+    private val mutableTiles: MutableObservableMap2D<Coordinate, Coordinate, Tile> = mutableObservableMap2dOf()
 
     /**
      * Tile map.
      * Each tile is mapped by its coordinates.
      */
-    override val tiles: ObservableMap<Pair<Coordinate, Coordinate>, Tile>
+    override val tiles: ObservableMap2D<Coordinate, Coordinate, Tile>
     get() = mutableTiles
 
     /**
      * Mutable realm map.
      */
-    private val mutableRealms: MutableObservableMap<Pair<RealmIndex, RealmIndex>, Realm> = mutableObservableMapOf()
+    private val mutableRealms: MutableObservableMap2D<RealmIndex, RealmIndex, Realm> = mutableObservableMap2dOf()
 
     /**
      * Realm map.
      * Each realm is mapped by its realm indices.
      */
-    override val realms: ObservableMap<Pair<RealmIndex, RealmIndex>, Realm>
+    override val realms: ObservableMap2D<RealmIndex, RealmIndex, Realm>
     get() = mutableRealms
 
     /**
@@ -79,9 +77,9 @@ object WorldStateManager: World {
      * Represents the world in its mutable state.
      */
     private val mutableWorld = object : MutableWorld {
-        override val tiles: MutableObservableMap<Pair<Coordinate, Coordinate>, Tile>
+        override val tiles: MutableObservableMap2D<Coordinate, Coordinate, Tile>
             get() = mutableTiles
-        override val realms: MutableObservableMap<Pair<RealmIndex, RealmIndex>, Realm>
+        override val realms: MutableObservableMap2D<RealmIndex, RealmIndex, Realm>
             get() = mutableRealms
         override val players: MutableObservableMap<Address, Player>
             get() = mutablePlayers

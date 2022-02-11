@@ -24,6 +24,7 @@ import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
 import ch.riesenacht.biotopium.reactive.collection.MutableObservableMap
+import ch.riesenacht.biotopium.reactive.collection.MutableObservableMap2D
 
 /**
  * Represents the world in its mutable form.
@@ -35,13 +36,13 @@ interface MutableWorld {
     /**
      * Mutable tile map.
      */
-    val tiles: MutableObservableMap<Pair<Coordinate, Coordinate>, Tile>
+    val tiles: MutableObservableMap2D<Coordinate, Coordinate, Tile>
 
 
     /**
      * Mutable realm map.
      */
-    val realms: MutableObservableMap<Pair<RealmIndex, RealmIndex>, Realm>
+    val realms: MutableObservableMap2D<RealmIndex, RealmIndex, Realm>
 
 
     /**

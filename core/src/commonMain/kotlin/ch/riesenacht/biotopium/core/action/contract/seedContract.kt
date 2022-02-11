@@ -60,13 +60,13 @@ val seedContract = actionContract<SeedAction>(
         rule { action, _, world ->
             val plot = action.produce
 
-            world.tiles[plot.x to plot.y]?.type == TileType.PLOT
+            world.tiles[plot.x, plot.y]?.type == TileType.PLOT
         }
 
         // the plot does not contain a plant
         rule { action, _, world ->
             val plot = action.produce
-            val localPlot = world.tiles[plot.x to plot.y]
+            val localPlot = world.tiles[plot.x, plot.y]
 
             (localPlot is Plot) && (localPlot.plant == null)
         }
@@ -91,6 +91,6 @@ val seedContract = actionContract<SeedAction>(
         // remove seed item from player
         world.players[owner]!!.removeItem(seed)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
     }
 )

@@ -42,7 +42,7 @@ val harvestContract = actionContract<HarvestAction>(
         // the plant is fully grown
         rule { action, _, world ->
             val plot = action.consume
-            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            val localPlot = world.tiles[plot.x, plot.y] as Plot
 
             localPlot.plant?.growth == PlantGrowth.GROWN
         }
@@ -58,7 +58,7 @@ val harvestContract = actionContract<HarvestAction>(
         rule { action, _, world ->
             val harvest = action.produce
             val plot = action.consume
-            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            val localPlot = world.tiles[plot.x, plot.y] as Plot
             harvest.plant.plantType == localPlot.plant?.type
                     && harvest.seeds.all { it.plantType == localPlot.plant.type }
         }
@@ -75,7 +75,7 @@ val harvestContract = actionContract<HarvestAction>(
         val harvest = action.produce
         val plot = action.consume
 
-        val localPlot = world.tiles[plot.x to plot.y] as Plot
+        val localPlot = world.tiles[plot.x, plot.y] as Plot
         val owner = localPlot.plant!!.owner
 
         val player = world.players[owner]!!
@@ -84,6 +84,6 @@ val harvestContract = actionContract<HarvestAction>(
         player.addItem(harvest.plant)
         player.addAllItems(harvest.seeds)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
     }
 )

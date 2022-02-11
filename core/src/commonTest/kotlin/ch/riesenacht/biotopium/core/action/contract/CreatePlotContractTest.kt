@@ -46,10 +46,10 @@ class CreatePlotContractTest : ContractTest() {
         val plot = Plot(0.coord, 0.coord)
 
         val tile = DefaultTile(0.coord, 0.coord)
-        world.tiles[tile.x to tile.y] = tile
+        world.tiles[tile.x, tile.y] = tile
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
@@ -60,6 +60,6 @@ class CreatePlotContractTest : ContractTest() {
         execContract(action, world)
 
         assertFalse(world.players[owner]!!.items.contains(hoe))
-        assertEquals(TileType.PLOT, world.tiles[plot.x to plot.y]!!.type)
+        assertEquals(TileType.PLOT, world.tiles[plot.x, plot.y]!!.type)
     }
 }

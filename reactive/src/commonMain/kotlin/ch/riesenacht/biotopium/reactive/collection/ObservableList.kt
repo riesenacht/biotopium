@@ -19,7 +19,6 @@
 package ch.riesenacht.biotopium.reactive.collection
 
 import ch.riesenacht.biotopium.reactive.BasicObservable
-import ch.riesenacht.biotopium.reactive.EmptyChange
 import ch.riesenacht.biotopium.reactive.Mutation
 
 /**

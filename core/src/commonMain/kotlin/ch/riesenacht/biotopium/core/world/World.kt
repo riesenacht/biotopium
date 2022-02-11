@@ -24,6 +24,7 @@ import ch.riesenacht.biotopium.core.world.model.RealmIndex
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import ch.riesenacht.biotopium.core.world.model.map.Tile
 import ch.riesenacht.biotopium.reactive.collection.ObservableMap
+import ch.riesenacht.biotopium.reactive.collection.ObservableMap2D
 
 /**
  * Represents the world.
@@ -36,13 +37,13 @@ interface World {
      * All tiles as map.
      * Each tile is mapped by its coordinates.
      */
-    val tiles: ObservableMap<Pair<Coordinate, Coordinate>, Tile>
+    val tiles: ObservableMap2D<Coordinate, Coordinate, Tile>
 
     /**
      * All realms as map.
      * Each realm is mapped by its realm indices.
      */
-    val realms: ObservableMap<Pair<RealmIndex, RealmIndex>, Realm>
+    val realms: ObservableMap2D<RealmIndex, RealmIndex, Realm>
 
     /**
      * All players as map.

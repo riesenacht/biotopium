@@ -18,15 +18,26 @@
 
 package ch.riesenacht.biotopium.reactive.collection
 
-import ch.riesenacht.biotopium.reactive.BasicObservable
-import ch.riesenacht.biotopium.reactive.Mutation
-
 /**
- * Represents an observable [map][Map] consisting of [key][K]-[value][V] pairs.
- *
- * @see Map
- * @see BasicObservable
+ * Represents an observable mutable 2-dimensional [map] consisting of [key][K]-[value][V] pairs.
  *
  * @author Manuel Riesen
  */
-interface ObservableMap<K, V> : Map<K, V>, BasicObservable<Mutation<K>>
+class MutableObservableMap2D<K1, K2, V>(
+    map: MutableObservableMap<Pair<K1, K2>, V>
+) : MutableObservableMap<Pair<K1, K2>, V> by map, ObservableMap2D<K1, K2, V> {
+
+    /**
+     * Sets the [value] at position [x];[y].
+     */
+    operator fun set(x: K1, y: K2, value: V) = set(x to y, value)
+
+}
+
+/**
+ * Creates a mutable observable 2-dimensional map.
+ * The map is populated with the given [pairs].
+ */
+fun <K1, K2, V> mutableObservableMap2dOf(vararg pairs: Pair<Pair<K1, K2>, V>): MutableObservableMap2D<K1, K2, V> {
+    return MutableObservableMap2D(mutableObservableMapOf(*pairs))
+}

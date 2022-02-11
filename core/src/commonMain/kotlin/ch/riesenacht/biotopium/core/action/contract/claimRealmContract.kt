@@ -57,6 +57,6 @@ val claimRealmContract = actionContract<ClaimRealmAction>(
         world.players[owner]!!.removeItem(claimPaper)
 
         // add the new realm to the world
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
     }
 )

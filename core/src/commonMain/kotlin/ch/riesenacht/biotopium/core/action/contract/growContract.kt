@@ -49,14 +49,14 @@ val growContract = actionContract<GrowAction>(
         // the plot's plant is not yet fully grown
         rule { action, _, world ->
             val plot = action.produce
-            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            val localPlot = world.tiles[plot.x, plot.y] as Plot
             localPlot.plant?.growth != PlantGrowth.GROWN
         }
 
         // the new plant's growth is equal to the current plant's growth plus 1
         rule { action, _, world ->
             val plot = action.produce
-            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            val localPlot = world.tiles[plot.x, plot.y] as Plot
             plot.plant?.growth?.ordinal == localPlot.plant?.growth?.ordinal?.plus(1)
         }
 
@@ -64,7 +64,7 @@ val growContract = actionContract<GrowAction>(
         // the growth rate is taken into account
         rule { action, origin, world ->
             val plot = action.produce
-            val localPlot = world.tiles[plot.x to plot.y] as Plot
+            val localPlot = world.tiles[plot.x, plot.y] as Plot
             localPlot.plant?.lastGrowth?.let { origin.timestamp <= it + growthRate } ?: false
         }
 
@@ -77,7 +77,7 @@ val growContract = actionContract<GrowAction>(
         plot.plant?.lastGrowth = origin.timestamp
 
         // set the new plot tile
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
     }
 )

@@ -46,10 +46,10 @@ class SeedContractTest : ContractTest() {
         val world = createMutableTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -61,10 +61,10 @@ class SeedContractTest : ContractTest() {
 
         execContract(action, world)
 
-        assertNotNull((world.tiles[plot.x to plot.y] as Plot).plant)
-        assertEquals(plant.type, (world.tiles[plot.x to plot.y] as Plot).plant!!.type)
-        assertEquals(plant.lastGrowth, (world.tiles[plot.x to plot.y] as Plot).plant!!.lastGrowth)
-        assertEquals(PlantGrowth.SEED, (world.tiles[plot.x to plot.y] as Plot).plant!!.growth)
+        assertNotNull((world.tiles[plot.x, plot.y] as Plot).plant)
+        assertEquals(plant.type, (world.tiles[plot.x, plot.y] as Plot).plant!!.type)
+        assertEquals(plant.lastGrowth, (world.tiles[plot.x, plot.y] as Plot).plant!!.lastGrowth)
+        assertEquals(PlantGrowth.SEED, (world.tiles[plot.x, plot.y] as Plot).plant!!.growth)
 
     }
 }

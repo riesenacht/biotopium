@@ -43,6 +43,7 @@ import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
 import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 import ch.riesenacht.biotopium.core.world.model.plant.growthRate
+import ch.riesenacht.biotopium.reactive.collection.mutableObservableMap2dOf
 import ch.riesenacht.biotopium.reactive.collection.mutableObservableMapOf
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -89,9 +90,9 @@ class ActionValidatorTest {
 
     private class TestWorld: World {
 
-        override val tiles = mutableObservableMapOf<Pair<Coordinate, Coordinate>, Tile>()
+        override val tiles = mutableObservableMap2dOf<Coordinate, Coordinate, Tile>()
 
-        override val realms = mutableObservableMapOf<Pair<RealmIndex, RealmIndex>, Realm>()
+        override val realms = mutableObservableMap2dOf<RealmIndex, RealmIndex, Realm>()
 
         override val players = mutableObservableMapOf<Address, Player>()
 
@@ -154,7 +155,7 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
         world.players[owner]?.addItem(realmClaimPaper)
 
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val content = ClaimRealmAction(realm, realmClaimPaper)
         val action = createActionRecord(zeroTimestamp, owner, content)
@@ -212,10 +213,10 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord)
 
         val tile = DefaultTile(0.coord, 0.coord)
-        world.tiles[tile.x to tile.y] = tile
+        world.tiles[tile.x, tile.y] = tile
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
@@ -237,7 +238,7 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord)
 
         val tile = DefaultTile(0.coord, 0.coord)
-        world.tiles[tile.x to tile.y] = tile
+        world.tiles[tile.x, tile.y] = tile
 
         val hoe = Hoe(owner)
         world.players[owner]!!.addItem(hoe)
@@ -260,7 +261,7 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord)
 
         val tile = DefaultTile(0.coord, 0.coord)
-        world.tiles[tile.x to tile.y] = tile
+        world.tiles[tile.x, tile.y] = tile
 
         val hoe = Hoe(differentOwner)
         world.players[owner]!!.addItem(hoe)
@@ -282,7 +283,7 @@ class ActionValidatorTest {
         val plot = Plot(0.coord, 0.coord)
 
         val tile = DefaultTile(0.coord, 0.coord)
-        world.tiles[tile.x to tile.y] = tile
+        world.tiles[tile.x, tile.y] = tile
 
         val hoe = Hoe(owner)
 
@@ -301,7 +302,7 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val hoe = Hoe(owner)
 
@@ -328,10 +329,10 @@ class ActionValidatorTest {
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.SEED)
         plant.lastGrowth = timestamp
         val plot = Plot(0.coord, 0.coord, plant)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val content = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.HALF_GROWN)))
         val action = createActionRecord(timestamp + growthRate, owner, content)
@@ -352,7 +353,7 @@ class ActionValidatorTest {
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.SEED)
         plant.lastGrowth = timestamp
         val plot = Plot(0.coord, 0.coord, plant)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val content = GrowAction(plot)
         val action = createActionRecord(timestamp + growthRate, owner, content)
@@ -373,7 +374,7 @@ class ActionValidatorTest {
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         plant.lastGrowth = timestamp
         val plot = Plot(0.coord, 0.coord, plant.copy(growth = PlantGrowth.HALF_GROWN))
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val content = GrowAction(plot)
         val action = createActionRecord(timestamp + growthRate, owner, content)
@@ -395,7 +396,7 @@ class ActionValidatorTest {
         plant.lastGrowth = timestamp
 
         val plot = Plot(0.coord, 0.coord, plant)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val content = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
         val action = createActionRecord(timestamp + growthRate, owner, content)
@@ -417,7 +418,7 @@ class ActionValidatorTest {
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.HALF_GROWN)
         plant.lastGrowth = timestamp
         val plot = Plot(0.coord, 0.coord, plant)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val content = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))
         val action = createActionRecord(timestamp, owner, content)
@@ -444,10 +445,10 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
@@ -469,7 +470,7 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
@@ -492,10 +493,10 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.HALF_GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
@@ -518,10 +519,10 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(differentOwner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
@@ -544,10 +545,10 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(differentOwner, PlantType.CORN)))
@@ -569,10 +570,10 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.WHEAT)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
@@ -594,10 +595,10 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.WHEAT)))
@@ -619,10 +620,10 @@ class ActionValidatorTest {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
@@ -752,10 +753,10 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -777,7 +778,7 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -799,10 +800,10 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -822,10 +823,10 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -847,10 +848,10 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -873,10 +874,10 @@ class ActionValidatorTest {
 
         val plot = Plot(0.coord, 0.coord)
         val tile = DefaultTile(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = tile
+        world.tiles[plot.x, plot.y] = tile
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -900,10 +901,10 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(differentOwner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -926,10 +927,10 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, plant)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -955,10 +956,10 @@ class ActionValidatorTest {
 
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plotOnMap = Plot(0.coord, 0.coord, plant)
-        world.tiles[plot.x to plot.y] = plotOnMap
+        world.tiles[plot.x, plot.y] = plotOnMap
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
         world.players[owner]?.addItem(seed)
@@ -980,10 +981,10 @@ class ActionValidatorTest {
         val world = createTestWorldWithPlayer(owner)
 
         val plot = Plot(0.coord, 0.coord)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val seed = Seed(owner, PlantType.CORN)
 

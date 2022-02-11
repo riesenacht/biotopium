@@ -48,7 +48,7 @@ val createPlotContract = actionContract<CreatePlotAction>(
         // the plot's tile is currently of type default
         rule { action, _, world ->
             val plot = action.produce
-            world.tiles[plot.x to plot.y]?.type == TileType.DEFAULT
+            world.tiles[plot.x, plot.y]?.type == TileType.DEFAULT
         }
     },
     exec { action, _, world ->
@@ -61,6 +61,6 @@ val createPlotContract = actionContract<CreatePlotAction>(
         world.players[owner]!!.removeItem(hoe)
 
         // set plot tile
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
     }
 )

@@ -18,15 +18,16 @@
 
 package ch.riesenacht.biotopium.reactive.collection
 
-import ch.riesenacht.biotopium.reactive.BasicObservable
-import ch.riesenacht.biotopium.reactive.Mutation
-
 /**
- * Represents an observable [map][Map] consisting of [key][K]-[value][V] pairs.
- *
- * @see Map
- * @see BasicObservable
+ * Represents a 2-dimensional observable map.
+ * The key consists of a [Pair] of [x][K1] and [y][K2], pointing to a [value][V].
  *
  * @author Manuel Riesen
  */
-interface ObservableMap<K, V> : Map<K, V>, BasicObservable<Mutation<K>>
+interface ObservableMap2D<K1, K2, V> : ObservableMap<Pair<K1, K2>, V> {
+
+    /**
+     * Gets the value at position [x];[y].
+     */
+    operator fun get(x: K1, y: K2) = get(x to y)
+}

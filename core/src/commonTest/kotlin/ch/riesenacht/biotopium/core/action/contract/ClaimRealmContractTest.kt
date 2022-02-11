@@ -54,7 +54,7 @@ class ClaimRealmContractTest : ContractTest() {
         execContract(action, world)
 
         assertContains(world.realms, realm.ix to realm.iy)
-        assertEquals(realm.owner, world.realms[realm.ix to realm.iy]?.owner)
+        assertEquals(realm.owner, world.realms[realm.ix, realm.iy]?.owner)
         assertFalse(world.players[owner]!!.items.contains(realmClaimPaper))
     }
 }

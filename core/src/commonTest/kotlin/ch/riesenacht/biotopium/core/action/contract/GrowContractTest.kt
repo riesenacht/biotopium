@@ -47,17 +47,17 @@ class GrowContractTest : ContractTest() {
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.SEED)
         plant.lastGrowth = timestamp
         val plot = Plot(0.coord, 0.coord, plant)
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val content = GrowAction(plot.copy(plant = plant.copy(growth = PlantGrowth.HALF_GROWN)))
         val action = createActionRecord(timestamp, owner, content)
 
         execContract(action, world)
 
-        assertEquals(PlantGrowth.HALF_GROWN, (world.tiles[plot.x to plot.y] as Plot).plant!!.growth)
-        assertEquals(timestamp, (world.tiles[plot.x to plot.y] as Plot).plant!!.lastGrowth)
+        assertEquals(PlantGrowth.HALF_GROWN, (world.tiles[plot.x, plot.y] as Plot).plant!!.growth)
+        assertEquals(timestamp, (world.tiles[plot.x, plot.y] as Plot).plant!!.lastGrowth)
     }
 }

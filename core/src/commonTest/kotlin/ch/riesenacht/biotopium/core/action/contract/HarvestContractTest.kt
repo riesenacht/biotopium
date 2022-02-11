@@ -50,10 +50,10 @@ class HarvestContractTest : ContractTest() {
         val growingPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         val plot = Plot(0.coord, 0.coord, growingPlant)
 
-        world.tiles[plot.x to plot.y] = plot
+        world.tiles[plot.x, plot.y] = plot
 
         val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
-        world.realms[realm.ix to realm.iy] = realm
+        world.realms[realm.ix, realm.iy] = realm
 
         val harvestedPlant = HarvestedPlant(owner, PlantType.CORN)
         val harvest = Harvest(harvestedPlant, listOf(Seed(owner, PlantType.CORN)))
@@ -65,6 +65,6 @@ class HarvestContractTest : ContractTest() {
 
         assertTrue(world.players[owner]!!.items.contains(harvest.plant))
         assertTrue(harvest.seeds.all { world.players[owner]!!.items.contains(it) })
-        assertNull((world.tiles[plot.x to plot.y] as Plot).plant)
+        assertNull((world.tiles[plot.x, plot.y] as Plot).plant)
     }
 }

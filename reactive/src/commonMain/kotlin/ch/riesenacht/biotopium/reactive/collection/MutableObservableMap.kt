@@ -18,78 +18,9 @@
 
 package ch.riesenacht.biotopium.reactive.collection
 
-import ch.riesenacht.biotopium.reactive.*
-import com.badoo.reaktive.disposable.Disposable
-
 /**
  * Represents an observable mutable [map] consisting of [key][K]-[value][V] pairs.
  *
  * @author Manuel Riesen
  */
-class MutableObservableMap<K, V>(
-    private val map: MutableMap<K, V>
-) : MutableMap<K, V> by map, ObservableMap<K, V> {
-
-    /**
-     * The underlying basic subject for change detection.
-     */
-    private lateinit var subject: BasicSubject<Mutation<K>>
-
-    /**
-     * Whether the map is reactive or not.
-     * The list becomes reactive if at least one subscriber exists.
-     */
-    private var reactive: Boolean = false
-    set(value) {
-        if(field) return
-        subject = BasicSubjectImpl(Mutation(Operation.NONE, null))
-        field = value
-    }
-
-    /**
-     * Notifies the subject about an occurred [operation][op] at a [key].
-     */
-    private fun mutation(op: Operation, key: K) {
-        if(reactive) subject.onNext(Mutation(op, key))
-    }
-
-    /**
-     * Notifies the subject about an occurred [operation][op] at [keys].
-     */
-    private fun mutation(op: Operation, keys: Collection<K>) {
-        if(reactive) subject.allOnNext(keys.map { Mutation(op, it) })
-    }
-
-    override fun clear() {
-        mutation(Operation.REMOVE, map.keys)
-        map.clear()
-    }
-
-    override fun put(key: K, value: V): V? {
-        mutation(Operation.ADD, key)
-        return map.put(key, value)
-    }
-
-    override fun putAll(from: Map<out K, V>) {
-        mutation(Operation.ADD, from.keys)
-        return map.putAll(from)
-    }
-
-    override fun remove(key: K): V? {
-        mutation(Operation.REMOVE, key)
-        return map.remove(key)
-    }
-
-    override fun subscribe(onNext: (Mutation<K>) -> Unit): Disposable {
-        reactive = true
-        return subject.subscribe(onNext)
-    }
-}
-
-/**
- * Creates a mutable observable map.
- * The map is populated with the given [pairs].
- */
-fun <K, V> mutableObservableMapOf(vararg pairs: Pair<K, V>): MutableObservableMap<K, V> {
-    return MutableObservableMap(mutableMapOf(*pairs))
-}
+interface MutableObservableMap<K, V> : MutableMap<K, V>, ObservableMap<K, V>
