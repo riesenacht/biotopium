@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -18,24 +18,14 @@
 
 package ch.riesenacht.biotopium.core.world.model
 
-/**
- * The integer in the [Coordinate] format.
- * @throws NegativeCoordinateException number is negative
- */
-val Int.coord: Coordinate
-    @Throws(NegativeCoordinateException::class)
-    get() = if(this >= 0) Coordinate(this.toUInt()) else throw NegativeCoordinateException()
+import kotlin.jvm.JvmInline
 
 /**
- * The integer in the [CoordinateUnit] format.
+ * Represents a [value] in a coordinate unit.
+ * Other than the [Coordinate], the value of a coordinate unit can be negative.
+ * A coordinate unit is used for the calculation of coordinates.
+ *
+ * @author Manuel Riesen
  */
-val Int.coordUnit: CoordinateUnit
-    get() = CoordinateUnit(this)
-
-/**
- * The integer in the [RealmIndex] format.
- * @throws NegativeCoordinateException number is negative
- */
-val Int.realmIndex: RealmIndex
-    @Throws(NegativeCoordinateException::class)
-    get() = if(this >= 0) RealmIndex(this.toUInt()) else throw NegativeCoordinateException()
+@JvmInline
+value class CoordinateUnit(val value: Int)

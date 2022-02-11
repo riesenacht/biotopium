@@ -18,15 +18,23 @@
 
 package ch.riesenacht.biotopium.core.world.model
 
+import ch.riesenacht.biotopium.core.world.model.map.realmSize
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
 /**
- * Represents an index of a realm.
+ * Represents an [index] of a realm.
  * Realm indices are used in a cartesian manner in 2-dimensional space.
  *
  * @author Manuel Riesen
  */
 @Serializable
 @JvmInline
-value class RealmIndex(val index: UInt)
+value class RealmIndex(val index: UInt) {
+
+    /**
+     * The root coordinate of the realm index.
+     */
+    val rootCoordinate: Coordinate
+    get() = Coordinate(index * realmSize)
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -19,23 +19,10 @@
 package ch.riesenacht.biotopium.core.world.model
 
 /**
- * The integer in the [Coordinate] format.
- * @throws NegativeCoordinateException number is negative
+ * Exception for negative coordinate values.
+ * This exception mainly occurs during calculations with [coordinates][Coordinate]
+ * and [coordinate units][CoordinateUnit].
+ *
+ * @author Manuel Riesen
  */
-val Int.coord: Coordinate
-    @Throws(NegativeCoordinateException::class)
-    get() = if(this >= 0) Coordinate(this.toUInt()) else throw NegativeCoordinateException()
-
-/**
- * The integer in the [CoordinateUnit] format.
- */
-val Int.coordUnit: CoordinateUnit
-    get() = CoordinateUnit(this)
-
-/**
- * The integer in the [RealmIndex] format.
- * @throws NegativeCoordinateException number is negative
- */
-val Int.realmIndex: RealmIndex
-    @Throws(NegativeCoordinateException::class)
-    get() = if(this >= 0) RealmIndex(this.toUInt()) else throw NegativeCoordinateException()
+class NegativeCoordinateException : NumberFormatException()

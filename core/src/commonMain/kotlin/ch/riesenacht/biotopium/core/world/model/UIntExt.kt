@@ -19,23 +19,20 @@
 package ch.riesenacht.biotopium.core.world.model
 
 /**
- * The integer in the [Coordinate] format.
- * @throws NegativeCoordinateException number is negative
+ * The unsigned integer in the [Coordinate] format.
+ * @throws NumberFormatException number is negative
  */
-val Int.coord: Coordinate
-    @Throws(NegativeCoordinateException::class)
-    get() = if(this >= 0) Coordinate(this.toUInt()) else throw NegativeCoordinateException()
+val UInt.coord: Coordinate
+    get() = Coordinate(this)
 
 /**
- * The integer in the [CoordinateUnit] format.
+ * The unsigned integer in the [CoordinateUnit] format.
  */
-val Int.coordUnit: CoordinateUnit
-    get() = CoordinateUnit(this)
+val UInt.coordUnit: CoordinateUnit
+    get() = CoordinateUnit(this.toInt())
 
 /**
- * The integer in the [RealmIndex] format.
- * @throws NegativeCoordinateException number is negative
+ * The unsigned integer in the [RealmIndex] format.
  */
-val Int.realmIndex: RealmIndex
-    @Throws(NegativeCoordinateException::class)
-    get() = if(this >= 0) RealmIndex(this.toUInt()) else throw NegativeCoordinateException()
+val UInt.realmIndex: RealmIndex
+    get() = RealmIndex(this)

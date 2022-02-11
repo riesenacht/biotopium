@@ -33,8 +33,26 @@ import kotlin.jvm.JvmInline
 value class Coordinate(val coordinate: UInt) {
 
     /**
-     * The realm index of the coordinate
+     * The realm index of the coordinate.
      */
     val realmIndex: RealmIndex
     get() = RealmIndex(coordinate / realmSize)
+
+    /**
+     * Adds a [delta] to the [coordinate].
+     * @throws NegativeCoordinateException operation resulted in a negative coordinate value
+     */
+    @Throws(NegativeCoordinateException::class)
+    operator fun plus(delta: CoordinateUnit) = if(coordinate.toInt() + delta.value > 0)
+            Coordinate((coordinate.toInt() + delta.value).toUInt())
+        else throw NegativeCoordinateException()
+
+    /**
+     * Subtracts the [coordinate] by a [delta].
+     * @throws NegativeCoordinateException operation resulted in a negative coordinate value
+     */
+    @Throws(NegativeCoordinateException::class)
+    operator fun minus(delta: CoordinateUnit) = if(coordinate.toInt() - delta.value > 0)
+            Coordinate((coordinate.toInt() - delta.value).toUInt())
+        else throw NegativeCoordinateException()
 }
