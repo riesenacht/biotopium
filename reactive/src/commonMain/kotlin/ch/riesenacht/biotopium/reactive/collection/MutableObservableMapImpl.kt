@@ -66,23 +66,27 @@ open class MutableObservableMapImpl<K, V>(
     }
 
     override fun clear() {
-        mutation(Operation.REMOVE, map.keys)
+        val keys = map.keys.toList()
         map.clear()
+        mutation(Operation.REMOVE, keys)
     }
 
     override fun put(key: K, value: V): V? {
+        val res = map.put(key, value)
         mutation(Operation.ADD, key)
-        return map.put(key, value)
+        return res
     }
 
     override fun putAll(from: Map<out K, V>) {
+        val res = map.putAll(from)
         mutation(Operation.ADD, from.keys)
-        return map.putAll(from)
+        return res
     }
 
     override fun remove(key: K): V? {
+        val res = map.remove(key)
         mutation(Operation.REMOVE, key)
-        return map.remove(key)
+        return res
     }
 
     override fun subscribe(onNext: (Mutation<K>) -> Unit): Disposable {

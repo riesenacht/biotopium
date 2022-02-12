@@ -63,51 +63,62 @@ class MutableObservableList<E>(
     }
 
     override fun add(element: E): Boolean {
+        val res = list.add(element)
         mutation(Operation.ADD, element)
-        return list.add(element)
+        return res
     }
 
     override fun addAll(elements: Collection<E>): Boolean {
+        val res = list.addAll(elements)
         mutation(Operation.ADD, elements)
-        return list.addAll(elements)
+        return res
     }
 
     override fun add(index: Int, element: E) {
+        val res = list.add(index, element)
         mutation(Operation.ADD, element)
-        return list.add(index, element)
+        return res
     }
 
     override fun addAll(index: Int, elements: Collection<E>): Boolean {
+        val res = list.addAll(index, elements)
         mutation(Operation.ADD, elements)
-        return list.addAll(index, elements)
+        return res
     }
 
     override fun remove(element: E): Boolean {
+        val res = list.remove(element)
         mutation(Operation.REMOVE, element)
-        return list.remove(element)
+        return res
     }
 
     override fun removeAll(elements: Collection<E>): Boolean {
+        val res = list.removeAll(elements)
         mutation(Operation.REMOVE, elements)
-        return list.removeAll(elements)
+        return res
     }
 
     override fun clear() {
-        mutation(Operation.REMOVE, list)
+        val removedList = list.toList()
         list.clear()
+        mutation(Operation.REMOVE, removedList)
     }
 
     override fun removeAt(index: Int): E {
-        mutation(Operation.REMOVE, list[index])
-        return list.removeAt(index)
+        val item = list[index]
+        val res = list.removeAt(index)
+        mutation(Operation.REMOVE, item)
+        return res
     }
 
     override fun set(index: Int, element: E): E {
-        if(list[index] != null) {
-            mutation(Operation.REMOVE, list[index])
+        val item = list[index]
+        val res = list.set(index, element)
+        if(item != null) {
+            mutation(Operation.REMOVE, item)
         }
         mutation(Operation.ADD, element)
-        return list.set(index, element)
+        return res
     }
 
     override fun subscribe(onNext: ((Mutation<E>) -> Unit)): Disposable {
