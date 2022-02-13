@@ -43,7 +43,7 @@ value class Coordinate(val coordinate: UInt) {
      * @throws NegativeCoordinateException operation resulted in a negative coordinate value
      */
     @Throws(NegativeCoordinateException::class)
-    operator fun plus(delta: CoordinateUnit) = if(coordinate.toInt() + delta.value > 0)
+    operator fun plus(delta: CoordinateUnit) = if(coordinate.toInt() + delta.value >= 0)
             Coordinate((coordinate.toInt() + delta.value).toUInt())
         else throw NegativeCoordinateException()
 
@@ -52,7 +52,7 @@ value class Coordinate(val coordinate: UInt) {
      * @throws NegativeCoordinateException operation resulted in a negative coordinate value
      */
     @Throws(NegativeCoordinateException::class)
-    operator fun minus(delta: CoordinateUnit) = if(coordinate.toInt() - delta.value > 0)
+    operator fun minus(delta: CoordinateUnit) = if(coordinate.toInt() - delta.value >= 0)
             Coordinate((coordinate.toInt() - delta.value).toUInt())
         else throw NegativeCoordinateException()
 }
