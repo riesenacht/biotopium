@@ -30,6 +30,7 @@ import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
 import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.core.time.DateUtils
+import ch.riesenacht.biotopium.core.time.model.Timespan
 import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.Player
 import ch.riesenacht.biotopium.core.world.World
@@ -371,6 +372,9 @@ class ActionValidatorTest {
 
         val world = createTestWorldWithPlayer(owner)
 
+        val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
+        world.realms[realm.ix, realm.iy] = realm
+
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.GROWN)
         plant.lastGrowth = timestamp
         val plot = Plot(0.coord, 0.coord, plant.copy(growth = PlantGrowth.HALF_GROWN))
@@ -391,6 +395,9 @@ class ActionValidatorTest {
         val owner = defaultOwner
 
         val world = createTestWorldWithPlayer(owner)
+
+        val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
+        world.realms[realm.ix, realm.iy] = realm
 
         val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.SEED)
         plant.lastGrowth = timestamp
@@ -415,9 +422,12 @@ class ActionValidatorTest {
 
         val world = createTestWorldWithPlayer(owner)
 
-        val plant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.HALF_GROWN)
-        plant.lastGrowth = timestamp
-        val plot = Plot(0.coord, 0.coord, plant)
+        val realm = Realm(owner, 0.realmIndex, 0.realmIndex)
+        world.realms[realm.ix, realm.iy] = realm
+
+        val localPlant = GrowingPlant(owner, PlantType.CORN, PlantGrowth.HALF_GROWN)
+        localPlant.lastGrowth = timestamp
+        val plot = Plot(0.coord, 0.coord, localPlant)
         world.tiles[plot.x, plot.y] = plot
 
         val content = GrowAction(plot.copy(plant = plot.plant?.copy(growth = PlantGrowth.GROWN)))

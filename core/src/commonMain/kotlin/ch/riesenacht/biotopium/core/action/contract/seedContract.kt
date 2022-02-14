@@ -22,6 +22,7 @@ import ch.riesenacht.biotopium.core.action.exec.exec
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.SeedAction
 import ch.riesenacht.biotopium.core.action.rule.rules
+import ch.riesenacht.biotopium.core.time.DateUtils
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.TileType
 import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
@@ -90,6 +91,9 @@ val seedContract = actionContract<SeedAction>(
 
         // remove seed item from player
         world.players[owner]!!.removeItem(seed)
+
+        // set last growth timestamp
+        plot.plant?.lastGrowth = DateUtils.currentTimestamp()
 
         world.tiles[plot.x, plot.y] = plot
     }

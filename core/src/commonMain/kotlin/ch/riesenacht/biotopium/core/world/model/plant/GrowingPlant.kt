@@ -48,6 +48,12 @@ data class GrowingPlant(
      */
     @Transient
     var lastGrowth: Timestamp? = null
+
+    /**
+     * The identifier of the plant.
+     */
+    @Transient
+    val identifier: String = type.name.lowercase()
 }
 
 /**

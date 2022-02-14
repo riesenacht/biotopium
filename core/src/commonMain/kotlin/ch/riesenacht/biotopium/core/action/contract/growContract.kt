@@ -65,7 +65,7 @@ val growContract = actionContract<GrowAction>(
         rule { action, origin, world ->
             val plot = action.produce
             val localPlot = world.tiles[plot.x, plot.y] as Plot
-            localPlot.plant?.lastGrowth?.let { origin.timestamp <= it + growthRate } ?: false
+            localPlot.plant?.lastGrowth?.let { origin.timestamp >= it + growthRate } ?: false
         }
 
     },
