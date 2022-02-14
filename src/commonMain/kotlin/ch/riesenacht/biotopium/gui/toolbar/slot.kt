@@ -65,10 +65,11 @@ class Slot(
     var stack: ItemStack? = null
     set(value) {
         field = value
-        value?.let {
-            if(itemDisplay != null) {
-                container.removeChild(itemDisplay)
-            }
+        if(itemDisplay != null) {
+            container.removeChild(itemDisplay)
+        }
+        if(value != null) {
+
             itemDisplay = ItemDisplay(width, height, value)
             itemDisplay?.let {
                 container.addChild(it)

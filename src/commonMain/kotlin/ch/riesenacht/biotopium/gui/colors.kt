@@ -50,3 +50,44 @@ val darkSecondaryColor = Colors["#7A4025"]
  */
 val neutralColor = Colors["#F8FCFA"]
 
+/**
+ * The color for tiles.
+ */
+object TileColor {
+
+    /**
+     * Default tile color.
+     */
+    val defaultTile = darkPrimaryColor
+
+    /**
+     * Empty plot color.
+     */
+    val emptyPlot = darkSecondaryColor
+
+}
+
+/**
+ * The colors of plants.
+ */
+object PlantColor {
+
+    /**
+     * The colors for the wheat plant.
+     */
+    object Wheat {
+        val seed = Colors["#F6E1B7"]
+        val halfGrown = Colors["#F2D291"]
+        val grown = Colors["#EEC36D"]
+    }
+
+    /**
+     * The colors for the corn plant.
+     */
+    object Corn {
+        val seed = Colors["#FBEC5D"]
+        val halfGrown = Colors["#FAE738"]
+        val grown = Colors["#EFD706"]
+    }
+
+}

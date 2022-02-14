@@ -36,9 +36,7 @@ private var currentSlotHighlight: Container? = null
  * @param backgroundColor the background color
  */
 fun Container.highlightSlot(color: RGBA, slot: Slot, backgroundColor: RGBA = neutralColor) {
-    if(currentSlotHighlight != null) {
-        currentSlotHighlight?.removeFromParent()
-    }
+    clearHighlight()
     currentSlotHighlight = container {
         val arrow = this
         val arrowSize = slot.width * 0.3
@@ -59,4 +57,12 @@ fun Container.highlightSlot(color: RGBA, slot: Slot, backgroundColor: RGBA = neu
         }
         centerXOn(slot)
     }
+}
+
+/**
+ * Clears the highlight of a slot.
+ */
+fun clearHighlight() {
+    currentSlotHighlight?.removeAllComponents()
+    currentSlotHighlight?.removeFromParent()
 }

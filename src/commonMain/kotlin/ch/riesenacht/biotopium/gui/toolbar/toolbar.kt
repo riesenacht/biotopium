@@ -100,9 +100,14 @@ class Toolbar(root: Container, layout: ToolbarLayout, preferredSlotWidth: Double
     val slots: List<Slot>
 
     /**
-     * The selected slot
+     * The selected slot in its reactive form.
      */
-    val selectedSlot: BasicSubject<Slot>
+    val slotSelected: BasicSubject<Slot>
+
+    /**
+     * The currently selected slot.
+     */
+    var selectedSlot: Slot
 
     init {
         val frameWidth = root.width
@@ -166,7 +171,8 @@ class Toolbar(root: Container, layout: ToolbarLayout, preferredSlotWidth: Double
                 }
             }
         }
-        selectedSlot = BasicSubjectImpl(slots[0])
+        slotSelected = BasicSubjectImpl(slots[0])
+        selectedSlot = slots[0]
         slots[0].select()
 
         // key bindings
@@ -248,9 +254,13 @@ class Toolbar(root: Container, layout: ToolbarLayout, preferredSlotWidth: Double
      */
     private fun select(slot: Slot) {
         this.slots.forEach { if(it != slot) it.deselect() }
-        this.selectedSlot.onNext(slot)
+        this.slotSelected.onNext(slot)
+        this.selectedSlot = slot
     }
 
+    /**
+     * Finds a slot by item [type].
+     */
     fun findSlotByItemType(type: ItemType): Slot? = slots.find { it.stack?.item?.type == type }
 
     companion object {

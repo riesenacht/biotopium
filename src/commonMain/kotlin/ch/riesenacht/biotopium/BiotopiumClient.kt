@@ -20,13 +20,14 @@ package ch.riesenacht.biotopium
 
 import ch.riesenacht.biotopium.core.Biotopium
 import ch.riesenacht.biotopium.core.action.ActionManager
-import ch.riesenacht.biotopium.core.action.model.IntroductionAction
+import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.core.blockchain.KeyManager
-import ch.riesenacht.biotopium.core.world.model.item.Hoe
-import ch.riesenacht.biotopium.core.world.model.item.IntroductionGift
-import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
-import ch.riesenacht.biotopium.core.world.model.item.Seed
+import ch.riesenacht.biotopium.core.world.model.item.*
+import ch.riesenacht.biotopium.core.world.model.map.Plot
+import ch.riesenacht.biotopium.core.world.model.map.Tile
+import ch.riesenacht.biotopium.core.world.model.plant.GrowingPlant
+import ch.riesenacht.biotopium.core.world.model.plant.PlantGrowth
 import ch.riesenacht.biotopium.core.world.model.plant.PlantType
 import ch.riesenacht.biotopium.network.MessageHandler
 import ch.riesenacht.biotopium.network.model.message.blockchain.ChainFwdMessage
@@ -64,5 +65,57 @@ object BiotopiumClient : Biotopium(biotopiumClientConfig) {
         val cornSeeds = (1..numCornSeeds).map { Seed(address, PlantType.CORN) }.toList()
         val introductionGift = IntroductionGift(realmClaimPaper, hoes, wheatSeeds + cornSeeds)
         ActionManager.createAction(IntroductionAction(introductionGift))
+    }
+
+    /**
+     * Creates a create-plot-action.
+     * Turns a [tile] into a plot using a [hoe].
+     */
+    fun createCreatePlotAction(tile: Tile, hoe: Hoe) {
+        val plot = Plot(tile.x, tile.y)
+        ActionManager.createAction(CreatePlotAction(plot, hoe))
+    }
+
+    /**
+     * Creates a seed action.
+     * Plants a [seed] on a [plot].
+     */
+    fun createSeedAction(plot: Plot, seed: Seed) {
+        val address = KeyManager.address
+        val plantedPlot = plot.copy(plant = GrowingPlant(address, seed.plantType, PlantGrowth.SEED))
+        ActionManager.createAction(SeedAction(plantedPlot, seed))
+    }
+
+    /**
+     * Creates a harvest action.
+     * A [plant] is harvested from a [plot].
+     */
+    fun createHarvestAction(plant: GrowingPlant, plot: Plot) {
+
+        val harvestedPlant = HarvestedPlant(plant.owner, plant.type)
+        val seeds = listOf(
+            Seed(plant.owner, plant.type),
+            Seed(plant.owner, plant.type),
+            Seed(plant.owner, plant.type)
+        )
+        val harvest = Harvest(harvestedPlant, seeds)
+
+        ActionManager.createAction(HarvestAction(harvest, plot))
+    }
+
+    fun createGrowAction(plot: Plot) {
+
+        if(plot.plant == null) return
+
+        val growth: PlantGrowth = when(plot.plant?.growth) {
+            PlantGrowth.SEED -> PlantGrowth.HALF_GROWN
+            PlantGrowth.HALF_GROWN -> PlantGrowth.GROWN
+            PlantGrowth.GROWN -> PlantGrowth.GROWN
+            else -> PlantGrowth.SEED
+        }
+
+        val updatedPlot = plot.copy(plant = plot.plant!!.copy(growth = growth))
+
+        ActionManager.createAction(GrowAction(updatedPlot))
     }
 }

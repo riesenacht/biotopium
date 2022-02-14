@@ -43,7 +43,7 @@ import com.soywiz.korge.view.centerOn
  *
  * @author Manuel Riesen
  */
-class RealmClaimTutorial(private val toolbar: Toolbar) : Tutorial {
+class RealmClaimTutorial(private val toolbar: Toolbar, private val onEnd: () -> Unit) : Tutorial {
 
     override fun start(container: Container) {
         val realmClaimPaperSlot = toolbar.findSlotByItemType(ItemType.REALM_CLAIM_PAPER)
@@ -51,7 +51,7 @@ class RealmClaimTutorial(private val toolbar: Toolbar) : Tutorial {
             toolbar.highlightSlot(darkSecondaryColor, realmClaimPaperSlot)
         }
         var onSelected: Disposable? = null
-        onSelected = toolbar.selectedSlot.subscribe { slot ->
+        onSelected = toolbar.slotSelected.subscribe { slot ->
             if(slot.stack?.item?.type == ItemType.REALM_CLAIM_PAPER) {
                 container.uiButton(350.0, 40.0, text = "Claim a Realm at a random position") {
                     val claimRealmButton = this
@@ -61,16 +61,18 @@ class RealmClaimTutorial(private val toolbar: Toolbar) : Tutorial {
                         var tileCandidate: Tile
                         do {
                             tileCandidate = WorldStateManager.tiles.values.random()
-                        } while(WorldStateManager.realms[tileCandidate.x.realmIndex to tileCandidate.y.realmIndex] != null)
+                        } while(WorldStateManager.realms[tileCandidate.x.realmIndex, tileCandidate.y.realmIndex] != null)
                         val tile = tileCandidate
                         val realm = Realm(KeyManager.address, tile.x.realmIndex, tile.y.realmIndex)
                         slot.stack?.let {
                             ActionManager.createAction(ClaimRealmAction(realm, slot.stack!!.item as RealmClaimPaper))
                             ActionManager.registerActionListener(
                                 ActionType.CLAIM_REALM,
-                                removeOn = {action -> action.author == KeyManager.address }
+                                removeOn = { action -> action.author == KeyManager.address }
                             ) {
                                 claimRealmButton.removeFromParent()
+                                clearHighlight()
+                                onEnd.invoke()
                             }
                         }
                     }
