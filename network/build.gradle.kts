@@ -5,6 +5,7 @@ plugins {
 
 val jvmTargetVersion: String by project
 val kotlinxSerializationJsonVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 val biotopiumSubmoduleGroupId: String by project
 val biotopiumLoggingArtifactId: String by project
 val biotopiumNetworkArtifactId: String by project
@@ -40,6 +41,7 @@ kotlin {
             dependencies {
                 implementation(project(":$biotopiumLoggingArtifactId"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationJsonVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
             }
         }
         val commonTest by getting {
@@ -65,7 +67,6 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(project(":$biotopiumNetworkArtifactId:$gop2pArtifactId"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
             }
         }
         val jvmTest by getting

@@ -3,6 +3,7 @@ plugins {
     id("application")
 }
 
+val kotlinxCoroutinesVersion: String by project
 val jvmTargetVersion: String by project
 val biotopiumReactiveArtifactId: String by project
 val biotopiumCoreArtifactId: String by project
@@ -35,7 +36,7 @@ kotlin {
                 implementation(project(":$biotopiumReactiveArtifactId"))
                 implementation(project(":${biotopiumCoreArtifactId}"))
                 implementation(project(":${biotopiumNetworkArtifactId}"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
             }
         }
         val commonTest by getting {
