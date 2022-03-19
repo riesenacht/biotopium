@@ -88,7 +88,8 @@ internal external class AsyncGenerator {
 }
 
 internal external class BufferListWrapper {
-    val value: BufferList
+    val done: Boolean
+    val value: BufferList?
 }
 
 internal external class BufferList {

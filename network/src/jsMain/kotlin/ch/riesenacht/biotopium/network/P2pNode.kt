@@ -96,11 +96,24 @@ actual class P2pNode actual constructor(
             val stream = it.stream
             //NOTE: do not cast explicitly to Stream
             pipe(stream) { source ->
-                source.next()?.then { wrapper ->
-                    val bufferList = wrapper.value
-                    val message: SerializedMessage = bufferList.toString()
-                    receive(message)
+                var handleNext: () -> Unit = { }
+                val buffers: MutableList<BufferList> = mutableListOf()
+                handleNext = {
+                    source.next()?.then { result ->
+                        if(result.value != null) {
+                            buffers.add(result.value)
+                        }
+                        if(!result.done) {
+                            handleNext()
+                            return@then
+                        }
+                        val message: SerializedMessage = buffers.map { s ->
+                            return@map s.toString()
+                        }.joinToString("")
+                        receive(message)
+                    }
                 }
+                handleNext()
             }
         }
 
