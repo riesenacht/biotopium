@@ -21,6 +21,8 @@ package ch.riesenacht.biotopium.network
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.Topic
+import ch.riesenacht.biotopium.network.model.TopicType
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
@@ -34,6 +36,10 @@ import kotlin.reflect.KClass
 class NetworkManager(p2pConfig: P2pConfiguration) {
 
     val peerAddressBook: PeerAddressBook = PeerAddressBook()
+
+    private var globalTopics: List<Topic> = p2pConfig.topics.filter { it.type == TopicType.GLOBAL }
+
+    private var regionalTopics: List<Topic> = p2pConfig.topics.filter { it.type == TopicType.REGIONAL }
 
     private val p2pNode: P2pNode = P2pNode(p2pConfig)
 
@@ -67,18 +73,31 @@ class NetworkManager(p2pConfig: P2pConfiguration) {
         p2pNode.send(peerId, message)
     }
 
+    private fun sendToAllTopics(topics: List<Topic>, message: Message) {
+        topics.forEach { topic ->
+            p2pNode.sendBroadcast(topic, message)
+        }
+    }
+
     /**
-     * Broadcasts a [message].
+     * Broadcasts a [message] to all global topics.
      */
-    fun sendBroadcast(message: Message) {
-        p2pNode.sendBroadcast(message)
+    fun sendBroadcastGlobal(message: Message) {
+        sendToAllTopics(globalTopics, message)
+    }
+
+    /**
+     * Broadcasts a [message] to all regional topics.
+     */
+    fun sendBroadcastRegional(message: Message) {
+        sendToAllTopics(regionalTopics, message)
     }
 
     /**
      * Sends the peer [address] info message to all reachable peers.
      */
     fun sendPeerAddressInfoMessage(address: Address) {
-        p2pNode.sendBroadcast(PeerAddressInfoMessage(p2pNode.peerId, address))
+        sendBroadcastGlobal(PeerAddressInfoMessage(p2pNode.peerId, address))
     }
 
     /**

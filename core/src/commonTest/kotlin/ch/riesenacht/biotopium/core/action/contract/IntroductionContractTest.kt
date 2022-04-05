@@ -19,6 +19,8 @@
 package ch.riesenacht.biotopium.core.action.contract
 
 import ch.riesenacht.biotopium.core.action.model.IntroductionAction
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.regionIndex
 import ch.riesenacht.biotopium.core.world.model.item.Hoe
 import ch.riesenacht.biotopium.core.world.model.item.IntroductionGift
 import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
@@ -36,6 +38,9 @@ import kotlin.test.assertTrue
  */
 class IntroductionContractTest : ContractTest() {
 
+    private val region: Region
+        get() = Region(0.regionIndex, 0.regionIndex)
+
     @Test
     fun testIntroductionContractExec_positive() {
 
@@ -49,7 +54,7 @@ class IntroductionContractTest : ContractTest() {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val content = IntroductionAction(gift)
+        val content = IntroductionAction(gift, region)
         val action = createActionRecord(currentTimestamp, owner, content)
 
         execContract(action, world)

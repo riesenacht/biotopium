@@ -19,6 +19,8 @@
 package ch.riesenacht.biotopium
 
 import ch.riesenacht.biotopium.core.BiotopiumConfig
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.regionIndex
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 
 /**
@@ -30,3 +32,8 @@ val biotopiumClientConfig: BiotopiumConfig
         blocklordPeerIds,
         Ed25519.generateKeyPair()
     )
+
+/**
+ * The region of the biotopium client instance.
+ */
+val biotopiumClientRegion = Region(0.regionIndex, 0.regionIndex)

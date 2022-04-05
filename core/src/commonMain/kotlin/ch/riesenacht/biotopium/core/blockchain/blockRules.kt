@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.core.blockchain
 
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.blockchain.model.location.Stem
 import ch.riesenacht.biotopium.core.blockchain.rule.blockRuleset
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 
@@ -59,8 +60,12 @@ val generalBlockRules = blockRuleset {
  */
 val genesisRules = blockRuleset {
 
-    // The content of the genesis block must be empty
-    rule { block: Block, _: Block -> block.data.isEmpty() }
+    // The content of the genesis block of the stem chain must be empty
+    // (this does not apply to regional chains)
+    rule { block: Block, _: Block -> block.location != Stem || block.data.isEmpty() }
+
+    // The block's height is 0
+    rule { block: Block, _: Block -> block.height == 0uL }
 
     // All general block rules apply to the genesis block as well
     include(generalBlockRules)

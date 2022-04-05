@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.region
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -36,4 +38,7 @@ data class GrowAction(
     override val produce: Plot
 ) : Action, Producible<Plot> {
     override val type = ActionType.GROW
+
+    override val location: Locator
+    get() = produce.region
 }

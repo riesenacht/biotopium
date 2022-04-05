@@ -21,6 +21,7 @@ package ch.riesenacht.biotopium.serialization
 import ch.riesenacht.biotopium.TestCoreModuleEffect
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.blockchain.model.location.Stem
 import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
 import ch.riesenacht.biotopium.network.model.PeerId
@@ -123,7 +124,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
             BlockAddMessage(block)
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}],\"hash\":\"44f151c07837416c9c2f4af131a5a60f040b5ee1692b50e37fc13ba359cc3baf\",\"sign\":\"+f9PYevXLB5ZLj+95iH48j+MoC+3oeZmBz9yWaPqyIX/uZ09NYtIZF8rWnLPCUgor9iRWU6V6PcywixzjbHJAQ==\"}}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"location\":{\"class\":\"Region\",\"rx\":0,\"ry\":0},\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[{\"class\":\"DefaultTile\",\"x\":0,\"y\":0}]},\"hash\":\"fc4fbbb1f3902060454c48c576886d556da7f92f144165417e65158cb94677de\",\"sign\":\"3WsIg1gDubmkNamNZ3UN7HJae71ZdIGRAVM5rEt1P5lI7AqYChGI0dGs8SUBap3zZqnrdbxdsG+3bGGc4H3ACA==\"}],\"hash\":\"cc2eef2a1c5f30c78ac32e9bd0e38f7f788042d45d2de973c05a39d6bed82434\",\"sign\":\"bjhkTBiJjPhUtstXkKEl2oaW3y7RnNYgdquKQ7jydHuLlZecoWNzxgPARSdf8rv8BZeh3ho2c8BEFFd9WKssAA==\"}}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -133,7 +134,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeBlockAddMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}],\"hash\":\"44f151c07837416c9c2f4af131a5a60f040b5ee1692b50e37fc13ba359cc3baf\",\"sign\":\"+f9PYevXLB5ZLj+95iH48j+MoC+3oeZmBz9yWaPqyIX/uZ09NYtIZF8rWnLPCUgor9iRWU6V6PcywixzjbHJAQ==\"}}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"BlockAddMessage\",\"block\":{\"height\":1,\"location\":{\"class\":\"Region\",\"rx\":0,\"ry\":0},\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[{\"class\":\"DefaultTile\",\"x\":0,\"y\":0}]},\"hash\":\"fc4fbbb1f3902060454c48c576886d556da7f92f144165417e65158cb94677de\",\"sign\":\"3WsIg1gDubmkNamNZ3UN7HJae71ZdIGRAVM5rEt1P5lI7AqYChGI0dGs8SUBap3zZqnrdbxdsG+3bGGc4H3ACA==\"}],\"hash\":\"cc2eef2a1c5f30c78ac32e9bd0e38f7f788042d45d2de973c05a39d6bed82434\",\"sign\":\"bjhkTBiJjPhUtstXkKEl2oaW3y7RnNYgdquKQ7jydHuLlZecoWNzxgPARSdf8rv8BZeh3ho2c8BEFFd9WKssAA==\"}}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
@@ -153,10 +154,10 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val message = MessageEnvelope(
             peerId,
-            ChainReqMessage(1u)
+            ChainReqMessage(1u, Stem)
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainRequestMessage\",\"height\":1}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainRequestMessage\",\"height\":1,\"location\":{\"class\":\"Stem\"}}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -166,12 +167,12 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeChainReqMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainRequestMessage\",\"height\":1}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainRequestMessage\",\"height\":1,\"location\":{\"class\":\"Stem\"}}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val message = MessageEnvelope(
             peerId,
-            ChainReqMessage(1u)
+            ChainReqMessage(1u, Stem)
         )
 
         val decoded: MessageEnvelope<ChainReqMessage> = JsonEncoder.decode(encoded)
@@ -188,7 +189,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
             ChainFwdMessage(listOf(block))
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}],\"hash\":\"44f151c07837416c9c2f4af131a5a60f040b5ee1692b50e37fc13ba359cc3baf\",\"sign\":\"+f9PYevXLB5ZLj+95iH48j+MoC+3oeZmBz9yWaPqyIX/uZ09NYtIZF8rWnLPCUgor9iRWU6V6PcywixzjbHJAQ==\"}]}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"location\":{\"class\":\"Region\",\"rx\":0,\"ry\":0},\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[{\"class\":\"DefaultTile\",\"x\":0,\"y\":0}]},\"hash\":\"fc4fbbb1f3902060454c48c576886d556da7f92f144165417e65158cb94677de\",\"sign\":\"3WsIg1gDubmkNamNZ3UN7HJae71ZdIGRAVM5rEt1P5lI7AqYChGI0dGs8SUBap3zZqnrdbxdsG+3bGGc4H3ACA==\"}],\"hash\":\"cc2eef2a1c5f30c78ac32e9bd0e38f7f788042d45d2de973c05a39d6bed82434\",\"sign\":\"bjhkTBiJjPhUtstXkKEl2oaW3y7RnNYgdquKQ7jydHuLlZecoWNzxgPARSdf8rv8BZeh3ho2c8BEFFd9WKssAA==\"}]}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -198,7 +199,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeChainFwdMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}],\"hash\":\"44f151c07837416c9c2f4af131a5a60f040b5ee1692b50e37fc13ba359cc3baf\",\"sign\":\"+f9PYevXLB5ZLj+95iH48j+MoC+3oeZmBz9yWaPqyIX/uZ09NYtIZF8rWnLPCUgor9iRWU6V6PcywixzjbHJAQ==\"}]}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ChainForwardMessage\",\"blocks\":[{\"height\":1,\"location\":{\"class\":\"Region\",\"rx\":0,\"ry\":0},\"timestamp\":1,\"prevHash\":\"prevHash\",\"author\":\"test\",\"data\":[{\"class\":\"ActionRecord\",\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[{\"class\":\"DefaultTile\",\"x\":0,\"y\":0}]},\"hash\":\"fc4fbbb1f3902060454c48c576886d556da7f92f144165417e65158cb94677de\",\"sign\":\"3WsIg1gDubmkNamNZ3UN7HJae71ZdIGRAVM5rEt1P5lI7AqYChGI0dGs8SUBap3zZqnrdbxdsG+3bGGc4H3ACA==\"}],\"hash\":\"cc2eef2a1c5f30c78ac32e9bd0e38f7f788042d45d2de973c05a39d6bed82434\",\"sign\":\"bjhkTBiJjPhUtstXkKEl2oaW3y7RnNYgdquKQ7jydHuLlZecoWNzxgPARSdf8rv8BZeh3ho2c8BEFFd9WKssAA==\"}]}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val block = generateDefaultBlock()
@@ -221,7 +222,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
             ActionReqMessage(action)
         )
 
-        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ActionReqMessage\",\"action\":{\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}}}"
+        val expected = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ActionReqMessage\",\"action\":{\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[{\"class\":\"DefaultTile\",\"x\":0,\"y\":0}]},\"hash\":\"fc4fbbb1f3902060454c48c576886d556da7f92f144165417e65158cb94677de\",\"sign\":\"3WsIg1gDubmkNamNZ3UN7HJae71ZdIGRAVM5rEt1P5lI7AqYChGI0dGs8SUBap3zZqnrdbxdsG+3bGGc4H3ACA==\"}}}"
 
         val encoded = JsonEncoder.encode(message)
 
@@ -231,7 +232,7 @@ class JsonEncoderNetworkMessageTest : EncoderTest() {
     @Test
     fun testDecodeActionReqMessage() {
 
-        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ActionReqMessage\",\"action\":{\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[]},\"hash\":\"eadc67384a4fee1a01286bc23a62440f82616884b53893d57ad170553c070b88\",\"sign\":\"20vvOr6U6iBz3XK0ha0UUTj/dbOq0G+IbPPd7Gns/HJ5nr96xBQP4ijz2qkI2EjA3rQmNUQJMDEKsQ0srHrfDQ==\"}}}"
+        val encoded = "{\"peerId\":\"QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9\",\"message\":{\"class\":\"ActionReqMessage\",\"action\":{\"timestamp\":0,\"author\":\"GCLHfUCO3kB/wnCEqozS3mY4KXpHXD1ZyZcyZMkkOHc=\",\"content\":{\"class\":\"ChunkGenesisAction\",\"produce\":[{\"class\":\"DefaultTile\",\"x\":0,\"y\":0}]},\"hash\":\"fc4fbbb1f3902060454c48c576886d556da7f92f144165417e65158cb94677de\",\"sign\":\"3WsIg1gDubmkNamNZ3UN7HJae71ZdIGRAVM5rEt1P5lI7AqYChGI0dGs8SUBap3zZqnrdbxdsG+3bGGc4H3ACA==\"}}}"
 
         val peerId = PeerId("QmWPDDVPfBSrkrHjxt2wQ9JNsH4RNCQ2NkpFi9GHxTQvz9")
         val action = createActionRecord(zeroTimestamp, defaultOwner, generateDefaultTestAction())

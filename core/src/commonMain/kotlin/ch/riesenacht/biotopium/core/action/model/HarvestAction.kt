@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.region
 import ch.riesenacht.biotopium.core.world.model.item.Harvest
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import kotlinx.serialization.SerialName
@@ -38,4 +40,7 @@ data class HarvestAction(
     override val consume: Plot
 ) : Action, Producible<Harvest>, Consumable<Plot> {
     override val type = ActionType.HARVEST
+
+    override val location: Locator
+    get() = consume.region
 }

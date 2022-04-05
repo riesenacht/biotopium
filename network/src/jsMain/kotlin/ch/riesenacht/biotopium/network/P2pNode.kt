@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.Topic
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import ch.riesenacht.biotopium.network.utils.await
@@ -83,13 +84,18 @@ actual class P2pNode actual constructor(
         libp2p.on("peer:discovery") { peerId ->
             logger.debug { "discovered peer: ${peerId.toB58String()}" }
         }
-        libp2p.pubsub.on(p2pConfig.topic) { msg ->
-            val data: Uint8Array = msg.data as Uint8Array
-            val serializedMessage: SerializedMessage = decoder.decode(data)
-            receive(serializedMessage)
+        p2pConfig.topics.forEach { topic ->
+            libp2p.pubsub.on(topic.name) { msg ->
+                val data: Uint8Array = msg.data as Uint8Array
+                val serializedMessage: SerializedMessage = decoder.decode(data)
+                receive(serializedMessage)
+            }
         }
+
         libp2p.start().then {
-            libp2p.pubsub.subscribe(p2pConfig.topic)
+            p2pConfig.topics.forEach { topic ->
+                libp2p.pubsub.subscribe(topic.name)
+            }
         }.await()
 
         libp2p.handle(p2pConfig.protocolName) {
@@ -124,8 +130,8 @@ actual class P2pNode actual constructor(
         libp2p?.stop()?.await()
     }
 
-    override fun sendBroadcastSerialized(message: SerializedMessage) {
-        libp2p!!.pubsub.publish(p2pConfig.topic, message)
+    override fun sendBroadcastSerialized(topic: Topic, message: SerializedMessage) {
+        libp2p!!.pubsub.publish(topic.name, message)
     }
 
     override fun sendSerialized(peerId: PeerId, message: SerializedMessage) {

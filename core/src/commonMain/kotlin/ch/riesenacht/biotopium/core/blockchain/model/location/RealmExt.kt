@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -16,21 +16,12 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium
+package ch.riesenacht.biotopium.core.blockchain.model.location
 
-import ch.riesenacht.biotopium.network.BiotopiumProtocol
-import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
+import ch.riesenacht.biotopium.core.world.model.map.Realm
 
 /**
- * The peer-to-peer configuration of the client.
+ * The region of the realm.
  */
-
-val clientP2pConfig: P2pConfiguration
-    get() = P2pConfiguration(
-        topic = BiotopiumProtocol.topic,
-        protocolName = BiotopiumProtocol.protocolName,
-        listenPort = 5559,
-        bootstrapPeers = listOf(
-            "/ip4/127.0.0.1/tcp/5558/ws/p2p/12D3KooWFBmiRR8avwf28vQXFZgF5PUxag9Nd3vQM7CMBdegGdh6"
-        )
-    )
+val Realm.region: Region
+    get() = Region(ix.regionIndex, iy.regionIndex)

@@ -24,6 +24,8 @@ import jnr.ffi.Runtime;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Wrapper for the gop2p library.
@@ -39,7 +41,7 @@ public class GoP2p {
 
     private static final String STRING_BUNDLE_SEPARATOR = ";";
 
-    private final String topic;
+    private final List<String> topics;
     private final String protocolName;
     private final int port;
     private final String[] bootstrapPeers;
@@ -51,8 +53,8 @@ public class GoP2p {
         GO_P2P_LIBRARY = LibraryLoader.create(GoP2pLibrary.class).load(path);
     }
 
-    private GoP2p(String topic, String protocolName, int port, String[] bootstrapPeers, String privateKeyBase64) {
-        this.topic = topic;
+    private GoP2p(List<String> topics, String protocolName, int port, String[] bootstrapPeers, String privateKeyBase64) {
+        this.topics = topics;
         this.protocolName = protocolName;
         this.port = port;
         this.bootstrapPeers = bootstrapPeers;
@@ -64,7 +66,7 @@ public class GoP2p {
      */
     public static class Builder {
 
-        private String topic;
+        private List<String> topics;
         private String protocolName;
         private int port;
         private String[] bootstrapPeers;
@@ -74,11 +76,11 @@ public class GoP2p {
 
         /**
          * Sets the topic of the new {@link GoP2p} instance.
-         * @param topic to use
+         * @param topics to use
          * @return builder
          */
-        public Builder topic(String topic) {
-            this.topic = topic;
+        public Builder topics(List<String> topics) {
+            this.topics = topics;
             return this;
         }
 
@@ -130,7 +132,7 @@ public class GoP2p {
             if(bootstrapPeers == null) {
                 bootstrapPeers = new String[0];
             }
-            return new GoP2p(topic, protocolName, port, bootstrapPeers, privateKeyBase64);
+            return new GoP2p(topics, protocolName, port, bootstrapPeers, privateKeyBase64);
         }
     }
 
@@ -150,10 +152,11 @@ public class GoP2p {
         if(privateKeyBase64 != null) {
             privateKeyPtr = createPointerFromString(privateKeyBase64);
         }
-        Pointer topicPtr = createPointerFromString(topic);
+        String topicsBundle = createStringBundle(topics);
+        Pointer topicsPtr = createPointerFromString(topicsBundle);
         Pointer protocolNamePtr = createPointerFromString(protocolName);
         Pointer bootstrapPeerBundlePtr = createPointerFromString(String.join(STRING_BUNDLE_SEPARATOR, bootstrapPeers));
-        GO_P2P_LIBRARY.StartServer(topicPtr, protocolNamePtr, port, bootstrapPeerBundlePtr, privateKeyPtr);
+        GO_P2P_LIBRARY.StartServer(topicsPtr, protocolNamePtr, port, bootstrapPeerBundlePtr, privateKeyPtr);
     }
 
     /**
@@ -193,12 +196,14 @@ public class GoP2p {
     }
 
     /**
-     * Broadcasts a message.
+     * Broadcasts a message of a given topic.
+     * @param topic topic of message
      * @param serialized serialized message
      */
-    public void sendPubSub(String serialized) {
-        Pointer ptr = createPointerFromString(serialized);
-        GO_P2P_LIBRARY.SendPubSub(ptr);
+    public void sendPubSub(String topic, String serialized) {
+        Pointer topicPtr = createPointerFromString(topic);
+        Pointer serializedPtr = createPointerFromString(serialized);
+        GO_P2P_LIBRARY.SendPubSub(topicPtr, serializedPtr);
     }
 
     /**
@@ -226,12 +231,21 @@ public class GoP2p {
     }
 
     /**
+     * Creates a string bundle of a given list of strings.
+     * @param stringList list of strings
+     * @return bundled string
+     */
+    private String createStringBundle(List<String> stringList) {
+        return String.join(STRING_BUNDLE_SEPARATOR, stringList);
+    }
+
+    /**
      * Represents the gop2p library.
      */
     public interface GoP2pLibrary {
         void StartServer(Pointer topicPtr, Pointer protocolNamePtr, int port, Pointer bootstrapPeerBundlePtr, Pointer pkBase64Ptr);
         void StopServer();
-        void SendPubSub(Pointer serialized);
+        void SendPubSub(Pointer topic, Pointer serialized);
         void SendStream(Pointer peerId, Pointer serialized);
         Pointer PeerID();
         Pointer ListenPubSubBlocking();

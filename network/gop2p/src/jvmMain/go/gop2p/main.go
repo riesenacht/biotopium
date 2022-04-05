@@ -33,7 +33,7 @@ const stringBundleDelimiter = ";"
 
 // StartServer starts the peer-to-peer server.
 //export StartServer
-func StartServer(topicPtr CString, protocolNamePtr CString, port int, bootstrapPeerBundlePtr CString, pkBase64Ptr CString) {
+func StartServer(topicsBundlePtr CString, protocolNamePtr CString, port int, bootstrapPeerBundlePtr CString, pkBase64Ptr CString) {
 	pkBase64 := C.GoString(pkBase64Ptr)
 	var pkBytes []byte
 	if len(pkBase64) > 0 {
@@ -41,7 +41,8 @@ func StartServer(topicPtr CString, protocolNamePtr CString, port int, bootstrapP
 		check.Err(err)
 		pkBytes = pkStr
 	}
-	topic := C.GoString(topicPtr)
+	topicsBundle := C.GoString(topicsBundlePtr)
+	topics := strings.Split(topicsBundle, stringBundleDelimiter)
 	protocolName := C.GoString(protocolNamePtr)
 	bootstrapPeerBundle := C.GoString(bootstrapPeerBundlePtr)
 	var bootstrapPeers []string
@@ -51,7 +52,7 @@ func StartServer(topicPtr CString, protocolNamePtr CString, port int, bootstrapP
 		bootstrapPeers = make([]string, 0, 0)
 	}
 
-	config := p2p.NewConfig(topic, protocolName, port, bootstrapPeers, pkBytes)
+	config := p2p.NewConfig(topics, protocolName, port, bootstrapPeers, pkBytes)
 	p2p.StartP2PServer(config)
 }
 
@@ -74,7 +75,7 @@ func PeerID() CString {
 // This is a blocking function, waiting on a channel.
 //export ListenPubSubBlocking
 func ListenPubSubBlocking() CString {
-	message := <-p2p.Instance().PubSub.Messages
+	message := <-p2p.Instance().Messages
 	return NewCStringOnce(string(message))
 }
 
@@ -86,13 +87,13 @@ func ListenStreamBlocking() CString {
 	return NewCStringOnce(string(message))
 }
 
-
 // SendPubSub sends a message to all known peers.
-// The serialized message as pointer to a C character (array) has to be given.
+// The topic and serialized message as pointer to a C character (array) have to be given.
 //export SendPubSub
-func SendPubSub(serialized *C.char) {
+func SendPubSub(topic *C.char, serialized *C.char) {
+	topicName := C.GoString(topic)
 	str := C.GoString(serialized)
-	p2p.Instance().PubSub.Publish([]byte(str))
+	p2p.Instance().PubSubs[topicName].Publish([]byte(str))
 }
 
 // SendStream sends a message to a specific peer.

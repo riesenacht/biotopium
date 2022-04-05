@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.region
 import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
 import ch.riesenacht.biotopium.core.world.model.map.Realm
 import kotlinx.serialization.SerialName
@@ -38,4 +40,7 @@ data class ClaimRealmAction(
     override val consume: RealmClaimPaper
 ) : Action, Producible<Realm>, Consumable<RealmClaimPaper> {
     override val type = ActionType.CLAIM_REALM
+    
+    override val location: Locator
+    get() = produce.region
 }

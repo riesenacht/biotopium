@@ -22,7 +22,10 @@ import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.network.model.message.DebugMessage
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.PeerAddressInfoMessage
-import ch.riesenacht.biotopium.network.model.message.blockchain.*
+import ch.riesenacht.biotopium.network.model.message.blockchain.ActionReqMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.ChainFwdMessage
+import ch.riesenacht.biotopium.network.model.message.blockchain.ChainReqMessage
 import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer

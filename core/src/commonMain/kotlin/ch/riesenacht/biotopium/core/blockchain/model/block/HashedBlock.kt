@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.core.blockchain.model.block
 
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.Hashed
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
 import ch.riesenacht.biotopium.core.blockchain.model.record.RecordBook
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.crypto.model.Signature
@@ -40,6 +41,7 @@ import kotlinx.serialization.Serializable
 @SerialName("HashedBlock")
 data class HashedBlock(
     override val height: ULong,
+    override val location: Locator,
     override val timestamp: Timestamp,
     override val prevHash: Hash,
     override val author: Address,
@@ -53,6 +55,7 @@ data class HashedBlock(
      */
     fun toBlock(sign: Signature) = Block(
         height = height,
+        location = location,
         timestamp = timestamp,
         prevHash = prevHash,
         author = author,

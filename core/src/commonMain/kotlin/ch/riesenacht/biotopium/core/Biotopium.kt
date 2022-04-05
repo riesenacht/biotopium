@@ -48,7 +48,7 @@ abstract class Biotopium(private val config: BiotopiumConfig) {
 
     protected val logger = Logging.logger { }
 
-    private val randomBlocklordPeer: PeerId
+    protected val randomBlocklordPeer: PeerId
     get() = config.blocklordPeerIds.random()
 
     init {
@@ -67,12 +67,15 @@ abstract class Biotopium(private val config: BiotopiumConfig) {
         networkManager.registerMessageHandler(ChainReqMessage::class) { wrapper, network ->
             val reqMessage = wrapper.message
             val height = reqMessage.height
-            logger.debug { "received chain request for height: $height" }
-            if(height < blockchainManager.maxHeight) {
-                val startIndex = blockchainManager.blockchain.indexOfFirst { it.height == height }
-                val blockchain = blockchainManager.blockchain.drop(startIndex)
+            val location = reqMessage.location
 
-                val fwdMessage = ChainFwdMessage(blockchain)
+            logger.debug { "received chain request for height: $height and location $location" }
+            val blockchain = blockchainManager.blockchain[location]
+            if(height <= blockchain.maxHeight) {
+                val startIndex = blockchain.indexOfFirst { it.height == height }
+                val blockchainToFwd = blockchain.drop(startIndex)
+
+                val fwdMessage = ChainFwdMessage(blockchainToFwd)
 
                 network.send(wrapper.peerId, fwdMessage)
 

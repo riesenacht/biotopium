@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -16,15 +16,12 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.model.location
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.world.model.RealmIndex
 
 /**
- * Represents the blockchain itself.
- * A blockchain consists of a chain of [blocks][Block].
- * Each block is connected to its predecessor over the previous block's hash.
- *
- * @author Manuel Riesen
+ * The realm index in the region index format.
  */
-typealias Blockchain = List<Block>
+val RealmIndex.regionIndex: RegionIndex
+    get() = RegionIndex(this.index / regionSize)

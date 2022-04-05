@@ -19,13 +19,19 @@
 package ch.riesenacht.biotopium.blocklord
 
 import ch.riesenacht.biotopium.network.BiotopiumProtocol
+import ch.riesenacht.biotopium.network.model.Topic
+import ch.riesenacht.biotopium.network.model.TopicType
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 
 /**
  * The peer-to-peer configuration of the blocklord.
  */
 val blocklordP2pConfig = P2pConfiguration(
-    topic = BiotopiumProtocol.topic,
+    topics = listOf(
+        BiotopiumProtocol.globalTopic,
+        //TODO remove fix regional topic
+        Topic("${BiotopiumProtocol.regionTopicPrefix}0/0", TopicType.REGIONAL)
+    ),
     protocolName = BiotopiumProtocol.protocolName,
     listenPort = 5558,
     privateKeyBase64 = "CAESQKxECQQuSwd7gVEBAPt9S7GryYvdRNYSkSDElYJSPFLGT8ZBXrURWrKud91anxrBE1Ym0bWYiQJnNq7mVNHajA0="

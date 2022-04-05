@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The biotopium Authors.
+ * Copyright (c) 2022 The biotopium Authors.
  * This file is part of biotopium.
  *
  * biotopium is free software: you can redistribute it and/or modify
@@ -16,15 +16,14 @@
  * along with biotopium.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.riesenacht.biotopium.core.blockchain.model
+package ch.riesenacht.biotopium.core.blockchain.model.location
 
-import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.world.model.Coordinate
 
 /**
- * Represents a mutable blockchain.
- *
- * @see Blockchain
- *
- * @author Manuel Riesen
+ * The integer in the [Coordinate] format.
+ * @throws NegativeRegionIndexException number is negative
  */
-typealias MutableBlockchain = MutableList<Block>
+val Int.regionIndex
+    @Throws(NegativeRegionIndexException::class)
+    get() = if(this >= 0) RegionIndex(this.toUInt()) else throw NegativeRegionIndexException()

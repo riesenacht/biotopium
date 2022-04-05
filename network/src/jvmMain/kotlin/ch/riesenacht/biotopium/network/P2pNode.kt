@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.go2p.GoP2p
 import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.Topic
 import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
 import kotlinx.coroutines.*
@@ -38,7 +39,7 @@ actual class P2pNode actual constructor(
         get() = PeerId(gop2p.peerId!!)
 
     private val gop2p = GoP2p.builder()
-        .topic(p2pConfig.topic)
+        .topics(p2pConfig.topics.map { it.name })
         .protocolName(p2pConfig.protocolName)
         .port(p2pConfig.listenPort)
         .bootstrapPeers(p2pConfig.bootstrapPeers.toTypedArray())
@@ -60,8 +61,8 @@ actual class P2pNode actual constructor(
         listenPubSubJob?.cancelAndJoin()
     }
 
-    override fun sendBroadcastSerialized(message: SerializedMessage) {
-        gop2p.sendPubSub(message)
+    override fun sendBroadcastSerialized(topic: Topic, message: SerializedMessage) {
+        gop2p.sendPubSub(topic.name, message)
     }
 
     override fun sendSerialized(peerId: PeerId, message: SerializedMessage) {

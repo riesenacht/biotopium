@@ -30,33 +30,34 @@ const PubSubBufSize = 128
 
 // PubSubTopic represents a pubsub topic.
 type PubSubTopic struct {
-	Messages chan Message // Message input channel
-
-	ctx    context.Context      // Context
-	ps     *pubsub.PubSub       // PubSub instance
-	topic  *pubsub.Topic        // Topic
-	sub    *pubsub.Subscription // Subscription
-	peerID peer.ID              // Peer ID
+	topicName string               // Name of topic
+	messages  chan Message         // Incoming messages
+	ctx       context.Context      // Context
+	ps        *pubsub.PubSub       // PubSub instance
+	topic     *pubsub.Topic        // Topic
+	sub       *pubsub.Subscription // Subscription
+	peerID    peer.ID              // Peer ID
 }
 
 // listenTopic starts to listen to a topic.
-// A context, a pubsub, and a peer ID have to be given.
+// A topic name, a context, a pubsub, and a peer ID have to be given.
 // A ps topic is returned.
-func listenTopic(ctx context.Context, ps *pubsub.PubSub, peerID peer.ID) *PubSubTopic {
+func listenTopic(topicName string, ctx context.Context, ps *pubsub.PubSub, peerID peer.ID) *PubSubTopic {
 
-	topic, err := ps.Join(instance.Config.Topic)
+	topic, err := ps.Join(topicName)
 	check.Err(err)
 
 	sub, err := topic.Subscribe()
 	check.Err(err)
 
 	t := &PubSubTopic{
-		ctx:      ctx,
-		ps:       ps,
-		topic:    topic,
-		sub:      sub,
-		peerID:   peerID,
-		Messages: make(chan Message, PubSubBufSize),
+		topicName: topicName,
+		messages:  make(chan Message, PubSubBufSize),
+		ctx:       ctx,
+		ps:        ps,
+		topic:     topic,
+		sub:       sub,
+		peerID:    peerID,
 	}
 
 	go t.listen()
@@ -68,14 +69,14 @@ func (t *PubSubTopic) listen() {
 	for {
 		msg, err := t.sub.Next(t.ctx)
 		if err != nil {
-			close(t.Messages)
+			close(t.messages)
 			return
 		}
 		// exclude current peer ID
 		if msg.ReceivedFrom == t.peerID {
 			continue
 		}
-		t.Messages <- msg.Data
+		t.messages <- msg.Data
 	}
 }
 

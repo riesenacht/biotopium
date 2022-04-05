@@ -33,4 +33,5 @@ sealed interface Action : BlockRecordContent {
      * The type of action
      */
     val type: ActionType
+
 }

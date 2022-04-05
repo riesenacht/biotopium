@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.network.model.message.blockchain
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
 import ch.riesenacht.biotopium.network.model.BlockchainSignal
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -31,7 +32,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("ChainRequestMessage")
 data class ChainReqMessage(
-    val height: ULong
+    val height: ULong,
+    val location: Locator
 ) : BlockchainMessage() {
 
     override val signal = BlockchainSignal.CHAIN_REQ

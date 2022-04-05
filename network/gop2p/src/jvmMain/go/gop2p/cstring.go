@@ -24,6 +24,10 @@ import "C"
 // It is a pointer to C characters.
 type CString *C.char
 
+const strOnceThreshold = 10
+
+var numStrOnce int = 0
+
 // NewCString is the factory function for CStrings.
 // A string has to be given, a CString is returned.
 func NewCString(str string) CString {
@@ -37,6 +41,9 @@ func NewCString(str string) CString {
 // A string has to be given, a CString is returned.
 func NewCStringOnce(str string) CString {
 	cstr := NewCString(str)
-	memoryHandler.Mark(cstr)
+	if numStrOnce >= strOnceThreshold {
+        memoryHandler.Mark(cstr)
+        numStrOnce = 0
+	}
 	return cstr
 }

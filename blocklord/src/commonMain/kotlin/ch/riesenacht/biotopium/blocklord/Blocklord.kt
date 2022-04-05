@@ -26,16 +26,20 @@ import ch.riesenacht.biotopium.core.CoreModuleEffect
 import ch.riesenacht.biotopium.core.action.ActionManager
 import ch.riesenacht.biotopium.core.action.model.ActionCandidate
 import ch.riesenacht.biotopium.core.action.model.ChunkGenesisAction
+import ch.riesenacht.biotopium.core.blockchain.BlockSmith
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.core.blockchain.model.Address
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.Stem
 import ch.riesenacht.biotopium.core.blockchain.model.record.EmptyRecordBook
+import ch.riesenacht.biotopium.core.blockchain.model.record.RecordBook
+import ch.riesenacht.biotopium.core.blockchain.model.record.recordBookOf
 import ch.riesenacht.biotopium.core.crypto.model.Hash
 import ch.riesenacht.biotopium.core.effect.EffectProfile
 import ch.riesenacht.biotopium.core.effect.applyEffect
-import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.coord
 import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
 import ch.riesenacht.biotopium.logging.LoggingConfig
@@ -43,6 +47,7 @@ import ch.riesenacht.biotopium.logging.LoggingLevel
 import ch.riesenacht.biotopium.network.model.message.blockchain.ActionReqMessage
 import ch.riesenacht.biotopium.network.model.message.blockchain.BlockAddMessage
 import kotlinx.coroutines.awaitCancellation
+import ch.riesenacht.biotopium.core.time.DateUtils
 
 /**
  * The blocklord biotopium instance.
@@ -58,24 +63,36 @@ object Blocklord : Biotopium(blocklordConfig) {
         }
 
         OutgoingBlockBus.subscribe {
+
             // publish new blocks
             val message = BlockAddMessage(it)
-            networkManager.sendBroadcast(message)
+
+            if(it.location == Stem) {
+                networkManager.sendBroadcastGlobal(message)
+            } else {
+                networkManager.sendBroadcastRegional(message)
+            }
+
         }
 
     }
 
     /**
      * Starts the blockchain by generating the genesis block and adding it to the blockchain.
+     * //TODO fix bootstrap workaround
      */
     fun startBlockchain() {
-        val genesisBlock = generateGenesisBlock()
-        OutgoingBlockBus.onNext(genesisBlock)
-        BlockchainManager.add(genesisBlock)
+        val stemGenesisBlock = generateGenesisBlock()
+        OutgoingBlockBus.onNext(stemGenesisBlock)
+        BlockchainManager.add(stemGenesisBlock)
         val chunkGenesisAction = ChunkGenesisAction(
-            (0 until 64).flatMap { x -> (0 until 64).map { y -> DefaultTile(x.coord, y.coord) } }
+            (0 until 8).flatMap { x -> (0 until 8).map { y -> DefaultTile(x.coord, y.coord) } }
         )
         val chunkGenesisActionRecord = ActionManager.envelope(chunkGenesisAction)
+        val regionGenesisBlock = generateGenesisBlock(chunkGenesisAction.location, recordBookOf(chunkGenesisActionRecord))
+        val regionGenesisRefBlock = BlockSmith.createStemBlockFor(regionGenesisBlock)
+        BlockchainManager.add(regionGenesisRefBlock)
+        //BlockchainManager.add(regionGenesisBlock)
         ActionCandidateBus.onNext(ActionCandidate(chunkGenesisActionRecord))
     }
 
@@ -83,13 +100,14 @@ object Blocklord : Biotopium(blocklordConfig) {
     /**
      * Generates the genesis block.
      */
-    private fun generateGenesisBlock(): Block {
+    private fun generateGenesisBlock(location: Locator = Stem, records: RecordBook = EmptyRecordBook): Block {
 
         val raw = RawBlock(
             height = 0u,
-            timestamp = Timestamp(0),
+            location = location,
+            timestamp = DateUtils.currentTimestamp(),
             author = Address(blocklordConfig.keyPair.publicKey),
-            data = EmptyRecordBook,
+            data = records,
             prevHash = Hash("")
         )
         val hash = BlockUtils.hash(raw)

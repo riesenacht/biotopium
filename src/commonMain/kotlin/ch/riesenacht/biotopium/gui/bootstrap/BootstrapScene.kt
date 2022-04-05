@@ -19,12 +19,15 @@
 package ch.riesenacht.biotopium.gui.bootstrap
 
 import ch.riesenacht.biotopium.BiotopiumClient
+import ch.riesenacht.biotopium.biotopiumClientConfig
 import ch.riesenacht.biotopium.bus.IncomingActionBus
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.IntroductionAction
 import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.blockchain.KeyManager
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.regionIndex
 import ch.riesenacht.biotopium.core.world.Player
 import ch.riesenacht.biotopium.core.world.WorldStateManager
 import ch.riesenacht.biotopium.gui.GameConfig
@@ -56,9 +59,10 @@ class BootstrapScene(private val config: GameConfig) : Scene() {
     override suspend fun Container.sceneMain() {
 
         BiotopiumClient.startP2pNode()
-        BiotopiumClient.updateChain {
+        BiotopiumClient.updateAllChains {
             if(config.startOption == StartOption.NEW_ACCOUNT) {
-                BiotopiumClient.createIntroductionAction()
+                //TODO make region customizable
+                BiotopiumClient.createIntroductionAction(Region(0.regionIndex, 0.regionIndex))
             }
             var disposable: Disposable? = null
             disposable = IncomingActionBus.subscribe {

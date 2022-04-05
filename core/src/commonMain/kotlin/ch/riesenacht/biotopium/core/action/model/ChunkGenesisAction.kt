@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.region
 import ch.riesenacht.biotopium.core.world.model.map.Tile
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -35,4 +36,7 @@ data class ChunkGenesisAction(
     override val produce: List<Tile>,
 ) : Action, Producible<List<Tile>> {
     override val type = ActionType.CHUNK_GENESIS
+
+    override val location
+    get() = produce.first().region
 }

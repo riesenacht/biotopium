@@ -59,4 +59,4 @@ data class GrowingPlant(
 /**
  * The growth rate of a plant.
  */
-val growthRate: Timespan = Timespan(seconds = 600)
+val growthRate: Timespan = Timespan(seconds = 60)

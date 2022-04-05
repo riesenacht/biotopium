@@ -23,6 +23,9 @@ import ch.riesenacht.biotopium.core.action.ActionManager
 import ch.riesenacht.biotopium.core.action.model.*
 import ch.riesenacht.biotopium.core.blockchain.BlockchainManager
 import ch.riesenacht.biotopium.core.blockchain.KeyManager
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.Stem
 import ch.riesenacht.biotopium.core.world.model.item.*
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import ch.riesenacht.biotopium.core.world.model.map.Tile
@@ -39,10 +42,16 @@ import ch.riesenacht.biotopium.network.model.message.blockchain.ChainReqMessage
 object BiotopiumClient : Biotopium(biotopiumClientConfig) {
 
     /**
+     * The client's regions of interest.
+     * //TODO remove hardcoded region
+     */
+    private val regionsOfInterest: List<Region> = listOf(biotopiumClientRegion)
+
+    /**
      * Updates the blockchain and calls the [callback] function.
      */
-    fun updateChain(callback: () -> Unit) {
-        this.networkManager.send(blocklordPeerIds.random(), ChainReqMessage(BlockchainManager.maxHeight))
+    private fun updateChain(location: Locator, callback: () -> Unit) {
+        this.networkManager.send(randomBlocklordPeer, ChainReqMessage(BlockchainManager.blockchain[location].maxHeight, location))
         var handler: MessageHandler<ChainFwdMessage>? = null
         handler = MessageHandler { _, _ ->
             this.networkManager.removeMessageHandler(ChainFwdMessage::class, handler!!)
@@ -52,9 +61,39 @@ object BiotopiumClient : Biotopium(biotopiumClientConfig) {
     }
 
     /**
+     * Updates the stem chain.
+     * Invokes the [callback] after a successful update.
+     */
+    fun updateStemChain(callback: () -> Unit) = updateChain(Stem, callback)
+
+    /**
+     * Updates the chain of a [region].
+     * Invokes the [callback] after a successful update.
+     */
+    fun updateRegionChain(region: Region, callback: () -> Unit) = updateChain(region, callback)
+
+    /**
+     * Updates both the stem chain and all region chains.
+     * Invokes the [callback] after a successful update.
+     */
+    fun updateAllChains(callback: () -> Unit) {
+        updateStemChain {
+            var numUpdatedRegions = 0
+            regionsOfInterest.forEach { region ->
+                updateRegionChain(region) {
+                    numUpdatedRegions++
+                    if(numUpdatedRegions == regionsOfInterest.size) {
+                        callback.invoke()
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Creates the introduction action for a new player.
      */
-    fun createIntroductionAction() {
+    fun createIntroductionAction(region: Region) {
         val address = KeyManager.address
         val numHoes = 8
         val numWheatSeeds = 4
@@ -64,7 +103,7 @@ object BiotopiumClient : Biotopium(biotopiumClientConfig) {
         val wheatSeeds = (1..numWheatSeeds).map { Seed(address, PlantType.WHEAT) }.toList()
         val cornSeeds = (1..numCornSeeds).map { Seed(address, PlantType.CORN) }.toList()
         val introductionGift = IntroductionGift(realmClaimPaper, hoes, wheatSeeds + cornSeeds)
-        ActionManager.createAction(IntroductionAction(introductionGift))
+        ActionManager.createAction(IntroductionAction(introductionGift, region))
     }
 
     /**

@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.region
 import ch.riesenacht.biotopium.core.world.model.item.Seed
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import kotlinx.serialization.SerialName
@@ -39,4 +41,7 @@ data class SeedAction(
     override val consume: Seed
 ) : Action, Producible<Plot>, Consumable<Seed> {
     override val type = ActionType.SEED
+
+    override val location: Locator
+        get() = produce.region
 }

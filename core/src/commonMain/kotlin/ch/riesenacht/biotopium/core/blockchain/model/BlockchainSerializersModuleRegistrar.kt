@@ -22,8 +22,14 @@ import ch.riesenacht.biotopium.core.blockchain.model.block.AbstractBlock
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
 import ch.riesenacht.biotopium.core.blockchain.model.block.HashedBlock
 import ch.riesenacht.biotopium.core.blockchain.model.block.RawBlock
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.Stem
+import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecord
 import ch.riesenacht.biotopium.core.blockchain.model.record.BlockRecordContent
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
+import ch.riesenacht.biotopium.core.blockchain.model.record.ref.ReferenceRecord
+import ch.riesenacht.biotopium.core.blockchain.model.ref.RegionBlockReference
 import ch.riesenacht.biotopium.serialization.SerializersModuleRegistrar
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
@@ -65,6 +71,22 @@ object BlockchainSerializersModuleRegistrar : SerializersModuleRegistrar(Seriali
         // see: https://github.com/Kotlin/kotlinx.serialization/issues/944
         @Suppress("UNCHECKED_CAST")
         subclass(RawBlockRecord::class, RawBlockRecord.serializer( PolymorphicSerializer(BlockRecordContent::class)) as KSerializer<RawBlockRecord<*>>)
+    }
+
+    // Locator class hierarchy
+    polymorphic(Locator::class) {
+        subclass(Stem::class)
+        subclass(Region::class)
+    }
+
+    // Block record content hierarchy
+    polymorphic(BlockRecordContent::class) {
+        subclass(RegionBlockReference::class)
+    }
+
+    // Block record hierarchy
+    polymorphic(BlockRecord::class) {
+        subclass(ReferenceRecord::class)
     }
 
 })

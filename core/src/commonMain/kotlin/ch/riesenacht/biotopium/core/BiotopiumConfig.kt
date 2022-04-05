@@ -34,5 +34,5 @@ import ch.riesenacht.biotopium.network.model.config.P2pConfiguration
 class BiotopiumConfig(
     val p2pConfig: P2pConfiguration,
     val blocklordPeerIds: List<PeerId>,
-    val keyPair: KeyPair,
+    val keyPair: KeyPair
 )

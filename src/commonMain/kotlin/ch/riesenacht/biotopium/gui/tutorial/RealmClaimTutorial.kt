@@ -18,10 +18,13 @@
 
 package ch.riesenacht.biotopium.gui.tutorial
 
+import ch.riesenacht.biotopium.biotopiumClientRegion
 import ch.riesenacht.biotopium.core.action.ActionManager
 import ch.riesenacht.biotopium.core.action.model.ActionType
 import ch.riesenacht.biotopium.core.action.model.ClaimRealmAction
 import ch.riesenacht.biotopium.core.blockchain.KeyManager
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.regionIndex
 import ch.riesenacht.biotopium.core.world.WorldStateManager
 import ch.riesenacht.biotopium.core.world.model.item.ItemType
 import ch.riesenacht.biotopium.core.world.model.item.RealmClaimPaper
@@ -61,7 +64,11 @@ class RealmClaimTutorial(private val toolbar: Toolbar, private val onEnd: () -> 
                         var tileCandidate: Tile
                         do {
                             tileCandidate = WorldStateManager.tiles.values.random()
-                        } while(WorldStateManager.realms[tileCandidate.x.realmIndex, tileCandidate.y.realmIndex] != null)
+                        } while(
+                            //TODO remove hardcoded region
+                            biotopiumClientRegion == Region(tileCandidate.x.regionIndex, tileCandidate.y.regionIndex)
+                            && WorldStateManager.realms[tileCandidate.x.realmIndex, tileCandidate.y.realmIndex] != null
+                        )
                         val tile = tileCandidate
                         val realm = Realm(KeyManager.address, tile.x.realmIndex, tile.y.realmIndex)
                         slot.stack?.let {

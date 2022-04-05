@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import ch.riesenacht.biotopium.core.blockchain.model.location.region
 import ch.riesenacht.biotopium.core.world.model.item.Hoe
 import ch.riesenacht.biotopium.core.world.model.map.Plot
 import kotlinx.serialization.SerialName
@@ -38,4 +40,7 @@ data class CreatePlotAction(
     override val consume: Hoe
 ) : Action, Producible<Plot>, Consumable<Hoe> {
     override val type = ActionType.CREATE_PLOT
+
+    override val location: Locator
+    get() = produce.region
 }

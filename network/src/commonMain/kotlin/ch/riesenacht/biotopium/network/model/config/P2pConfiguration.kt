@@ -18,6 +18,8 @@
 
 package ch.riesenacht.biotopium.network.model.config
 
+import ch.riesenacht.biotopium.network.model.Topic
+
 /**
  * Represents the configuration of a [ch.riesenacht.biotopium.network.P2pNode].
  * Not all configuration values can and will be used by the [ch.riesenacht.biotopium.network.P2pNode].
@@ -26,7 +28,7 @@ package ch.riesenacht.biotopium.network.model.config
  * @property listenPort port to listen on (if possible on platform)
  * @property bootstrapPeers bootstrap peers to use (if possible on platform)
  * @property privateKeyBase64 private key bytes, encoded in base64 to use (if possible on platform)
- * @property topic topic to use
+ * @property topics topics to listen to
  *
  * @author Manuel Riesen
  */
@@ -34,6 +36,6 @@ data class P2pConfiguration(
     val listenPort: Int,
     val bootstrapPeers: List<String> = emptyList(),
     val privateKeyBase64: String? = null,
-    val topic: String,
+    val topics: List<Topic>,
     val protocolName: String
 )

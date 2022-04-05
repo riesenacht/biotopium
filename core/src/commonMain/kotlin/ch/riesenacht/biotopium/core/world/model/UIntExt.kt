@@ -20,7 +20,6 @@ package ch.riesenacht.biotopium.core.world.model
 
 /**
  * The unsigned integer in the [Coordinate] format.
- * @throws NumberFormatException number is negative
  */
 val UInt.coord: Coordinate
     get() = Coordinate(this)

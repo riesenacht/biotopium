@@ -22,9 +22,13 @@ import ch.riesenacht.biotopium.bus.BlockCandidateBus
 import ch.riesenacht.biotopium.bus.IncomingActionBus
 import ch.riesenacht.biotopium.core.action.model.Action
 import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
-import ch.riesenacht.biotopium.core.blockchain.model.Blockchain
-import ch.riesenacht.biotopium.core.blockchain.model.MutableBlockchain
 import ch.riesenacht.biotopium.core.blockchain.model.block.Block
+import ch.riesenacht.biotopium.core.blockchain.model.chain.BlockchainMap
+import ch.riesenacht.biotopium.core.blockchain.model.chain.MutableBlockchainMap
+import ch.riesenacht.biotopium.core.blockchain.model.chain.StemBlockchain
+import ch.riesenacht.biotopium.core.blockchain.model.chain.findLastRef
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.Stem
 import ch.riesenacht.biotopium.logging.Logging
 
 /**
@@ -35,15 +39,9 @@ import ch.riesenacht.biotopium.logging.Logging
 object BlockchainManager {
 
     /**
-     * The maximum height on the blockchain.
-     */
-    val maxHeight: ULong
-    get() = if(blockchain.isEmpty()) 0u else blockchain.last().height
-
-    /**
      * Mutable variant of the blockchain.
      */
-    private val mutableBlockchain: MutableBlockchain = mutableListOf()
+    private val mutableBlockchain: MutableBlockchainMap = MutableBlockchainMap()
 
     /**
      * Validator for validating new blocks
@@ -56,8 +54,36 @@ object BlockchainManager {
     /**
      * The most recent version of the blockchain.
      */
-    val blockchain: Blockchain
+    val blockchain: BlockchainMap
         get() = mutableBlockchain
+
+    /**
+     * The stem blockchain.
+     */
+    val stemBlockchain: StemBlockchain
+        get() = blockchain[Stem]
+
+    /**
+     * Represents a data structure providing the lookup for the stem distance.
+     */
+    interface StemDistanceLookup {
+
+        /**
+         * Looks up the stem distance for a [region].
+         */
+        operator fun get(region: Region): ULong
+    }
+
+    /**
+     * The stem distance lookup.
+     */
+    val stemDistance = object : StemDistanceLookup {
+        override operator fun get(region: Region): ULong {
+            val ref = stemBlockchain.findLastRef(region)
+            val maxHeight = blockchain[region].maxHeight
+            return maxHeight - (ref?.height ?: 0uL)
+        }
+    }
 
     init {
         BlockCandidateBus.subscribe {
@@ -71,9 +97,8 @@ object BlockchainManager {
      * @return block is valid and was added
      */
     fun add(block: Block): Boolean {
-
-        if(validator.validateNew(block, blockchain)) {
-            if(mutableBlockchain.add(block)) {
+        if(validator.validateNew(block, blockchain[block.location])) {
+            if(mutableBlockchain[block.location].add(block)) {
 
                 block.data.forEach {
                     if(it is ActionRecord<out Action>) {

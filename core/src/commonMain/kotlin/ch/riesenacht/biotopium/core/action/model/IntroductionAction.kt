@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.action.model
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
 import ch.riesenacht.biotopium.core.world.model.item.IntroductionGift
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -34,7 +35,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("IntroductionAction")
 data class IntroductionAction(
-    override val produce: IntroductionGift
+    override val produce: IntroductionGift,
+    override val location: Region
 ) : Action, Producible<IntroductionGift> {
     override val type = ActionType.INTRODUCTION
 }

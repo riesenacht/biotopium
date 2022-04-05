@@ -37,11 +37,12 @@ import (
 
 // server represents a peer-to-peer server.
 type server struct {
-	Host   host.Host          // P2P host
-	Config *config            // configuration
-	PubSub *PubSubTopic       // ps network
-	Stream *Stream            // stream
-	Cancel context.CancelFunc // running state
+	Host     host.Host               // P2P host
+	Messages chan Message            // message input channel
+	Config   *config                 // configuration
+	PubSubs  map[string]*PubSubTopic // pubsub networks
+	Stream   *Stream                 // stream
+	Cancel   context.CancelFunc      // running state
 }
 
 // The peer-to-peer server instance
@@ -66,7 +67,8 @@ func PeerID() peer.ID {
 // A configuration has to be given.
 func StartP2PServer(config *config) {
 	instance = &server{
-		Config: config,
+		Config:   config,
+		Messages: make(chan Message, PubSubBufSize),
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	instance.Cancel = cancel
@@ -91,6 +93,7 @@ func StartP2PServer(config *config) {
 		libp2p.NATPortMap(),      // Try to open ports over uPnP
 		libp2p.EnableAutoRelay(), // Advertise node on relays
 		libp2p.DefaultTransports, // default transports, includes WebSockets and TCP
+		libp2p.DefaultMuxers,
 		libp2p.Security(noise.ID, noise.New),
 		libp2p.Routing(func(h host.Host) (routing.PeerRouting, error) {
 			dhtInstance, err := dht.New(
@@ -129,9 +132,20 @@ func StartP2PServer(config *config) {
 
 	ps, err := pubsub.NewGossipSub(ctx, h)
 	check.Err(err)
+	pubSubs := make(map[string]*PubSubTopic)
+	for _, topic := range config.Topics {
+		topicName := topic
+		psNet := listenTopic(topicName, ctx, ps, h.ID())
+		pubSubs[topicName] = psNet
 
-	psNet := listenTopic(ctx, ps, h.ID())
-	instance.PubSub = psNet
+		go func() {
+			for {
+				message := <-psNet.messages
+				instance.Messages <- message
+			}
+		}()
+	}
+	instance.PubSubs = pubSubs
 
 	stream := listenProtocol(h, config.ProtocolName)
 	instance.Stream = stream

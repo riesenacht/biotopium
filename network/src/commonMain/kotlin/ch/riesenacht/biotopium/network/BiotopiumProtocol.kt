@@ -18,6 +18,9 @@
 
 package ch.riesenacht.biotopium.network
 
+import ch.riesenacht.biotopium.network.model.Topic
+import ch.riesenacht.biotopium.network.model.TopicType
+
 /**
  * Represents the biotopium protocol.
  *
@@ -25,6 +28,8 @@ package ch.riesenacht.biotopium.network
  */
 object BiotopiumProtocol {
     private const val protoPrefix = "/biotopium/0.1.0"
-    const val topic = "$protoPrefix/public"
+    const val regionTopicPrefix = "$protoPrefix/region/"
+    private const val globalTopicName = "$protoPrefix/global"
+    val globalTopic = Topic(globalTopicName, TopicType.GLOBAL)
     const val protocolName = "$protoPrefix/direct"
 }

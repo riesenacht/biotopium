@@ -19,6 +19,7 @@
 package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.Topic
 import ch.riesenacht.biotopium.network.model.message.Message
 
 /**
@@ -36,7 +37,7 @@ interface NetworkContext {
     /**
      * Sends an unboxed [message] to all connected peers.
      */
-    fun sendBroadcast(message: Message)
+    fun sendBroadcast(topic: Topic, message: Message)
 
     /**
      * Sends a [message] to a peer with the given [peer ID][peerId].

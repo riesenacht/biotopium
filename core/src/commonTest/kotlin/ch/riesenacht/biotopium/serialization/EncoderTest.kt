@@ -34,6 +34,8 @@ import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
 import ch.riesenacht.biotopium.core.crypto.model.PublicKey
 import ch.riesenacht.biotopium.core.time.model.Timestamp
 import ch.riesenacht.biotopium.core.world.model.Owner
+import ch.riesenacht.biotopium.core.world.model.coord
+import ch.riesenacht.biotopium.core.world.model.map.DefaultTile
 
 /**
  * Basic encoder test, extended by all encoder test classes.
@@ -64,7 +66,7 @@ abstract class EncoderTest {
     /**
      * Generates a default test action.
      */
-    protected fun generateDefaultTestAction() = ChunkGenesisAction(emptyList())
+    protected fun generateDefaultTestAction() = ChunkGenesisAction(listOf(DefaultTile(0.coord, 0.coord)))
 
     protected inline fun <reified T : Action> createActionRecord(
         timestamp: Timestamp = zeroTimestamp,
@@ -85,6 +87,7 @@ abstract class EncoderTest {
 
         val raw = RawBlock(
             1u,
+            action.location,
             Timestamp(1),
             Hash("prevHash"),
             Address.fromBase64("test"),

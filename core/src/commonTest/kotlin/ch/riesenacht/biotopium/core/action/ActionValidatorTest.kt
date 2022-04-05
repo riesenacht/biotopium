@@ -24,6 +24,9 @@ import ch.riesenacht.biotopium.core.action.model.record.ActionRecord
 import ch.riesenacht.biotopium.core.action.model.record.toActionRecord
 import ch.riesenacht.biotopium.core.blockchain.BlockUtils
 import ch.riesenacht.biotopium.core.blockchain.model.Address
+import ch.riesenacht.biotopium.core.blockchain.model.location.Region
+import ch.riesenacht.biotopium.core.blockchain.model.location.regionIndex
+import ch.riesenacht.biotopium.core.blockchain.model.location.regionSize
 import ch.riesenacht.biotopium.core.blockchain.model.record.RawBlockRecord
 import ch.riesenacht.biotopium.core.crypto.Ed25519
 import ch.riesenacht.biotopium.core.crypto.model.PrivateKey
@@ -68,6 +71,9 @@ class ActionValidatorTest {
 
     private val defaultOwner: Owner
         get() = Owner(defaultKeyPair.publicKey)
+
+    private val region: Region
+        get() = Region(0.regionIndex, 0.regionIndex)
 
     private fun createOtherOwner(base64: String = "none") = Address.fromBase64(base64)
 
@@ -662,7 +668,7 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val content = IntroductionAction(gift)
+        val content = IntroductionAction(gift, region)
         val action = createActionRecord(currentTimestamp, owner, content)
 
         assertTrue(ActionValidator.validate(action, world))
@@ -682,7 +688,7 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val content = IntroductionAction(gift)
+        val content = IntroductionAction(gift, region)
         val action = createActionRecord(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
@@ -703,7 +709,7 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val content = IntroductionAction(gift)
+        val content = IntroductionAction(gift, region)
         val action = createActionRecord(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
@@ -724,7 +730,7 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(owner, PlantType.CORN))
         )
 
-        val content = IntroductionAction(gift)
+        val content = IntroductionAction(gift, region)
         val action = createActionRecord(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))
@@ -745,7 +751,7 @@ class ActionValidatorTest {
             listOf(Seed(owner, PlantType.WHEAT), Seed(differentOwner, PlantType.CORN))
         )
 
-        val content = IntroductionAction(gift)
+        val content = IntroductionAction(gift, region)
         val action = createActionRecord(currentTimestamp, owner, content)
 
         assertFalse(ActionValidator.validate(action, world))

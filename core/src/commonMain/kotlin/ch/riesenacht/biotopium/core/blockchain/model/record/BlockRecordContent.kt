@@ -18,9 +18,18 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.record
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
+import kotlinx.serialization.Transient
+
 /**
  * Represents the content of a block record.
  *
  * @author Manuel Riesen
  */
-interface BlockRecordContent
+interface BlockRecordContent {
+    /**
+     * The locator of the block record content
+     */
+    @Transient
+    val location: Locator
+}

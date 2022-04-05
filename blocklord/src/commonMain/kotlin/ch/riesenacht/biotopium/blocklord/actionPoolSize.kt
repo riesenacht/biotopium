@@ -21,4 +21,4 @@ package ch.riesenacht.biotopium.blocklord
 /**
  * The size of the action pool.
  */
-const val actionPoolSize = 1
+const val actionPoolThreshold = 1

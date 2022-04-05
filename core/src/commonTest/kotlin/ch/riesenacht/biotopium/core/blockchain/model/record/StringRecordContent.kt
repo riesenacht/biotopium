@@ -18,6 +18,7 @@
 
 package ch.riesenacht.biotopium.core.blockchain.model.record
 
+import ch.riesenacht.biotopium.core.blockchain.model.location.Locator
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,4 +32,4 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @SerialName("StringRecordContent")
-class StringRecordContent(val str: String) : BlockRecordContent
+class StringRecordContent(val str: String, override val location: Locator) : BlockRecordContent

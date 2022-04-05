@@ -20,6 +20,7 @@ package ch.riesenacht.biotopium.network
 
 import ch.riesenacht.biotopium.logging.Logging
 import ch.riesenacht.biotopium.network.model.PeerId
+import ch.riesenacht.biotopium.network.model.Topic
 import ch.riesenacht.biotopium.network.model.message.Message
 import ch.riesenacht.biotopium.network.model.message.MessageEnvelope
 import ch.riesenacht.biotopium.network.model.message.SerializedMessage
@@ -51,18 +52,18 @@ abstract class NetworkNode : NetworkContext {
     /**
      * Sends a serialized [message] to all connected peers.
      */
-    protected abstract fun sendBroadcastSerialized(message: SerializedMessage)
+    protected abstract fun sendBroadcastSerialized(topic: Topic, message: SerializedMessage)
 
     /**
      * Sends an unboxed [message] to all connected peers.
      */
-    override fun sendBroadcast(message: Message) {
-        logger.debug { "sending message $message to all" }
+    override fun sendBroadcast(topic: Topic, message: Message) {
+        logger.debug { "sending message $message of topic $topic" }
 
         val wrapper = wrapMessage(message)
 
         val serialized = JsonEncoder.encode(wrapper)
-        sendBroadcastSerialized(serialized)
+        sendBroadcastSerialized(topic, serialized)
     }
 
     /**
