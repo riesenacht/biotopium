@@ -63,7 +63,7 @@ data class Hoe(
 - Note: unnamed callbacks use plain function types, e.g. `onTileClick: (Tile) -> Unit` (`src/commonMain/kotlin/ch/riesenacht/biotopium/gui/realm/tile.kt:44`).
 
 ### 12. Single-instance components (utilities, validators, encoders, managers) are `object`s.
-- Confidence: high (52 object declarations)
+- Confidence: high (37 plain `object` declarations in main code, plus 4 `expect`/8 `actual` objects; no class with a private constructor and `getInstance`)
 - Evidence: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/BlockUtils.kt:36`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/action/ActionValidator.kt:32`, `network/src/commonMain/kotlin/ch/riesenacht/biotopium/serialization/JsonEncoder.kt:30`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/KeyManager.kt:29`
 
 ### 13. Configured instances of an abstract base class are body-less `object`s that pass values or a lambda to the super constructor.

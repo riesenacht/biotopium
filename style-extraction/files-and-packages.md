@@ -6,7 +6,7 @@ Order of members inside a class is in [classes-and-dependencies.md](classes-and-
 ### 1. A file holds one top-level declaration and is named after it, even when the declaration is one line.
 - Confidence: high (185 of 211 main files have exactly one top-level declaration)
 - Evidence: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/model/Hashable.kt:29`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/world/model/Owner.kt:28`, `network/src/commonMain/kotlin/ch/riesenacht/biotopium/network/model/message/SerializedMessage.kt:26`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/crypto/model/Hash.kt:32`
-- Counterexamples: see rules 5–7; `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/item.kt` holds two classes.
+- Counterexamples: see rules 5–7; `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/item.kt:29` and `:38` are two classes in one file.
 
 ### 2. A file whose only declaration is a top-level function or property is named after it in lowerCamelCase.
 - Confidence: high
@@ -48,10 +48,10 @@ class Slot(
 - Evidence: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/world/model/map/Realm.kt:45`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/world/model/plant/GrowingPlant.kt:62`, `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/slot.kt:118`, `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/toolbar.kt:266`
 - Counterexamples: companion object at the top of the class in `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/realm/realm.kt:70`; standalone constant file `blocklord/src/commonMain/kotlin/ch/riesenacht/biotopium/blocklord/actionPoolSize.kt:24`.
 
-### 9. Files are short: most hold under 30 lines of code after the license header and imports.
-- Confidence: high (median 15 lines, 162 of 211 main files ≤ 30 lines, largest `toolbar.kt` ≈ 206 lines)
-- Evidence: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/model/BlockCandidate.kt`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/action/model/GrowAction.kt`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/KeyManager.kt`
-- Counterexamples: `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/toolbar.kt`, `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/menu/mainMenu.kt`, `core/src/commonTest/kotlin/ch/riesenacht/biotopium/core/action/ActionValidatorTest.kt` (1009 lines)
+### 9. Files are short: most have at most 30 non-blank lines after the license header, package and imports (KDoc included).
+- Confidence: high (162 of 211 main files ≤ 30 lines; median 15 lines with KDoc, 6 lines without comments)
+- Evidence (whole file from the declaration to the end): `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/model/BlockCandidate.kt:24`–`31`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/action/model/GrowAction.kt:25`–`39`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/KeyManager.kt:24`–`41`
+- Counterexamples: `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/toolbar.kt:33`–`273` (206 non-blank lines), `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/menu/mainMenu.kt:36`–`155`, `core/src/commonTest/kotlin/ch/riesenacht/biotopium/core/action/ActionValidatorTest.kt:54`–`1009`
 
 ### 10. Data-only types live in a `model` subpackage of the feature package that uses them.
 - Confidence: high

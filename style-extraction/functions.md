@@ -3,12 +3,12 @@
 Function bodies, return types, arguments, overloads, extensions, operators and DSL builders.
 
 ### 1. A function whose body is one expression uses an expression body.
-- Confidence: medium (46 expression bodies, 9 block bodies with a single `return`)
+- Confidence: medium (51 expression bodies, 9 block bodies with a single `return`)
 - Evidence: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/BlocklordSource.kt:70`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/action/rule/ActionRuleSet.kt:39`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/Book.kt:31`, `reactive/src/commonMain/kotlin/ch/riesenacht/biotopium/bus/EventBus.kt:43`
 - Counterexamples: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/BlockUtils.kt:51`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/BlockchainManager.kt:97`, `network/src/commonMain/kotlin/ch/riesenacht/biotopium/network/NetworkNode.kt:76`, `reactive/src/commonMain/kotlin/ch/riesenacht/biotopium/reactive/collection/MutableObservableList.kt:134`
 
 ### 2. Expression-bodied functions usually leave out the return type.
-- Confidence: low (33 without, 13 with)
+- Confidence: low (34 without, 17 with)
 - Evidence: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/model/block/HashedBlock.kt:54`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/BlocklordSource.kt:70`, `core/src/jvmMain/kotlin/ch/riesenacht/biotopium/core/time/DateUtils.kt:34`
 - Counterexamples: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/model/Address.kt:40`, `network/src/commonMain/kotlin/ch/riesenacht/biotopium/serialization/JsonEncoder.kt:51`, `core/src/jvmMain/kotlin/ch/riesenacht/biotopium/core/crypto/Sha3.kt:47`
 

@@ -8,6 +8,7 @@ Each rule is backed by at least 3 occurrences. Counterexamples are listed, not j
 
 | File | Covers | Rules |
 |------|--------|-------|
+| [summary.md](summary.md) | Short summary of all style rules, with links to the detail files | – |
 | [naming.md](naming.md) | Type, function, property, constant and parameter names | 13 |
 | [files-and-packages.md](files-and-packages.md) | One declaration per file, file names, `Ext`/`Dsl` files, file size, packages | 11 |
 | [modelling.md](modelling.md) | Data, value and sealed types, enums, interfaces, type aliases, objects, delegation | 15 |
@@ -19,6 +20,7 @@ Each rule is backed by at least 3 occurrences. Counterexamples are listed, not j
 | [logging.md](logging.md) | Logger declaration, levels, message format | 6 |
 | [tests.md](tests.md) | Framework, test names, structure, fixtures, test doubles, assertions | 16 |
 | [comments.md](comments.md) | KDoc coverage, `@author`, wording, tags, links, inline comments, markers | 30 |
+| [architecture.md](architecture.md) | Architectural decisions (separate from the style rules): modules, platforms, lifecycle, communication, state, consensus, client, concurrency, testing | 33 decisions |
 
 ## 2. Conflicts
 
@@ -29,8 +31,8 @@ Patterns with two or more competing variants. Each needs a decision.
 | 1 | Private backing property name | `mutableTiles` (8×) vs `_trusted`, `_selected` (2×) | [nullability-and-state.md](nullability-and-state.md) #2 |
 | 2 | `positive`/`negative` in test names | after the operation (62), at the end (39), missing (53) | [tests.md](tests.md) #4 |
 | 3 | `assertEquals` argument order | expected first vs actual first | [tests.md](tests.md) #7 |
-| 4 | Single-expression functions | expression body (46) vs block with one `return` (9) | [functions.md](functions.md) #1 |
-| 5 | Return type on expression bodies | omitted (33) vs written (13) | [functions.md](functions.md) #2 |
+| 4 | Single-expression functions | expression body (51) vs block with one `return` (9) | [functions.md](functions.md) #1 |
+| 5 | Return type on expression bodies | omitted (34) vs written (17) | [functions.md](functions.md) #2 |
 | 6 | Constructor calls with many arguments | named vs positional | [functions.md](functions.md) #4 |
 | 7 | Verb for building objects | `create…` vs `generate…` | [naming.md](naming.md) #10 |
 | 8 | Compound word casing | `RuleSet` vs `Ruleset` | [naming.md](naming.md) #12 |
@@ -80,7 +82,7 @@ Small, self-contained files with little domain logic.
 Left out because they belong to the architecture, a library, the domain, or a linter.
 
 - **License header**: the GPL block comment at the top of every file (project boilerplate; missing only in `core/src/commonTest/kotlin/ch/riesenacht/biotopium/serialization/HashableStringEncoderTest.kt`).
-- **Architecture**: Kotlin Multiplatform `expect`/`actual` split and source sets; module split (`core`, `network`, `reactive`, `logging`, `blocklord`, client) and packages spanning modules; module effects, `@SideEffect` and effect profiles; event buses and manager singletons as the wiring mechanism; `suspend` start/stop of network nodes.
+- **Architecture** (documented separately in [architecture.md](architecture.md)): Kotlin Multiplatform `expect`/`actual` split and source sets; module split (`core`, `network`, `reactive`, `logging`, `blocklord`, client) and packages spanning modules; module effects, `@SideEffect` and effect profiles; event buses and manager singletons as the wiring mechanism; `suspend` start/stop of network nodes.
 - **Libraries**: kotlinx.serialization (`@Serializable`, `@SerialName("<ClassName>")`, `@Transient`, `@Polymorphic`, serializers-module registrars, `reified` encode/decode); Korge (scenes, `Container` builder DSL, `AsyncInjector`, UI skins); Reaktive (`BehaviorSubject`, `PublishSubject`, `Disposable`); kotlin-logging (`typealias Logging = KotlinLogging`, `LoggingConfig`); JS interop (`external`, `@JsModule`, `@JsNonModule`, `dynamic`; names in external declarations copy the JS names).
 - **Domain**: blockchain model chain Raw → Hashed → Block, `Producible`/`Consumable` actions, contents of the action rules and contracts, unsigned coordinate types, golden hash and key strings in tests.
 - **Formatting a linter catches**: no space in `if(`, `when(`, `for(`, `catch(`; `get()` aligned with the property instead of indented; blank lines after `{` and between members; trailing commas; parameter wrapping; line length; import order and wildcard imports; `{  }` spacing.

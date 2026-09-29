@@ -3,7 +3,7 @@
 `val`/`var`, exposing mutable state, nullable handling and collection types.
 
 ### 1. `val` is the default; `var` appears only for state that really changes.
-- Confidence: high (≈1360 `val`, 35 `var`)
+- Confidence: high (1347 `val`, 35 `var`, comments and strings excluded)
 - Evidence of the `var` cases: `lateinit var keyPair` (`core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/KeyManager.kt:34`), `var stack` (`src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/slot.kt:65`), `var startOption` (`src/commonMain/kotlin/ch/riesenacht/biotopium/gui/GameConfig.kt:31`)
 
 ### 2. Mutable state is held in a private `mutable<Name>` property and exposed as a read-only type through a getter.

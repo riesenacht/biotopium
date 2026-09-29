@@ -123,7 +123,7 @@ Share of public declarations with KDoc overall: about 90–95 %.
 - Counterexamples: `@param` for constructor properties (`core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/action/model/HarvestAction.kt:29`); `@property` and `@param` mixed (`core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/effect/ModuleEffect.kt:28`–`29`).
 
 ### 18. Function parameters are mostly referenced as `[name]` links inside the sentence instead of `@param` tags.
-- Confidence: medium (≈ 100 function KDocs with inline links; `@param` in 63 lines, mainly crypto, JS externals and GUI)
+- Confidence: medium (of 141 function KDocs with parameters: 112 inline links only, 22 `@param` only, 2 both, 5 neither; `@param` mainly in crypto, JS externals and GUI)
 - Evidence inline: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/world/Player.kt:50`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/action/ActionManager.kt:109`, `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/blockchain/BlockValidator.kt:32`
 - Evidence `@param`: `core/src/commonMain/kotlin/ch/riesenacht/biotopium/core/crypto/Ed25519.kt:47`, `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/slot.kt:32`, `src/commonMain/kotlin/ch/riesenacht/biotopium/gui/toolbar/toolbar.kt:90`
 
